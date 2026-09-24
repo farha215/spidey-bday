@@ -136,25 +136,29 @@ export default function Home() {
 
               {/* SIDEBAR TABS */}
               {booted && (
-                <div className="absolute left-0 top-1/2 z-30 flex -translate-y-1/2 flex-col gap-1">
-                  <button onClick={() => openMemory(0)} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>
-                    M1
+                <div className="absolute left-0 top-1/3 z-30 flex -translate-y-1/2 flex-col gap-2">
+                  <button 
+                    onClick={() => {
+                      // Toggle memory pins visibility (green tab)
+                      setActivePanel({ type: "none" });
+                    }} 
+                    className="group relative flex h-10 w-12 cursor-pointer items-center justify-center border-y-2 border-r-2 border-black bg-[#6e9c6c] transition-transform hover:translate-x-1"
+                    style={{ clipPath: "polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%)" }}
+                  >
+                    <div className="absolute left-0 top-0 h-[2px] w-[80%] bg-white/40"></div>
+                    <img src="/spidey-bday/assets/spider-black.png" alt="" className="mr-2 h-6 w-6 object-contain pixelated opacity-90" />
                   </button>
-                  <button onClick={() => openMemory(1)} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>
-                    M2
+                  <button 
+                    onClick={() => {
+                      // Toggle letter pin visibility (red tab)
+                      setActivePanel({ type: "none" });
+                    }} 
+                    className="group relative flex h-10 w-12 cursor-pointer items-center justify-center border-y-2 border-r-2 border-black bg-[#ba5c5c] transition-transform hover:translate-x-1"
+                    style={{ clipPath: "polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%)" }}
+                  >
+                    <div className="absolute left-0 top-0 h-[2px] w-[80%] bg-white/40"></div>
+                    <img src="/spidey-bday/assets/spider-black.png" alt="" className="mr-2 h-6 w-6 object-contain pixelated opacity-90" />
                   </button>
-                  <button onClick={() => openMemory(2)} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>
-                    M3
-                  </button>
-                  <button onClick={() => openMemory(3)} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>
-                    M4
-                  </button>
-                  <button onClick={openLetter} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#ffc619" } as any}>
-                    LTR
-                  </button>
-                  <div className="mt-1 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-[#ffc619] bg-white shadow-[0_0_10px_rgba(255,198,25,0.6)]">
-                    <img src="/spidey-bday/assets/spidey-face.png" alt="" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply', animationDelay: '1s' }} />
-                  </div>
                 </div>
               )}
 
