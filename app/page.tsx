@@ -69,7 +69,32 @@ export default function Home() {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-black">
       <APIProvider apiKey="AIzaSyDhFTe_7TYC4vcCSntJmbIVQcXTjjZuXcM" libraries={MAP_LIBRARIES} onError={(err) => console.error("Google Maps Error:", err)}>
-        <main className="relative flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-[#0a0a0a] shadow-[0_0_50px_rgba(90,200,236,0.15)]">
+        <main className="relative flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-[#2c6c8c] border-x-4 border-black shadow-[0_0_50px_rgba(90,200,236,0.15)]">
+          {/* SIDEBAR TABS */}
+          {booted && (
+            <div className="absolute left-0 top-1/3 z-50 flex -translate-y-1/2 flex-col gap-1">
+              <button 
+                onClick={() => setActivePanel({ type: "none" })} 
+                className="group relative flex h-[46px] w-[58px] cursor-pointer items-center justify-center transition-transform hover:translate-x-1"
+              >
+                <svg viewBox="0 0 58 46" className="absolute inset-0 h-full w-full drop-shadow-[2px_2px_0_rgba(0,0,0,0.6)]" preserveAspectRatio="none">
+                  <path d="M0,2 L44,2 L56,23 L44,44 L0,44" fill="#6a9a6c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
+                  <path d="M0,6 L38,6 L48,23" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
+                </svg>
+                <img src="/spidey-bday/assets/spider-black.png" alt="" className="relative z-10 mr-1 h-7 w-7 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
+              </button>
+              <button 
+                onClick={() => setActivePanel({ type: "none" })} 
+                className="group relative flex h-[46px] w-[58px] cursor-pointer items-center justify-center transition-transform hover:translate-x-1"
+              >
+                <svg viewBox="0 0 58 46" className="absolute inset-0 h-full w-full drop-shadow-[2px_2px_0_rgba(0,0,0,0.6)]" preserveAspectRatio="none">
+                  <path d="M0,2 L44,2 L56,23 L44,44 L0,44" fill="#b85c5c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
+                  <path d="M0,6 L38,6 L48,23" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
+                </svg>
+                <img src="/spidey-bday/assets/spider-black.png" alt="" className="relative z-10 mr-1 h-7 w-7 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
+              </button>
+            </div>
+          )}
         <div className="absolute left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b-4 border-[#5a9cba] bg-[#96e0f7] px-2 shadow-[0_0_15px_rgba(150,224,247,0.5)]">
           <div className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#ffc619] bg-white shadow-[0_0_10px_rgba(255,198,25,0.6)]">
             <img src="/spidey-bday/assets/spidey-face.png" alt="Guide" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply' }} />
@@ -86,8 +111,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative min-h-0 flex-1 px-1 pt-16 pb-1">
-          <div className="relative h-full overflow-hidden border-[10px] border-[#96e0f7] bg-[#04040e]">
+        <div className="relative min-h-0 flex-1 px-4 pt-16 pb-1">
+          <div className="relative h-full overflow-hidden border-4 border-black bg-[#04040e]">
             <div className="scanlines pointer-events-none absolute inset-0 z-50" />
             
             <div className="absolute inset-0 overflow-hidden">
@@ -134,31 +159,7 @@ export default function Home() {
                 <LetterModal onClose={closePanel} />
               )}
 
-              {/* SIDEBAR TABS */}
-              {booted && (
-                <div className="absolute left-0 top-1/3 z-30 flex -translate-y-1/2 flex-col gap-1">
-                  <button 
-                    onClick={() => setActivePanel({ type: "none" })} 
-                    className="group relative flex h-[42px] w-[52px] cursor-pointer items-center justify-center transition-transform hover:translate-x-1"
-                  >
-                    <svg viewBox="0 0 52 42" className="absolute inset-0 h-full w-full drop-shadow-[2px_2px_0_rgba(0,0,0,0.5)]" preserveAspectRatio="none">
-                      <path d="M-5,2 L40,2 L50,21 L40,40 L-5,40" fill="#6a9a6c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
-                      <path d="M0,6 L35,6 L43,21" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
-                    </svg>
-                    <img src="/spidey-bday/assets/pin-spider.png" alt="" className="relative z-10 mr-2 h-7 w-7 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
-                  </button>
-                  <button 
-                    onClick={() => setActivePanel({ type: "none" })} 
-                    className="group relative flex h-[42px] w-[52px] cursor-pointer items-center justify-center transition-transform hover:translate-x-1"
-                  >
-                    <svg viewBox="0 0 52 42" className="absolute inset-0 h-full w-full drop-shadow-[2px_2px_0_rgba(0,0,0,0.5)]" preserveAspectRatio="none">
-                      <path d="M-5,2 L40,2 L50,21 L40,40 L-5,40" fill="#b85c5c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
-                      <path d="M0,6 L35,6 L43,21" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
-                    </svg>
-                    <img src="/spidey-bday/assets/pin-spider.png" alt="" className="relative z-10 mr-2 h-7 w-7 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
-                  </button>
-                </div>
-              )}
+              {/* SIDEBAR TABS MOVED TO MAIN CONTAINER */}
 
               {/* CHIBI SPIDEY (removed from inner map) */}
             </div>
