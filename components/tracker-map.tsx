@@ -94,11 +94,7 @@ export function TrackerMap({
 				colorScheme={"DARK" as any}
 				backgroundColor="#030405"
 				className="h-full w-full"
-				minZoom={2}
-				restriction={{
-					latLngBounds: { north: 85, south: -85, west: -180, east: 180 },
-					strictBounds: false,
-				}}
+				minZoom={3}
 			>
 				{visiblePins.map((pin) => (
 					<AdvancedMarker
