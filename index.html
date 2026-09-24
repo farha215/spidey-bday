@@ -221,7 +221,7 @@
 
     /* Dark pixel-tinted basemap */
     #leaflet-map .leaflet-tile-pane {
-      filter: saturate(0.6) brightness(0.85) hue-rotate(-6deg) contrast(1.05);
+      filter: brightness(0.9) contrast(1.08) saturate(0.85);
     }
     #leaflet-map .leaflet-control-attribution {
       background: rgba(6,11,16,.75) !important; color: #5aabdb !important;
@@ -733,10 +733,9 @@ function initLeafletMap() {
     attributionControl: true
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap &copy; CARTO',
-    subdomains: 'abcd',
-    maxZoom: 19
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
+    maxZoom: 16
   }).addTo(leafletMap);
 
   const memIcon = (n) => L.divIcon({
