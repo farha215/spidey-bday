@@ -55,7 +55,7 @@ export function BootSequence({ onComplete }: { onComplete: () => void }) {
   }, [onComplete]);
 
   return (
-    <div className="absolute inset-0 z-40 bg-[#1a1a1a] flex flex-col justify-end p-4 pb-10 overflow-hidden font-mono text-[8px] sm:text-[10px] text-[#888] tracking-widest">
+    <div className="absolute inset-0 z-40 bg-[#1a1a1a] flex flex-col justify-end p-4 pb-10 overflow-hidden font-pixel-body text-[8px] sm:text-[10px] text-[#888] tracking-widest">
       
       {/* HANGING SPIDEY */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
