@@ -86,7 +86,7 @@ export function TrackerMap({
 	return (
 		<div className="relative h-full w-full">
 			<Map
-				mapId="spidey-tracker-map"
+				mapId="DEMO_MAP_ID"
 				defaultCenter={{ lat: -14, lng: -67 }}
 				defaultZoom={2.5}
 				disableDefaultUI={true}
