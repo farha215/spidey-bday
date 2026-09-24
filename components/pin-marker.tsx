@@ -20,8 +20,6 @@ export function PinMarker({ pin }: { pin: Pin }) {
 			style={{ width: 42, height: 42 }}
 			title={pin.title}
 		>
-			<span className="drop-wave" aria-hidden />
-			<span className="drop-wave drop-wave--b" aria-hidden />
 			<div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-white bg-white shadow-[0_0_12px_rgba(255,255,255,0.4)]">
 				<img
 					src={pin.pinType === "letter" ? "/spidey-bday/assets/spider-black.png" : "/spidey-bday/assets/pin-spider.png"}
