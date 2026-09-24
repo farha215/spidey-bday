@@ -43,15 +43,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (isBootComplete()) {
-      const soundOn = getSoundPreference();
-      if (soundOn) sound.enable();
-      setMuted(!soundOn);
-      setStage("live");
-    } else {
-      finishBoot(true);
-    }
-  }, [finishBoot]);
+    const soundOn = getSoundPreference();
+    if (soundOn) sound.enable();
+    setMuted(!soundOn);
+  }, []);
 
   const openMemory = (idx: number) => {
     sound.play("panel-open", 0.45);
