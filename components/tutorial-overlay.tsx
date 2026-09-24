@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { Radar } from "@/components/radar";
-import type { MapRef } from "@/components/ui/map";
 
 const AUTO_CLOSE_MS = 8000;
 
@@ -40,7 +39,6 @@ const LEGEND = [
  * radar sweeping empty (its natural empty state). Auto-closes or click.
  */
 export function TutorialOverlay({ onClose }: { onClose: () => void }) {
-	const dummyMapRef = useRef<MapRef | null>(null);
 
 	useEffect(() => {
 		const t = setTimeout(onClose, AUTO_CLOSE_MS);
@@ -98,7 +96,7 @@ export function TutorialOverlay({ onClose }: { onClose: () => void }) {
 			</span>
 
 			{/* the radar itself, sweeping empty */}
-			<Radar mapRef={dummyMapRef} pins={[]} decorative />
+			<Radar map={null} pins={[]} decorative />
 
 			<p className="blink absolute bottom-6 left-1/2 -translate-x-1/2 font-pixel-body text-[9px] text-[#f5e9c8]/80">
 				TOCA EN CUALQUIER LADO PARA SALTAR

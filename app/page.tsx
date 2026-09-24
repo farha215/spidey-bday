@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { MemoryModal } from "@/components/memory-modal";
 import { LetterModal } from "@/components/letter-modal";
 import { BootSequence } from "@/components/boot-sequence";
+import { APIProvider } from "@vis.gl/react-google-maps";
 import { sound } from "@/lib/sound";
 import {
   getSoundPreference,
@@ -65,7 +66,8 @@ export default function Home() {
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-black">
-      <main className="relative flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-[#0a0a0a] shadow-[0_0_50px_rgba(90,200,236,0.15)]">
+      <APIProvider apiKey="AIzaSyDhFTe_7TYC4vcCSntJmbIVQcXTjjZuXcM">
+        <main className="relative flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-[#0a0a0a] shadow-[0_0_50px_rgba(90,200,236,0.15)]">
         {/* HEADER LOGO */}
         <div className="absolute left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b-4 border-[#2a9ac0] bg-[#5ac8ec] px-2 shadow-[0_0_15px_rgba(90,200,236,0.5)]">
           <div className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white shadow-[0_0_10px_rgba(255,64,64,0.6)]">
@@ -197,6 +199,7 @@ export default function Home() {
           </button>
         </div>
       </main>
+      </APIProvider>
     </div>
   );
 }

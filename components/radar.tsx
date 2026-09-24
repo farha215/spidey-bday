@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { MapRef } from "@/components/ui/map";
+
 import { PIN_COLORS, type Pin } from "@/lib/tracker";
 
 const SIZE = 110;
@@ -44,11 +44,11 @@ function bearing(
  * map center, placed by bearing + non-linear distance.
  */
 export function Radar({
-	mapRef,
+	map,
 	pins,
 	decorative = false,
 }: {
-	mapRef: React.RefObject<MapRef | null>;
+	map: google.maps.Map | null;
 	pins: Pin[];
 	decorative?: boolean;
 }) {
@@ -127,16 +127,17 @@ export function Radar({
 			ctx.stroke();
 
 			// blips relative to current map center
-			const map = mapRef.current;
 			if (map) {
-				const c = map.getCenter();
-				const zoom = map.getZoom() ?? 3;
-				const rangeKm = Math.max(300, 24000 / 2 ** (zoom - 1.5));
-				for (const p of pins) {
-					if (p.lat == null || p.lng == null) continue;
-					const d = haversineKm(c.lat, c.lng, p.lat, p.lng);
-					if (d > rangeKm) continue;
-					const ang = bearing(c.lat, c.lng, p.lat, p.lng) - Math.PI / 2;
+				const center = map.getCenter();
+				if (center) {
+					const c = { lat: center.lat(), lng: center.lng() };
+					const zoom = map.getZoom() ?? 3;
+					const rangeKm = Math.max(300, 24000 / 2 ** (zoom - 1.5));
+					for (const p of pins) {
+						if (p.lat == null || p.lng == null) continue;
+						const d = haversineKm(c.lat, c.lng, p.lat, p.lng);
+						if (d > rangeKm) continue;
+						const ang = bearing(c.lat, c.lng, p.lat, p.lng) - Math.PI / 2;
 					const rr = R * (d / rangeKm) ** 0.82;
 					ctx.beginPath();
 					ctx.arc(
@@ -148,6 +149,7 @@ export function Radar({
 					);
 					ctx.fillStyle = PIN_COLORS[p.pinType] ?? "#5ac8ec";
 					ctx.fill();
+				}
 				}
 			}
 
@@ -166,7 +168,7 @@ export function Radar({
 
 		raf = requestAnimationFrame(frame);
 		return () => cancelAnimationFrame(raf);
-	}, [mapRef, pins]);
+	}, [map, pins]);
 
 	return (
 		<div className="pointer-events-auto absolute bottom-9 right-3 z-10">
@@ -180,13 +182,12 @@ export function Radar({
 					<button
 						type="button"
 						aria-label="Vista global"
-						onClick={() =>
-							mapRef.current?.flyTo({
-								center: [-67, -14],
-								zoom: 2.5,
-								speed: 1.2,
-							})
-						}
+						onClick={() => {
+							if (map) {
+								map.panTo({ lat: -14, lng: -67 });
+								map.setZoom(2.5);
+							}
+						}}
 						className="bit-border flex h-8 w-8 cursor-pointer items-center justify-center font-pixel-body text-[13px] text-black hover:opacity-85"
 						style={
 							{
@@ -201,13 +202,12 @@ export function Radar({
 					<button
 						type="button"
 						aria-label="Centrar en Lima"
-						onClick={() =>
-							mapRef.current?.flyTo({
-								center: [-77.0428, -12.0464],
-								zoom: 10.5,
-								speed: 1.2,
-							})
-						}
+						onClick={() => {
+							if (map) {
+								map.panTo({ lat: -12.0464, lng: -77.0428 });
+								map.setZoom(10.5);
+							}
+						}}
 						className="bit-border flex h-8 w-8 cursor-pointer items-center justify-center font-pixel-body text-[13px] text-black hover:opacity-85"
 						style={
 							{
