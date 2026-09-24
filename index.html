@@ -7,6 +7,7 @@
   <meta name="description" content="A special birthday Spidey Tracker for Twin." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -107,7 +108,7 @@
 
     /* Spider image */
     #spider-img {
-      width: 90px; height: 90px;
+      height: 96px; width: auto;
       object-fit: contain;
       image-rendering: pixelated;
       filter: drop-shadow(0 0 8px rgba(200,30,30,.6));
@@ -221,7 +222,56 @@
 
     /* ── Map ── */
     .map-wrap { flex: 1; position: relative; overflow: hidden; min-height: 0; }
-    #map-canvas { display: block; position: absolute; top: 0; left: 0; }
+    #leaflet-map { position: absolute; inset: 0; background: #0a1628; z-index: 1; }
+
+    /* Dark pixel-tinted basemap */
+    #leaflet-map .leaflet-tile-pane {
+      filter: saturate(0.6) brightness(0.85) hue-rotate(-6deg) contrast(1.05);
+    }
+    #leaflet-map .leaflet-control-attribution {
+      background: rgba(6,11,16,.75) !important; color: #5aabdb !important;
+      font-family: 'Press Start 2P', monospace; font-size: 4.5px !important;
+      border: 1px solid #2a6a90; padding: 3px 5px !important;
+    }
+    #leaflet-map .leaflet-control-attribution a { color: #2d8ec9 !important; }
+    #leaflet-map .leaflet-control-zoom { display: none; }
+
+    /* Leaflet pin markers (reuses pin visuals, positioned by Leaflet) */
+    .leaflet-div-icon,
+    .leaflet-marker-icon { background: transparent !important; border: none !important; }
+    .lf-pin {
+      width: 40px; height: 40px; border-radius: 50%; border: 3px solid;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 18px; user-select: none; position: relative;
+    }
+    .lf-pin.pin-mem {
+      background: rgba(22,163,74,.9); border-color: #4ade80;
+      animation: pulseMem 2.5s ease-in-out infinite;
+    }
+    .lf-pin.pin-letter {
+      background: rgba(185,28,28,.9); border-color: #f87171;
+      animation: pulseLetter 2.5s ease-in-out infinite;
+    }
+    .lf-pin .pin-lbl {
+      position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: #060b10; border: 1px solid #2d8ec9;
+      font-size: 5px; color: #5aabdb; padding: 3px 6px;
+      white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .2s;
+    }
+    .lf-pin:hover .pin-lbl { opacity: 1; }
+
+    /* Map control cluster (bottom-right, like the globe/center icons) */
+    .map-controls {
+      position: absolute; right: 10px; bottom: 62px; z-index: 20;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .map-ctrl-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 2px solid #2d8ec9; background: rgba(6,11,16,.85);
+      color: #2d8ec9; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; cursor: pointer; box-shadow: 0 0 10px rgba(45,142,201,.3);
+    }
+    .map-ctrl-btn:active { background: rgba(45,142,201,.25); }
 
     /* Rulers */
     .ruler {
@@ -297,7 +347,7 @@
     }
     @keyframes spiderBob { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-5px) } }
     .walk-img {
-      width: 36px; height: 36px; object-fit: contain;
+      height: 46px; width: auto; object-fit: contain;
       image-rendering: pixelated;
       filter: drop-shadow(0 0 4px rgba(200,30,30,.5));
     }
@@ -433,8 +483,8 @@
     <div class="web-stage">
       <div id="web-line"></div>
       <div id="spider-drop">
-        <!-- Uses spiderman.png if present, falls back to CSS art -->
-        <img id="spider-img" src="spiderman.png" alt="Spider-Man"
+        <!-- assets/spider-drop.png, falls back to CSS art if missing -->
+        <img id="spider-img" src="assets/spider-drop.png" alt="Spider-Man"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
         <div class="css-spider">
           <div class="sp-head"><div class="sp-eye-l"></div><div class="sp-eye-r"></div></div>
@@ -476,11 +526,11 @@
       <div class="hdr-title">
         SPIDEY <div class="eyes-wrap"><div class="s-eye"></div><div class="s-eye"></div></div> TRACKER
       </div>
-      <div class="hdr-btn">🕷</div>
+      <div class="hdr-btn" onclick="openLetter()">🕷</div>
     </div>
 
     <div class="map-wrap" id="map-wrap">
-      <canvas id="map-canvas"></canvas>
+      <div id="leaflet-map"></div>
 
       <div class="ruler left"  id="ruler-l"></div>
       <div class="ruler right" id="ruler-r"></div>
@@ -490,33 +540,15 @@
         <div class="flt-btn red   active" id="flt-let" onclick="toggleFilter(this)">🕷</div>
       </div>
 
-      <!-- ── Memory pins ── -->
-      <div class="map-pin pin-mem" id="pin-0" style="left:58%;top:22%" onclick="openMemory(0)">🕷<div class="pin-lbl">MEMORY #1</div></div>
-      <div class="map-pin pin-mem" id="pin-1" style="left:28%;top:42%" onclick="openMemory(1)">🕷<div class="pin-lbl">MEMORY #2</div></div>
-      <div class="map-pin pin-mem" id="pin-2" style="left:72%;top:57%" onclick="openMemory(2)">🕷<div class="pin-lbl">MEMORY #3</div></div>
-      <div class="map-pin pin-mem" id="pin-3" style="left:44%;top:73%" onclick="openMemory(3)">🕷<div class="pin-lbl">MEMORY #4</div></div>
-
-      <!-- ── Letter pin ── -->
-      <div class="map-pin pin-letter" id="pin-letter" style="left:62%;top:43%" onclick="openLetter()">✉<div class="pin-lbl">READ LETTER</div></div>
-
-      <!-- Spiderweb corner -->
-      <div class="web-corner">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <line x1="50" y1="50" x2="50"  y2="0"   stroke="#2d8ec9" stroke-width=".9" opacity=".7"/>
-          <line x1="50" y1="50" x2="93"  y2="25"  stroke="#2d8ec9" stroke-width=".9" opacity=".7"/>
-          <line x1="50" y1="50" x2="93"  y2="75"  stroke="#2d8ec9" stroke-width=".9" opacity=".7"/>
-          <line x1="50" y1="50" x2="50"  y2="100" stroke="#2d8ec9" stroke-width=".9" opacity=".7"/>
-          <line x1="50" y1="50" x2="7"   y2="75"  stroke="#2d8ec9" stroke-width=".9" opacity=".7"/>
-          <line x1="50" y1="50" x2="7"   y2="25"  stroke="#2d8ec9" stroke-width=".9" opacity=".7"/>
-          <polygon points="50,18 75,34 75,66 50,82 25,66 25,34" fill="none" stroke="#2d8ec9" stroke-width=".9" opacity=".55"/>
-          <polygon points="50,32 65,41 65,59 50,68 35,59 35,41" fill="none" stroke="#2d8ec9" stroke-width=".9" opacity=".45"/>
-          <circle cx="50" cy="50" r="6" fill="none" stroke="#2d8ec9" stroke-width=".9" opacity=".65"/>
-        </svg>
+      <div class="map-controls">
+        <div class="map-ctrl-btn" onclick="mapZoom(1)">＋</div>
+        <div class="map-ctrl-btn" onclick="mapZoom(-1)">－</div>
+        <div class="map-ctrl-btn" onclick="recenterMap()">◎</div>
       </div>
 
       <!-- Walk figure -->
       <div class="walk-figure">
-        <img class="walk-img" src="spiderman.png" alt=""
+        <img class="walk-img" src="assets/spiderman-walk.png" alt=""
              onerror="this.style.display='none'" />
       </div>
     </div>
@@ -524,7 +556,7 @@
     <div class="ticker-bar">
       <div class="ticker-wrap">
         <div class="ticker-txt">
-          HAPPY BIRTHDAY TWIN! 🕷 TAP THE SPIDER ICONS TO UNLOCK MEMORIES &amp; A SECRET MESSAGE 🕸 YOUR FRIENDLY NEIGHBORHOOD BIRTHDAY SURPRISE IS HERE 🕷 HAPPY BIRTHDAY TWIN! 🕸
+          HAPPY BIRTHDAY TWIN! 🕷 TAP THE PINS ACROSS CALICUT TO UNLOCK MEMORIES &amp; A SECRET MESSAGE 🕸 YOUR FRIENDLY NEIGHBORHOOD BIRTHDAY SURPRISE IS HERE 🕷 HAPPY BIRTHDAY TWIN! 🕸
         </div>
       </div>
       <div class="snd-btn" id="snd-toggle" onclick="toggleSound()">🔊</div>
@@ -593,6 +625,7 @@
 
 </div><!-- /app -->
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /* ══════════════════════════════════════════════
    ✏️  CUSTOMIZE YOUR MEMORIES HERE
@@ -623,10 +656,25 @@ const MEMORIES = [
   }
 ];
 
+/* ── Pin locations across Calicut (Kozhikode) ──
+   Edit these lat/lng values to move a pin anywhere on the map. */
+const CALICUT_CENTER = [11.2588, 75.7804];
+const CALICUT_ZOOM   = 14;
+const MEM_PINS = [
+  [11.2626, 75.7746],
+  [11.2540, 75.7862],
+  [11.2685, 75.7830],
+  [11.2497, 75.7760]
+];
+const LETTER_PIN = [11.2588, 75.7810];
+
 /* ── State ── */
 let soundEnabled = true;
 let guideOpen    = false;
 let audioCtx     = null;
+let leafletMap   = null;
+let memLayer     = null;
+let letterLayer  = null;
 
 /* ── Sound ── */
 function getAudio() {
@@ -671,7 +719,7 @@ function launchTracker() {
     ld.style.display = 'none';
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        buildMap();
+        initLeafletMap();
         buildRulers();
         showGuideOnce();
       });
@@ -679,128 +727,50 @@ function launchTracker() {
   }, 700);
 }
 
-/* ── Map canvas ── */
-function buildMap() {
-  const canvas = document.getElementById('map-canvas');
-  const wrap   = document.getElementById('map-wrap');
+/* ── Leaflet map of Calicut ── */
+function initLeafletMap() {
+  if (leafletMap) { leafletMap.invalidateSize(); return; }
 
-  // Get real dimensions — use multiple fallbacks
-  const w = wrap.offsetWidth  || wrap.clientWidth  || window.innerWidth;
-  const h = wrap.offsetHeight || wrap.clientHeight || (window.innerHeight - 98);
-
-  canvas.width  = w;
-  canvas.height = h;
-  canvas.style.width  = w + 'px';
-  canvas.style.height = h + 'px';
-
-  drawCity(canvas);
-}
-
-function drawCity(canvas) {
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-
-  /* ── Base ── */
-  ctx.fillStyle = '#0a1628';
-  ctx.fillRect(0, 0, W, H);
-
-  /* ── Fine grid ── */
-  ctx.strokeStyle = '#152540';
-  ctx.lineWidth = .6;
-  for (let x = 0; x < W; x += 22) {
-    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-  }
-  for (let y = 0; y < H; y += 22) {
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-  }
-
-  /* ── City blocks ── */
-  const blocks = [
-    [.08,.04,.20,.11],[.35,.02,.22,.09],[.64,.04,.26,.14],[.93,.06,.06,.12],
-    [.04,.18,.18,.13],[.27,.17,.22,.10],[.54,.19,.22,.12],[.80,.18,.18,.16],
-    [.06,.36,.20,.14],[.31,.35,.25,.13],[.62,.36,.20,.11],[.86,.37,.12,.16],
-    [.05,.56,.20,.13],[.30,.55,.22,.12],[.57,.54,.20,.14],[.81,.56,.16,.16],
-    [.08,.74,.22,.15],[.38,.73,.20,.18],[.64,.74,.24,.18],[.90,.76,.08,.14],
-  ];
-  blocks.forEach(([bx, by, bw, bh]) => {
-    ctx.fillStyle = '#091422';
-    ctx.fillRect(bx*W, by*H, bw*W, bh*H);
-    ctx.strokeStyle = '#1c3a56'; ctx.lineWidth = 1;
-    ctx.strokeRect(bx*W, by*H, bw*W, bh*H);
-    // windows glow
-    ctx.fillStyle = 'rgba(45,142,201,0.05)';
-    for (let wx = bx*W + 4; wx < (bx+bw)*W - 8; wx += 9) {
-      for (let wy = by*H + 4; wy < (by+bh)*H - 8; wy += 9) {
-        if (Math.random() > .55) ctx.fillRect(wx, wy, 4, 4);
-      }
-    }
+  leafletMap = L.map('leaflet-map', {
+    center: CALICUT_CENTER,
+    zoom: CALICUT_ZOOM,
+    zoomControl: false,
+    attributionControl: true
   });
 
-  /* ── Main roads (much brighter) ── */
-  const hR = [.15, .33, .49, .65, .81];
-  const vR = [.20, .40, .60, .80];
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(leafletMap);
 
-  // Road glow
-  ctx.strokeStyle = 'rgba(45,142,201,0.12)';
-  ctx.lineWidth = 10;
-  hR.forEach(y => { ctx.beginPath(); ctx.moveTo(0,y*H); ctx.lineTo(W,y*H); ctx.stroke(); });
-  vR.forEach(x => { ctx.beginPath(); ctx.moveTo(x*W,0); ctx.lineTo(x*W,H); ctx.stroke(); });
+  const memIcon = (n) => L.divIcon({
+    className: '', html: `<div class="lf-pin pin-mem">🕷<div class="pin-lbl">MEMORY #${n}</div></div>`,
+    iconSize: [40,40], iconAnchor: [20,20]
+  });
+  const letterIcon = L.divIcon({
+    className: '', html: `<div class="lf-pin pin-letter">✉<div class="pin-lbl">READ LETTER</div></div>`,
+    iconSize: [40,40], iconAnchor: [20,20]
+  });
 
-  // Road surface
-  ctx.strokeStyle = '#244c6e';
-  ctx.lineWidth = 4;
-  hR.forEach(y => { ctx.beginPath(); ctx.moveTo(0,y*H); ctx.lineTo(W,y*H); ctx.stroke(); });
-  vR.forEach(x => { ctx.beginPath(); ctx.moveTo(x*W,0); ctx.lineTo(x*W,H); ctx.stroke(); });
+  memLayer = L.layerGroup(
+    MEM_PINS.map((pos, i) =>
+      L.marker(pos, { icon: memIcon(i+1) }).on('click', () => openMemory(i))
+    )
+  ).addTo(leafletMap);
 
-  // Road center lines (dashed, bright)
-  ctx.setLineDash([8, 10]);
-  ctx.strokeStyle = 'rgba(45,142,201,0.35)';
-  ctx.lineWidth = 1;
-  hR.forEach(y => { ctx.beginPath(); ctx.moveTo(0,y*H); ctx.lineTo(W,y*H); ctx.stroke(); });
-  vR.forEach(x => { ctx.beginPath(); ctx.moveTo(x*W,0); ctx.lineTo(x*W,H); ctx.stroke(); });
-  ctx.setLineDash([]);
+  letterLayer = L.layerGroup([
+    L.marker(LETTER_PIN, { icon: letterIcon }).on('click', () => openLetter())
+  ]).addTo(leafletMap);
+}
 
-  /* ── Intersections ── */
-  hR.forEach(y => vR.forEach(x => {
-    const grd = ctx.createRadialGradient(x*W, y*H, 0, x*W, y*H, 16);
-    grd.addColorStop(0, 'rgba(45,142,201,0.18)');
-    grd.addColorStop(1, 'rgba(45,142,201,0)');
-    ctx.fillStyle = grd;
-    ctx.fillRect(x*W - 16, y*H - 16, 32, 32);
-  }));
-
-  /* ── Random city lights ── */
-  for (let i = 0; i < 60; i++) {
-    const lx = Math.random() * W;
-    const ly = Math.random() * H;
-    const r  = Math.random() * 2 + 0.5;
-    const g  = ctx.createRadialGradient(lx, ly, 0, lx, ly, r * 4);
-    const colors = ['rgba(45,142,201,', 'rgba(120,200,255,', 'rgba(200,80,80,'];
-    const c = colors[Math.floor(Math.random() * colors.length)];
-    g.addColorStop(0, c + '0.6)');
-    g.addColorStop(1, c + '0)');
-    ctx.fillStyle = g;
-    ctx.beginPath();
-    ctx.arc(lx, ly, r * 4, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = c + '0.8)';
-    ctx.beginPath();
-    ctx.arc(lx, ly, r, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  /* ── Scanlines ── */
-  for (let y = 0; y < H; y += 4) {
-    ctx.fillStyle = 'rgba(0,0,0,.10)';
-    ctx.fillRect(0, y, W, 1);
-  }
-
-  /* ── Vignette ── */
-  const vig = ctx.createRadialGradient(W/2, H/2, H*.2, W/2, H/2, H*.85);
-  vig.addColorStop(0, 'rgba(0,0,0,0)');
-  vig.addColorStop(1, 'rgba(0,0,20,.6)');
-  ctx.fillStyle = vig;
-  ctx.fillRect(0, 0, W, H);
+function mapZoom(dir) {
+  playBeep(550, .06);
+  if (leafletMap) leafletMap.setZoom(leafletMap.getZoom() + dir);
+}
+function recenterMap() {
+  playBeep(600, .08);
+  if (leafletMap) leafletMap.setView(CALICUT_CENTER, CALICUT_ZOOM);
 }
 
 /* ── Rulers ── */
@@ -857,16 +827,17 @@ document.querySelectorAll('.modal-overlay').forEach(o => {
 function toggleFilter(btn) {
   playBeep(550, .07);
   btn.classList.toggle('active');
-  const isMem = btn.id === 'flt-mem';
-  document.querySelectorAll(isMem ? '.pin-mem' : '.pin-letter').forEach(p => {
-    p.style.display = btn.classList.contains('active') ? 'flex' : 'none';
-  });
+  const on     = btn.classList.contains('active');
+  const isMem  = btn.id === 'flt-mem';
+  const layer  = isMem ? memLayer : letterLayer;
+  if (!leafletMap || !layer) return;
+  if (on) leafletMap.addLayer(layer); else leafletMap.removeLayer(layer);
 }
 
 /* ── Resize ── */
 window.addEventListener('resize', () => {
-  if (document.getElementById('tracker-screen').classList.contains('show')) {
-    buildMap();
+  if (document.getElementById('tracker-screen').classList.contains('show') && leafletMap) {
+    leafletMap.invalidateSize();
   }
 });
 </script>
