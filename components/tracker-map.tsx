@@ -50,7 +50,11 @@ export function TrackerMap({
 			map.panTo({ lat: pin.lat, lng: pin.lng });
 			map.setZoom(10.8);
 			
-			setSelected(pin);
+			if (pin.pinType === "letter" || pin.id === "letter") {
+				setSelected(null);
+			} else {
+				setSelected(pin);
+			}
 			onPinFocus?.(pin.id);
 			deepLinkedRef.current = pin.id;
 			
@@ -130,7 +134,7 @@ export function TrackerMap({
 
 			{toastMsg && (
 				<div className="pointer-events-none absolute bottom-4 left-1/2 z-50 -translate-x-1/2">
-					<div className="border-[2px] border-[#96e0f7] bg-[#0a0a0a]/80 px-4 py-2 font-pixel-body text-[10px] tracking-wider text-[#96e0f7] backdrop-blur-sm">
+					<div className="border-[2px] border-[#96e0f7] bg-[#0a0a0a]/80 px-4 py-2 font-pixel-body text-[10px] tracking-wider text-[#96e0f7] backdrop-blur-sm whitespace-nowrap">
 						{toastMsg}
 					</div>
 				</div>

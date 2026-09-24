@@ -3,82 +3,130 @@
 import { useEffect, useState } from "react";
 import { sound } from "@/lib/sound";
 
-const BOOT_LOGS = [
-  "INITIALIZING SPIDEY TRACKER v4.2.0...",
-  "BOOTING CORE SERVICES [OK]",
-  "INITIALIZING MAP RENDER PIPELINE...",
-  "LOADING BASE ASSETS: FRAME UI [OK]",
-  "LOADING BASE ASSETS: TICKER MODULE [OK]",
-  "STARTING EVENT BUS [OK]",
-  "CALIBRATING SPRITESHEET RENDERER [OK]",
-  "WARMING IMAGE CACHE...",
-  "CHECKING FONT REGISTRY [OK]",
-  "VALIDATING ROUTE HANDLERS [OK]",
-  "BUILDING API CONNECTION POOL...",
-  "AUTHENTICATING SESSION TOKENS [OK]",
-  "RUNNING BOOT SELF-TEST: PASS",
-  "VERIFYING FEATURE FLAGS [OK]",
-  "PRELOADING CRITICAL UI FRAGMENTS...",
-  "MOUNTING OVERLAY CONTROLLERS [OK]",
-  "SYNCING STATE STORE [OK]",
-  "INITIALIZING LIGHTBOX ROUTES...",
-  "CHECKING MEDIA GATES [OK]",
-  "PATCHING FALLBACK HANDLERS [OK]",
-  "SCANNING MODULE DEPENDENCIES...",
-  "RESOLVING ASYNC TASK QUEUE [OK]",
-  "COMPILING BOOT LOG BUFFER...",
-  "VALIDATING RUNTIME CONFIG [OK]"
-];
+export function BootSequence({ 
+  onComplete,
+  onSelectSound 
+}: { 
+  onComplete: () => void;
+  onSelectSound?: (enable: boolean) => void;
+}) {
+  const [dropProgress, setDropProgress] = useState(false);
+  const [symbolBloom, setSymbolBloom] = useState(false);
 
-export function BootSequence({ onComplete }: { onComplete: () => void }) {
-  const [logs, setLogs] = useState<string[]>([]);
-  
   useEffect(() => {
-    let currentIndex = 0;
-    
-    // Type out logs rapidly
-    const interval = setInterval(() => {
-      if (currentIndex < BOOT_LOGS.length) {
-        setLogs((prev) => [...prev, BOOT_LOGS[currentIndex]]);
-        // Play a very subtle mechanical typing tick or just rely on visual (sound can get annoying if too fast)
-        // sound.play("typing", 0.05); 
-        currentIndex++;
-      } else {
-        clearInterval(interval);
-        setTimeout(() => {
-          onComplete();
-        }, 800); // Wait a tiny bit after logs finish before hiding
-      }
-    }, 60); // fast log scroll
+    // Start dropping animation smoothly after mount
+    const dropTimer = setTimeout(() => {
+      setDropProgress(true);
+    }, 150);
 
-    return () => clearInterval(interval);
-  }, [onComplete]);
+    // Trigger symbol bloom right when Spider-Man reaches the bottom of the drop!
+    const bloomTimer = setTimeout(() => {
+      setSymbolBloom(true);
+    }, 2100);
+
+    return () => {
+      clearTimeout(dropTimer);
+      clearTimeout(bloomTimer);
+    };
+  }, []);
+
+  const handleSoundChoice = (enableSound: boolean) => {
+    if (enableSound) {
+      sound.enable();
+      sound.play("jingle", 0.3);
+    } else {
+      sound.disable();
+    }
+    onSelectSound?.(enableSound);
+    onComplete();
+  };
 
   return (
-    <div className="absolute inset-0 z-40 bg-[#1a1a1a] flex flex-col justify-end p-4 pb-10 overflow-hidden font-pixel-body text-[8px] sm:text-[10px] text-[#888] tracking-widest">
-      
-      {/* HANGING SPIDEY */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
-        {/* Web string */}
-        <div className="w-[2px] h-32 bg-white opacity-80" />
+    <div className="absolute inset-0 z-40 flex flex-col justify-end items-center p-5 pb-6 overflow-hidden font-pixel-body select-none bg-[#1e2226]">
+      {/* BACKGROUND SPIDER SYMBOL EMBLEM - BLOOMS OUT FROM BEHIND SPIDEY'S HEAD */}
+      <div className="absolute top-[95px] left-1/2 -translate-x-1/2 z-10 flex items-center justify-center pointer-events-none overflow-visible">
+        {/* Radial Cyan Bloom Glow */}
+        <div 
+          className={`absolute w-[350px] h-[350px] rounded-full transition-all duration-1000 ease-out ${
+            symbolBloom ? "scale-100 opacity-60" : "scale-25 opacity-0"
+          }`}
+          style={{
+            background: "radial-gradient(circle at center, rgba(150, 224, 247, 0.25) 0%, rgba(90, 156, 186, 0.08) 50%, transparent 75%)",
+            filter: "blur(20px)"
+          }}
+        />
+
+        <img 
+          src="/spidey-bday/assets/symbol-transparent.png" 
+          alt="" 
+          className={`w-[320px] max-w-[85vw] h-auto object-contain pixelated filter drop-shadow-[0_0_20px_rgba(150,224,247,0.35)] brightness-110 transition-all duration-1000 ease-out origin-center ${
+            symbolBloom ? "scale-100 opacity-45" : "scale-25 opacity-0"
+          }`}
+        />
+      </div>
+
+      {/* SCANLINES OVERLAY */}
+      <div className="scanlines pointer-events-none absolute inset-0 z-10 opacity-60" />
+
+      {/* TOP DROPPING SPIDERMAN & WEB */}
+      <div 
+        className="absolute top-0 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center transition-all duration-[2500ms] ease-out pointer-events-none"
+        style={{ 
+          transform: dropProgress ? "translateY(0)" : "translateY(-295px)",
+          opacity: dropProgress ? 1 : 0
+        }}
+      >
+        {/* Web string attached directly to the very top edge of the screen */}
+        <div className="w-[2px] h-[155px] bg-white opacity-90 shadow-[0_0_4px_rgba(255,255,255,0.8)]" />
         
-        {/* Spidey avatar with animation */}
-        <div className="relative -mt-2 animate-spidey-hang">
+        {/* Spider-Man connected directly to the bottom end of the web line */}
+        <div className="-mt-[1px]">
           <img 
-            src="/spidey-bday/assets/spider-drop-transparent.png" 
-            alt="" 
-            className="w-16 h-16 object-contain pixelated" 
+            src="/spidey-bday/assets/spidey-drop-transparent.png" 
+            alt="Spider-Man" 
+            className="w-20 h-auto object-contain pixelated drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]" 
           />
         </div>
       </div>
 
-      {/* TERMINAL LOGS */}
-      <div className="flex flex-col gap-1 w-full max-w-[90%]">
-        {logs.map((log, i) => (
-          <div key={i} className="whitespace-nowrap opacity-70 animate-fade-in-fast">
-            {log}
-          </div>
-        ))}
+      {/* BOTTOM SECTION: WELCOME TEXT & SOUND BUTTONS */}
+      <div className={`relative z-20 flex flex-col items-center text-center gap-4 w-full transition-all duration-700 delay-300 ${dropProgress ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+        <div className="font-pixel-body text-[12px] sm:text-[13px] leading-relaxed text-[#96e0f7] tracking-widest max-w-[340px] font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+          <p>WELCOME TO THE SPIDEY TRACKER.</p>
+          <p>INTERACT WITH THE MAP TO VIEW</p>
+          <p>TWIN SIGHTINGS</p>
+          <p>ALL OVER THE WORLD.</p>
+        </div>
+
+        <p className="font-pixel-body text-[9px] tracking-widest text-[#7a9cb0]">
+          CHOOSE YOUR SETTINGS AND START TRACKING
+        </p>
+
+        {/* SOUND SELECTION BUTTONS */}
+        <div className="flex items-center justify-center gap-3 w-full">
+          <button
+            onClick={() => handleSoundChoice(true)}
+            className="btn-3d px-4 py-2 font-pixel-body text-[9px] tracking-wider uppercase text-white shadow-lg"
+            style={{ 
+              "--btn-color": "#4a7c8c", 
+              "--bevel-light": "rgba(255,255,255,0.4)", 
+              "--bevel-dark": "rgba(0,0,0,0.5)" 
+            } as any}
+          >
+            SOUND ON
+          </button>
+          <button
+            onClick={() => handleSoundChoice(false)}
+            className="btn-3d px-4 py-2 font-pixel-body text-[9px] tracking-wider uppercase text-white shadow-lg opacity-80 hover:opacity-100"
+            style={{ 
+              "--btn-color": "#2a3036", 
+              "--bevel-light": "rgba(255,255,255,0.2)", 
+              "--bevel-dark": "rgba(0,0,0,0.6)" 
+            } as any}
+          >
+            SOUND OFF
+          </button>
+        </div>
       </div>
     </div>
   );

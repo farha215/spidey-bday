@@ -229,6 +229,24 @@
 	);
 }
 
+/* --- 2-Toned 3D Pixel Frame Bezel (Spidey Tracker console style) --- */
+.frame-3d-outer {
+	border: 4px solid #000000;
+	border-radius: 6px;
+	box-shadow: 
+		inset 4px 4px 0 #5a9cba,
+		inset -4px -4px 0 #10354e,
+		0 0 50px rgba(90, 200, 236, 0.2);
+}
+
+.frame-3d-screen {
+	border: 3px solid #000000;
+	border-radius: 4px;
+	box-shadow: 
+		inset 4px 4px 0 #051522,
+		inset -4px -4px 0 #5a9cba;
+}
+
 /* --- 3D Pixel Pill Button (Requested by User) --- */
 .btn-3d {
 	position: relative;
@@ -382,13 +400,12 @@
 
 @keyframes spidey-idle {
 	0% { transform: translateY(0px) scale(1, 1); }
-	15% { transform: translateY(-3px) scale(1, 1.05); } /* bounce up */
+	15% { transform: translateY(-3px) scale(1, 1.05); }
 	30% { transform: translateY(0px) scale(1, 1); }
-	40% { transform: translateY(0px) scale(-1, 1); } /* flip horizontally */
-	45% { transform: translateY(0px) scale(-1, 0.9); } /* blink */
-	50% { transform: translateY(0px) scale(-1, 1); }
-	60% { transform: translateY(0px) scale(1, 1); } /* back to normal */
-	75% { transform: translateY(-3px) scale(1, 1.05); } /* bounce up */
+	45% { transform: translateY(0px) scale(1, 0.88); }
+	50% { transform: translateY(0px) scale(1, 1); }
+	75% { transform: translateY(-3px) scale(1, 1.05); }
+	85% { transform: translateY(0px) scale(1, 0.9); }
 	100% { transform: translateY(0px) scale(1, 1); }
 }
 
@@ -821,3 +838,35 @@
 		inset -10px 0 16px rgba(0, 0, 0, 0.4),
 		inset 0 3px 0 rgba(0, 0, 0, 0.8);
 }
+
+/* Google Places Autocomplete Styling */
+.pac-container {
+	background-color: #ded6be !important;
+	border: 2px solid #000000 !important;
+	box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8) !important;
+	font-family: var(--font-pixel-body), monospace !important;
+	font-size: 8px !important;
+	z-index: 99999 !important;
+}
+.pac-item {
+	font-family: var(--font-pixel-body), monospace !important;
+	font-size: 9px !important;
+	color: #000000 !important;
+	border-top: 1px solid rgba(0, 0, 0, 0.15) !important;
+	padding: 4px 8px !important;
+	cursor: pointer !important;
+}
+.pac-item:hover, .pac-item-selected {
+	background-color: #5a9cba !important;
+	color: #ffffff !important;
+}
+.pac-item-query {
+	font-family: var(--font-pixel-body), monospace !important;
+	font-size: 9px !important;
+	color: #000000 !important;
+	font-weight: bold !important;
+}
+.pac-matched {
+	color: #2d7d54 !important;
+}
+

@@ -64,9 +64,7 @@ export const PIN_Z: Record<PinType, number> = {
 };
 
 export function getPins(): Pin[] {
-	return (mainData.pins as Pin[])
-		.slice()
-		.sort((a, b) => PIN_Z[a.pinType] - PIN_Z[b.pinType]);
+	return [];
 }
 
 export function getBootLines(): string[] {
