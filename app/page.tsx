@@ -159,29 +159,34 @@ export default function Home() {
                 </div>
               )}
 
-              {/* CHIBI SPIDEY */}
-              {booted && (
-                <div className="pointer-events-none absolute bottom-4 left-4 z-20 animate-bounce rounded-sm bg-white/80 p-[2px]">
-                  <img src="/assets/spiderman-walk.png" alt="" className="h-12 w-auto pixelated" />
-                </div>
-              )}
+              {/* CHIBI SPIDEY (removed from inner map) */}
             </div>
           </div>
         </div>
 
         {/* BOTTOM TICKER PANEL */}
-        <div className="z-50 flex h-10 w-full shrink-0 items-center gap-2 border-t-4 border-[#2a9ac0] bg-[#5ac8ec] px-2 py-1 pb-safe-2">
-          {/* SCROLLING TICKER */}
-          <div className="relative flex h-full flex-1 items-center overflow-hidden rounded bg-[#04040e] border-2 border-[#04040e] shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]">
-            <div className="ticker-track flex w-max items-center font-pixel-body text-[8px] text-[#5ac8ec] tracking-widest pt-1">
-              <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
-              <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
-              <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
-              <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
-            </div>
+        <div className="relative z-50 flex h-14 w-full shrink-0 items-center gap-2 border-t-4 border-[#2a9ac0] bg-[#5ac8ec] py-2 pr-2 pl-12 pb-safe-3">
+          {/* OVERLAPPING SPIDEY AVATAR */}
+          <div className="absolute -left-2 bottom-0 z-50 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-[4px] border-[#0a0a0a] bg-[#2a9ac0] shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
+            <img src="/assets/spiderman-walk.png" alt="" className="h-12 w-auto pixelated drop-shadow-[0_2px_0_rgba(0,0,0,1)]" />
           </div>
 
-          {/* SOUND TOGGLE */}
+          {/* SCROLLING TICKER PILL */}
+          <div className="btn-3d flex h-full flex-1 items-center overflow-hidden font-pixel-body text-[8px] tracking-widest text-white" style={{ "--btn-color": "#1a1a1a", "--bevel-light": "rgba(255,255,255,0.15)", "--bevel-dark": "rgba(0,0,0,0.6)" } as any}>
+            {muted ? (
+              <div className="flex w-full items-center justify-center pt-1 animate-pulse">
+                SELECT SOUND OPTION
+              </div>
+            ) : (
+              <div className="ticker-track flex w-max items-center h-full pt-1 text-[#5ac8ec]">
+                <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
+                <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
+                <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
+              </div>
+            )}
+          </div>
+
+          {/* SOUND TOGGLE PILL */}
           <button
             type="button"
             onClick={() => {
@@ -189,7 +194,8 @@ export default function Home() {
               setMuted(!on);
               setSoundPreference(on);
             }}
-            className="flex h-full aspect-square cursor-pointer items-center justify-center rounded bg-[#0a0a0a] font-pixel-body text-[10px] text-[#5ac8ec] hover:brightness-110"
+            className="btn-3d flex h-full aspect-square cursor-pointer items-center justify-center pt-1 font-pixel-body text-[12px] text-black"
+            style={{ "--btn-color": "#d4d4d4", "--bevel-light": "rgba(255,255,255,0.8)", "--bevel-dark": "rgba(0,0,0,0.4)" } as any}
           >
             {muted ? "×" : "♪"}
           </button>
