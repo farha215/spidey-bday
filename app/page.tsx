@@ -29,6 +29,17 @@ export default function Home() {
   const booted = stage === "live";
   const [muted, setMuted] = useState(true);
   const [activePanel, setActivePanel] = useState<PanelState>({ type: "none" });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showEyes, setShowEyes] = useState(false);
+
+  useEffect(() => {
+    if (isMenuOpen) return;
+    const interval = setInterval(() => {
+      setShowEyes(true);
+      setTimeout(() => setShowEyes(false), 2000); // show eyes for 2 seconds
+    }, 7000); // every 7 seconds
+    return () => clearInterval(interval);
+  }, [isMenuOpen]);
 
   const finishBoot = useCallback((playIntro: boolean) => {
     markBootComplete();
@@ -81,7 +92,7 @@ export default function Home() {
                   <path d="M0,2 L44,2 L56,23 L44,44 L0,44" fill="#6a9a6c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
                   <path d="M0,6 L38,6 L48,23" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
                 </svg>
-                <img src="/spidey-bday/assets/spider-black.png" alt="" className="relative z-10 mr-1 h-7 w-7 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
+                <img src="/spidey-bday/assets/side-button-transparent.png" alt="" className="relative z-10 mr-1 h-5 w-5 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
               </button>
               <button 
                 onClick={() => setActivePanel({ type: "none" })} 
@@ -91,20 +102,32 @@ export default function Home() {
                   <path d="M0,2 L44,2 L56,23 L44,44 L0,44" fill="#b85c5c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
                   <path d="M0,6 L38,6 L48,23" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
                 </svg>
-                <img src="/spidey-bday/assets/spider-black.png" alt="" className="relative z-10 mr-1 h-7 w-7 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
+                <img src="/spidey-bday/assets/side-button-transparent.png" alt="" className="relative z-10 mr-1 h-5 w-5 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
               </button>
             </div>
           )}
         <div className="absolute left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b-4 border-[#5a9cba] bg-[#96e0f7] px-2 shadow-[0_0_15px_rgba(150,224,247,0.5)]">
-          <div className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#ffc619] bg-white shadow-[0_0_10px_rgba(255,198,25,0.6)]">
-            <img src="/spidey-bday/assets/spidey-face.png" alt="Guide" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply' }} />
+          <div 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="relative flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#ffc619] bg-white shadow-[0_0_10px_rgba(255,198,25,0.6)]"
+          >
+            {isMenuOpen ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" className="h-6 w-6">
+                <line x1="6" y1="6" x2="18" y2="18" />
+                <line x1="18" y1="6" x2="6" y2="18" />
+              </svg>
+            ) : showEyes ? (
+              <img src="/spidey-bday/assets/spidey-face.png" alt="Guide" className="absolute inset-0 h-full w-full object-cover pixelated" style={{ mixBlendMode: 'multiply' }} />
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" className="h-5 w-5">
+                <line x1="4" y1="7" x2="20" y2="7" />
+                <line x1="4" y1="12" x2="20" y2="12" />
+                <line x1="4" y1="17" x2="20" y2="17" />
+              </svg>
+            )}
           </div>
-          <div className="flex items-center gap-2 font-pixel-body text-[10px] tracking-widest text-[#0a0a0a]">
-            SPIDEY
-            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-[#ffc619] bg-white">
-              <img src="/spidey-bday/assets/spidey-face.png" alt="Guide" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply', animationDelay: '2s' }} />
-            </div>
-            TRACKER<span className="title-cursor"></span>
+          <div className="flex flex-1 items-center justify-center">
+            <img src="/spidey-bday/assets/plaque-transparent.png" alt="Spidey Tracker" className="h-8 w-auto pixelated drop-shadow-[0_2px_0_rgba(0,0,0,0.5)]" />
           </div>
           <div onClick={openLetter} className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-[#5a9cba] bg-[#5a9cba]">
             <img src="/spidey-bday/assets/pin-spider.png" alt="Letter" className="h-full w-full object-cover pixelated" style={{ mixBlendMode: 'multiply' }} />

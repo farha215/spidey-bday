@@ -102,7 +102,7 @@ export function TrackerMap({
 				colorScheme={"DARK" as any}
 				backgroundColor="#030405"
 				className="h-full w-full"
-				minZoom={2}
+				minZoom={1.5}
 			>
 				{visiblePins.map((pin) => (
 					<AdvancedMarker
