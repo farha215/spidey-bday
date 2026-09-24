@@ -86,7 +86,7 @@ export function TrackerMap({
 	return (
 		<div className="relative h-full w-full">
 			<Map
-				mapId="DEMO_MAP_ID"
+				mapId="a02018de0f67e69b12e6719b"
 				defaultCenter={{ lat: -14, lng: -67 }}
 				defaultZoom={2.5}
 				disableDefaultUI={true}
