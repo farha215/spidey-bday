@@ -69,12 +69,12 @@ export default function Home() {
         {/* HEADER LOGO */}
         <div className="absolute left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b-4 border-[#2a9ac0] bg-[#5ac8ec] px-2 shadow-[0_0_15px_rgba(90,200,236,0.5)]">
           <div className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white shadow-[0_0_10px_rgba(255,64,64,0.6)]">
-            <img src="/assets/spidey-face.png" alt="Guide" className="h-full w-full object-cover pixelated" style={{ mixBlendMode: 'multiply' }} />
+            <img src="/assets/spidey-face.png" alt="Guide" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply' }} />
           </div>
           <div className="flex items-center gap-2 font-pixel-body text-[10px] tracking-widest text-[#0a0a0a]">
             SPIDEY
             <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white">
-              <img src="/assets/spidey-face.png" alt="Guide" className="h-full w-full object-cover pixelated" style={{ mixBlendMode: 'multiply' }} />
+              <img src="/assets/spidey-face.png" alt="Guide" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply', animationDelay: '2s' }} />
             </div>
             TRACKER
           </div>
@@ -150,7 +150,7 @@ export default function Home() {
                     LTR
                   </button>
                   <div className="mt-1 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white shadow-[0_0_10px_rgba(255,64,64,0.6)]">
-                    <img src="/assets/spidey-face.png" alt="" className="h-full w-full object-cover pixelated" style={{ mixBlendMode: 'multiply' }} />
+                    <img src="/assets/spidey-face.png" alt="" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply', animationDelay: '1s' }} />
                   </div>
                 </div>
               )}
@@ -164,7 +164,7 @@ export default function Home() {
         <div className="relative z-50 flex h-14 w-full shrink-0 items-center gap-2 border-t-4 border-[#2a9ac0] bg-[#5ac8ec] py-2 pr-2 pl-12 pb-safe-3">
           {/* OVERLAPPING SPIDEY AVATAR */}
           <div className="absolute -left-2 bottom-0 z-50 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-[4px] border-[#0a0a0a] bg-[#2a9ac0] shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
-            <img src="/assets/spiderman-walk.png" alt="" className="h-12 w-auto pixelated drop-shadow-[0_2px_0_rgba(0,0,0,1)]" />
+            <img src="/assets/spiderman-walk.png" alt="" className="h-12 w-auto pixelated drop-shadow-[0_2px_0_rgba(0,0,0,1)] animate-spidey-idle" />
           </div>
 
           {/* SCROLLING TICKER PILL */}
