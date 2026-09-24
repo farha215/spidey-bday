@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bitcount_Prop_Single, Press_Start_2P } from "next/font/google";
+import { Bitcount_Prop_Single } from "next/font/google";
 import "./globals.css";
 
 const pixelTitle = Bitcount_Prop_Single({
@@ -7,7 +7,7 @@ const pixelTitle = Bitcount_Prop_Single({
 	subsets: ["latin"],
 });
 
-const pixelBody = Press_Start_2P({
+const pixelBody = Bitcount_Prop_Single({
 	variable: "--font-pixel-body",
 	subsets: ["latin"],
 	weight: "400",

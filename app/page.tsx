@@ -68,25 +68,24 @@ export default function Home() {
     <div className="flex min-h-dvh items-center justify-center bg-black">
       <APIProvider apiKey="AIzaSyDhFTe_7TYC4vcCSntJmbIVQcXTjjZuXcM">
         <main className="relative flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-[#0a0a0a] shadow-[0_0_50px_rgba(90,200,236,0.15)]">
-        {/* HEADER LOGO */}
-        <div className="absolute left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b-4 border-[#2a9ac0] bg-[#5ac8ec] px-2 shadow-[0_0_15px_rgba(90,200,236,0.5)]">
-          <div className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white shadow-[0_0_10px_rgba(255,64,64,0.6)]">
+        <div className="absolute left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b-4 border-[#5a9cba] bg-[#96e0f7] px-2 shadow-[0_0_15px_rgba(150,224,247,0.5)]">
+          <div className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#ffc619] bg-white shadow-[0_0_10px_rgba(255,198,25,0.6)]">
             <img src="/spidey-bday/assets/spidey-face.png" alt="Guide" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply' }} />
           </div>
           <div className="flex items-center gap-2 font-pixel-body text-[10px] tracking-widest text-[#0a0a0a]">
             SPIDEY
-            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white">
+            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-[#ffc619] bg-white">
               <img src="/spidey-bday/assets/spidey-face.png" alt="Guide" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply', animationDelay: '2s' }} />
             </div>
-            TRACKER
+            TRACKER<span className="title-cursor"></span>
           </div>
-          <div onClick={openLetter} className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-[#2a9ac0] bg-[#2a9ac0]">
+          <div onClick={openLetter} className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-[#5a9cba] bg-[#5a9cba]">
             <img src="/spidey-bday/assets/pin-spider.png" alt="Letter" className="h-full w-full object-cover pixelated" style={{ mixBlendMode: 'multiply' }} />
           </div>
         </div>
 
         <div className="relative min-h-0 flex-1 px-1 pt-16 pb-1">
-          <div className="relative h-full overflow-hidden border-[10px] border-[#5ac8ec] bg-[#04040e]">
+          <div className="relative h-full overflow-hidden border-[10px] border-[#96e0f7] bg-[#04040e]">
             <div className="scanlines pointer-events-none absolute inset-0 z-50" />
             
             <div className="absolute inset-0 overflow-hidden">
@@ -116,7 +115,7 @@ export default function Home() {
               
               {stage === "initmap" && (
                 <div className="absolute inset-0 z-40 flex items-center justify-center bg-[#0a0a0a]">
-                  <p className="blink font-pixel-body text-[11px] tracking-widest text-[#5ac8ec]">
+                  <p className="blink font-pixel-body text-[11px] tracking-widest text-[#96e0f7]">
                     INITIALIZING MAP...
                   </p>
                 </div>
@@ -148,10 +147,10 @@ export default function Home() {
                   <button onClick={() => openMemory(3)} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>
                     M4
                   </button>
-                  <button onClick={openLetter} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#c89a10" } as any}>
+                  <button onClick={openLetter} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#ffc619" } as any}>
                     LTR
                   </button>
-                  <div className="mt-1 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white shadow-[0_0_10px_rgba(255,64,64,0.6)]">
+                  <div className="mt-1 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-[#ffc619] bg-white shadow-[0_0_10px_rgba(255,198,25,0.6)]">
                     <img src="/spidey-bday/assets/spidey-face.png" alt="" className="h-full w-full object-cover pixelated animate-spidey-hang" style={{ mixBlendMode: 'multiply', animationDelay: '1s' }} />
                   </div>
                 </div>
@@ -163,9 +162,9 @@ export default function Home() {
         </div>
 
         {/* BOTTOM TICKER PANEL */}
-        <div className="relative z-50 flex h-14 w-full shrink-0 items-center gap-2 border-t-4 border-[#2a9ac0] bg-[#5ac8ec] py-2 pr-2 pl-12 pb-safe-3">
+        <div className="relative z-50 flex h-14 w-full shrink-0 items-center gap-2 border-t-4 border-[#5a9cba] bg-[#96e0f7] py-2 pr-2 pl-12 pb-safe-3">
           {/* OVERLAPPING SPIDEY AVATAR */}
-          <div className="absolute -left-2 bottom-0 z-50 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-[4px] border-[#0a0a0a] bg-[#2a9ac0] shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
+          <div className="absolute -left-2 bottom-0 z-50 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-[4px] border-[#0a0a0a] bg-[#5a9cba] shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
             <img src="/spidey-bday/assets/spiderman-walk.png" alt="" className="h-12 w-auto pixelated drop-shadow-[0_2px_0_rgba(0,0,0,1)] animate-spidey-idle" />
           </div>
 
@@ -176,7 +175,7 @@ export default function Home() {
                 SELECT SOUND OPTION
               </div>
             ) : (
-              <div className="ticker-track flex w-max items-center h-full pt-1 text-[#5ac8ec]">
+              <div className="ticker-track flex w-max items-center h-full pt-1 text-[#96e0f7]">
                 <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
                 <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
                 <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>

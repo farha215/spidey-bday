@@ -59,7 +59,7 @@ export function TutorialOverlay({ onClose }: { onClose: () => void }) {
 			/>
 
 			{/* welcome, short and to the point */}
-			<p className="absolute left-1/2 top-[12%] w-full max-w-lg -translate-x-1/2 px-6 text-center font-pixel-body text-[11px] leading-loose text-[#5ac8ec]">
+			<p className="absolute left-1/2 top-[12%] w-full max-w-lg -translate-x-1/2 px-6 text-center font-pixel-body text-[11px] leading-loose text-[#96e0f7]">
 				¡BIENVENIDO! ESTO ES TODO LO QUE NECESITAS SABER.
 			</p>
 

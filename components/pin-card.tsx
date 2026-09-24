@@ -68,11 +68,11 @@ export function PinCard({ pin, onClose }: { pin: Pin; onClose: () => void }) {
 					href={href}
 					target="_blank"
 					rel="noopener noreferrer"
-					className="bit-border mt-3 block px-2 py-2 text-center font-pixel-body text-[9px] text-[#5ac8ec] transition-opacity hover:opacity-80"
+					className="bit-border mt-3 block px-2 py-2 text-center font-pixel-body text-[9px] text-[#96e0f7] transition-opacity hover:opacity-80"
 					style={
 						{
 							"--bb-step": "2px",
-							"--bb-frame": "#5ac8ec",
+							"--bb-frame": "#96e0f7",
 							"--bb-fill": "#0a0a0a",
 						} as React.CSSProperties
 					}

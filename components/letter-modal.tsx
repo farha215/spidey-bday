@@ -5,7 +5,7 @@ import React from "react";
 export function LetterModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="absolute inset-x-4 top-10 bottom-14 z-50 panel-in flex flex-col justify-end sm:inset-x-8 sm:bottom-20">
-      <div className="bit-border bg-[#0a0a18] p-5 shadow-2xl" style={{ "--bb-step": "3px", "--bb-frame": "#5ac8ec", "--bb-fill": "#0a0a18" } as any}>
+      <div className="bit-border bg-[#0a0a18] p-5 shadow-2xl" style={{ "--bb-step": "3px", "--bb-frame": "#96e0f7", "--bb-fill": "#0a0a18" } as any}>
         <button
           onClick={onClose}
           className="absolute right-0 top-[-30px] bit-border z-50 flex h-8 w-8 cursor-pointer items-center justify-center bg-[#ff4040] font-pixel-body text-[8px] text-white hover:opacity-85"
@@ -35,7 +35,7 @@ export function LetterModal({ onClose }: { onClose: () => void }) {
         
         <div className="mt-5 font-pixel-body text-[8px] text-white">
           — your twin 🖤<br/>
-          <span className="text-[6px] text-[#5ac8ec] opacity-80">[ your friendly neighborhood bestie ]</span>
+          <span className="text-[6px] text-[#96e0f7] opacity-80">[ your friendly neighborhood bestie ]</span>
         </div>
         
         <div className="mt-4 animate-bounce text-center text-xl">🕷 🕸 🕷</div>

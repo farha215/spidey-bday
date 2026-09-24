@@ -122,7 +122,7 @@ export function Radar({
 			ctx.beginPath();
 			ctx.moveTo(cx, cy);
 			ctx.lineTo(cx + R * Math.cos(sweep), cy + R * Math.sin(sweep));
-			ctx.strokeStyle = "#5ac8ec";
+			ctx.strokeStyle = "#96e0f7";
 			ctx.lineWidth = 1.5;
 			ctx.stroke();
 
@@ -147,7 +147,7 @@ export function Radar({
 						0,
 						Math.PI * 2,
 					);
-					ctx.fillStyle = PIN_COLORS[p.pinType] ?? "#5ac8ec";
+					ctx.fillStyle = PIN_COLORS[p.pinType] ?? "#96e0f7";
 					ctx.fill();
 				}
 				}
@@ -158,7 +158,7 @@ export function Radar({
 			// rim
 			ctx.beginPath();
 			ctx.arc(cx, cy, R, 0, Math.PI * 2);
-			ctx.strokeStyle = "#5ac8ec";
+			ctx.strokeStyle = "#96e0f7";
 			ctx.lineWidth = 2;
 			ctx.stroke();
 
@@ -193,7 +193,7 @@ export function Radar({
 							{
 								"--bb-step": "2px",
 								"--bb-frame": "#0a0a0a",
-								"--bb-fill": "#5ac8ec",
+								"--bb-fill": "#96e0f7",
 							} as React.CSSProperties
 						}
 					>
@@ -213,7 +213,7 @@ export function Radar({
 							{
 								"--bb-step": "2px",
 								"--bb-frame": "#0a0a0a",
-								"--bb-fill": "#5ac8ec",
+								"--bb-fill": "#96e0f7",
 							} as React.CSSProperties
 						}
 					>

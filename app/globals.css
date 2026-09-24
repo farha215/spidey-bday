@@ -149,8 +149,8 @@
 /* ============ CRAFTER TRACKER 8-BIT THEME ============ */
 
 :root {
-	--ct-gold: #5ac8ec;
-	--ct-gold-dark: #2a9ac0;
+	--ct-gold: #ffc619;
+	--ct-gold-dark: #c89a10;
 	--ct-bg: #0a0a0a;
 	--ct-panel: #111111;
 	--ct-cream: #f5e9c8;
@@ -333,6 +333,18 @@
 }
 .blink {
 	animation: cursor-blink 800ms steps(1, end) infinite;
+}
+
+.title-cursor {
+	display: inline-block;
+	width: 8px;
+	height: 1em;
+	vertical-align: middle;
+	background: currentColor;
+	box-shadow: 0 0 8px rgba(150, 224, 247, 0.45);
+	animation: cursor-blink 1s steps(1, end) infinite;
+	position: relative;
+	top: -1px;
 }
 
 /* --- ticker marquee --- */
