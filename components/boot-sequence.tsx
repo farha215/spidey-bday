@@ -65,7 +65,7 @@ export function BootSequence({ onComplete }: { onComplete: () => void }) {
         {/* Spidey avatar with animation */}
         <div className="relative -mt-2 animate-spidey-hang">
           <img 
-            src="/assets/spider-drop-transparent.png" 
+            src="/spidey-bday/assets/spider-drop-transparent.png" 
             alt="" 
             className="w-16 h-16 object-contain pixelated" 
           />

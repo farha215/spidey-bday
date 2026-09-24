@@ -24,7 +24,7 @@ export function PinMarker({ pin }: { pin: Pin }) {
 			<span className="drop-wave drop-wave--b" aria-hidden />
 			<div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-white bg-white shadow-[0_0_12px_rgba(255,255,255,0.4)]">
 				<img
-					src={pin.pinType === "letter" ? "/assets/spider-black.png" : "/assets/pin-spider.png"}
+					src={pin.pinType === "letter" ? "/spidey-bday/assets/spider-black.png" : "/spidey-bday/assets/pin-spider.png"}
 					alt=""
 					className="pixelated h-full w-full object-cover"
 					style={{ mixBlendMode: 'multiply' }}

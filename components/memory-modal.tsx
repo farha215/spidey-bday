@@ -9,10 +9,10 @@ interface Memory {
 }
 
 export const MEMORIES: Memory[] = [
-  { title: "MEMORY #1", caption: "This is our first memory together. Time flies!", photo: "/assets/pin-spider.png" },
-  { title: "MEMORY #2", caption: "Remember this day? It was unforgettable.", photo: "/assets/pin-spider.png" },
-  { title: "MEMORY #3", caption: "I still laugh when I think about this.", photo: "/assets/pin-spider.png" },
-  { title: "MEMORY #4", caption: "One of my favorite moments of all time.", photo: "/assets/pin-spider.png" }
+  { title: "MEMORY #1", caption: "This is our first memory together. Time flies!", photo: "/spidey-bday/assets/pin-spider.png" },
+  { title: "MEMORY #2", caption: "Remember this day? It was unforgettable.", photo: "/spidey-bday/assets/pin-spider.png" },
+  { title: "MEMORY #3", caption: "I still laugh when I think about this.", photo: "/spidey-bday/assets/pin-spider.png" },
+  { title: "MEMORY #4", caption: "One of my favorite moments of all time.", photo: "/spidey-bday/assets/pin-spider.png" }
 ];
 
 export function MemoryModal({ index, onClose }: { index: number; onClose: () => void }) {
