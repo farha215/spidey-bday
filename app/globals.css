@@ -229,6 +229,68 @@
 	);
 }
 
+/* --- 3D Pixel Pill Button (Requested by User) --- */
+.btn-3d {
+	position: relative;
+	color: white;
+	font-weight: bold;
+	text-transform: uppercase;
+	z-index: 1;
+	--btn-color: var(--ct-red);
+	--bevel-light: rgba(255, 255, 255, 0.45);
+	--bevel-dark: rgba(0, 0, 0, 0.35);
+	margin: 3px;
+	cursor: pointer;
+}
+.btn-3d:active {
+	transform: translateY(2px);
+}
+.btn-3d::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: var(--btn-color);
+	box-shadow: 
+		inset -3px -3px 0px var(--bevel-dark),
+		inset 3px 3px 0px var(--bevel-light);
+	clip-path: polygon(
+		6px 0, calc(100% - 6px) 0,
+		calc(100% - 6px) 3px, calc(100% - 3px) 3px,
+		calc(100% - 3px) 6px, 100% 6px,
+		100% calc(100% - 6px), calc(100% - 3px) calc(100% - 6px),
+		calc(100% - 3px) calc(100% - 3px), calc(100% - 6px) calc(100% - 3px),
+		calc(100% - 6px) 100%, 6px 100%,
+		6px calc(100% - 3px), 3px calc(100% - 3px),
+		3px calc(100% - 6px), 0 calc(100% - 6px),
+		0 6px, 3px 6px,
+		3px 3px, 6px 3px
+	);
+	transition: filter 150ms ease;
+}
+.btn-3d:hover::before {
+	filter: brightness(1.15);
+}
+.btn-3d::after {
+	content: "";
+	position: absolute;
+	inset: -3px;
+	z-index: -2;
+	background: #0a0a0a; /* Outer border */
+	clip-path: polygon(
+		6px 0, calc(100% - 6px) 0,
+		calc(100% - 6px) 3px, calc(100% - 3px) 3px,
+		calc(100% - 3px) 6px, 100% 6px,
+		100% calc(100% - 6px), calc(100% - 3px) calc(100% - 6px),
+		calc(100% - 3px) calc(100% - 3px), calc(100% - 6px) calc(100% - 3px),
+		calc(100% - 6px) 100%, 6px 100%,
+		6px calc(100% - 3px), 3px calc(100% - 3px),
+		3px calc(100% - 6px), 0 calc(100% - 6px),
+		0 6px, 3px 6px,
+		3px 3px, 6px 3px
+	);
+}
+
 /* --- CRT scanlines overlay --- */
 .scanlines::after {
 	content: "";

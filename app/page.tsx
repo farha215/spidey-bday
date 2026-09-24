@@ -138,13 +138,13 @@ export default function Home() {
               {/* SIDEBAR TABS */}
               {booted && (
                 <div className="absolute left-0 top-1/2 z-30 flex -translate-y-1/2 flex-col gap-2">
-                  <button onClick={() => openMemory(0)} className="bit-border flex h-10 w-10 cursor-pointer items-center justify-center font-pixel-body text-[8px] text-white hover:opacity-85 shadow-[0_0_12px_rgba(255,64,64,0.6)]" style={{ "--bb-step": "3px", "--bb-frame": "#ff4040", "--bb-fill": "#ff4040" } as any}>
+                  <button onClick={() => openMemory(0)} className="btn-3d flex h-10 w-10 items-center justify-center font-pixel-body text-[8px]" style={{ "--btn-color": "#ff4040" } as any}>
                     M1
                   </button>
-                  <button onClick={() => openMemory(1)} className="bit-border flex h-10 w-10 cursor-pointer items-center justify-center font-pixel-body text-[8px] text-white hover:opacity-85 shadow-[0_0_12px_rgba(255,64,64,0.6)]" style={{ "--bb-step": "3px", "--bb-frame": "#ff4040", "--bb-fill": "#ff4040" } as any}>
+                  <button onClick={() => openMemory(1)} className="btn-3d flex h-10 w-10 items-center justify-center font-pixel-body text-[8px]" style={{ "--btn-color": "#ff4040" } as any}>
                     M2
                   </button>
-                  <button onClick={openLetter} className="bit-border flex h-10 w-10 cursor-pointer items-center justify-center font-pixel-body text-[8px] text-white hover:opacity-85 shadow-[0_0_12px_rgba(42,170,144,0.6)]" style={{ "--bb-step": "3px", "--bb-frame": "#2aaa90", "--bb-fill": "#2aaa90" } as any}>
+                  <button onClick={openLetter} className="btn-3d flex h-10 w-10 items-center justify-center font-pixel-body text-[8px]" style={{ "--btn-color": "#2aaa90" } as any}>
                     LTR
                   </button>
                   <div className="mt-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white shadow-[0_0_10px_rgba(255,64,64,0.6)]">
@@ -181,17 +181,17 @@ export default function Home() {
 
         {/* BOTTOM CONTROL PANEL */}
         <div className="z-50 flex flex-col gap-1.5 border-t-4 border-[#2a9ac0] bg-[#5ac8ec] p-2 pb-safe-4">
-          <div className="flex items-center gap-2">
-            <span className="bit-border flex-shrink-0 px-2 py-1.5 text-center font-pixel-body text-[6px] text-white min-w-[32px]" style={{ "--bb-step": "2px", "--bb-frame": "#2a9ac0", "--bb-fill": "rgba(255,255,255,0.15)" } as any}>M.1</span>
-            <button onClick={() => openMemory(0)} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#8a2a10", "--bb-fill": "#d45a30" } as any}>MEMORY 1</button>
-            <button onClick={() => openMemory(1)} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#8a2a10", "--bb-fill": "#d45a30" } as any}>MEMORY 2</button>
-            <button onClick={openLetter} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#7a5a00", "--bb-fill": "#c89a10" } as any}>LETTER</button>
+          <div className="flex items-center gap-1">
+            <span className="btn-3d flex-shrink-0 px-1 py-1.5 text-center font-pixel-body text-[6px] min-w-[28px] cursor-default" style={{ "--btn-color": "#4a4a4a", "--bevel-light": "rgba(255,255,255,0.2)", "--bevel-dark": "rgba(0,0,0,0.4)" } as any}>M.1</span>
+            <button onClick={() => openMemory(0)} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>MEMORY 1</button>
+            <button onClick={() => openMemory(1)} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>MEMORY 2</button>
+            <button onClick={openLetter} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#c89a10" } as any}>LETTER</button>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="bit-border flex-shrink-0 px-2 py-1.5 text-center font-pixel-body text-[6px] text-white min-w-[32px]" style={{ "--bb-step": "2px", "--bb-frame": "#2a9ac0", "--bb-fill": "rgba(255,255,255,0.15)" } as any}>M.2</span>
-            <button onClick={() => openMemory(2)} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#8a2a10", "--bb-fill": "#d45a30" } as any}>MEMORY 3</button>
-            <button onClick={() => openMemory(3)} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#8a2a10", "--bb-fill": "#d45a30" } as any}>MEMORY 4</button>
-            <button onClick={() => setActivePanel({ type: "guide" })} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#0e6b58", "--bb-fill": "#2aaa90" } as any}>GUIDE</button>
+          <div className="flex items-center gap-1">
+            <span className="btn-3d flex-shrink-0 px-1 py-1.5 text-center font-pixel-body text-[6px] min-w-[28px] cursor-default" style={{ "--btn-color": "#4a4a4a", "--bevel-light": "rgba(255,255,255,0.2)", "--bevel-dark": "rgba(0,0,0,0.4)" } as any}>M.2</span>
+            <button onClick={() => openMemory(2)} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>MEMORY 3</button>
+            <button onClick={() => openMemory(3)} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>MEMORY 4</button>
+            <button onClick={() => setActivePanel({ type: "guide" })} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#2aaa90" } as any}>GUIDE</button>
           </div>
         </div>
       </main>
