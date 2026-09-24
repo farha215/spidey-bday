@@ -92,7 +92,7 @@ export default function Home() {
                   <path d="M0,2 L44,2 L56,23 L44,44 L0,44" fill="#6a9a6c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
                   <path d="M0,6 L38,6 L48,23" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
                 </svg>
-                <img src="/spidey-bday/assets/side-button-transparent.png" alt="" className="relative z-10 mr-1 h-5 w-5 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
+                <img src="/spidey-bday/assets/side-button-transparent.png" alt="" className="relative z-10 mr-1 h-5 w-5 object-contain pixelated opacity-90" />
               </button>
               <button 
                 onClick={() => setActivePanel({ type: "none" })} 
@@ -102,7 +102,7 @@ export default function Home() {
                   <path d="M0,2 L44,2 L56,23 L44,44 L0,44" fill="#b85c5c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
                   <path d="M0,6 L38,6 L48,23" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
                 </svg>
-                <img src="/spidey-bday/assets/side-button-transparent.png" alt="" className="relative z-10 mr-1 h-5 w-5 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
+                <img src="/spidey-bday/assets/side-button-transparent.png" alt="" className="relative z-10 mr-1 h-5 w-5 object-contain pixelated opacity-90" />
               </button>
             </div>
           )}
