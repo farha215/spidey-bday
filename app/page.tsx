@@ -136,28 +136,26 @@ export default function Home() {
 
               {/* SIDEBAR TABS */}
               {booted && (
-                <div className="absolute left-0 top-1/3 z-30 flex -translate-y-1/2 flex-col gap-2">
+                <div className="absolute left-0 top-1/3 z-30 flex -translate-y-1/2 flex-col gap-1">
                   <button 
-                    onClick={() => {
-                      // Toggle memory pins visibility (green tab)
-                      setActivePanel({ type: "none" });
-                    }} 
-                    className="group relative flex h-10 w-12 cursor-pointer items-center justify-center border-y-2 border-r-2 border-black bg-[#6e9c6c] transition-transform hover:translate-x-1"
-                    style={{ clipPath: "polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%)" }}
+                    onClick={() => setActivePanel({ type: "none" })} 
+                    className="group relative flex h-[42px] w-[52px] cursor-pointer items-center justify-center transition-transform hover:translate-x-1"
                   >
-                    <div className="absolute left-0 top-0 h-[2px] w-[80%] bg-white/40"></div>
-                    <img src="/spidey-bday/assets/spider-black.png" alt="" className="mr-2 h-6 w-6 object-contain pixelated opacity-90" />
+                    <svg viewBox="0 0 52 42" className="absolute inset-0 h-full w-full drop-shadow-[2px_2px_0_rgba(0,0,0,0.5)]" preserveAspectRatio="none">
+                      <path d="M-5,2 L40,2 L50,21 L40,40 L-5,40" fill="#6a9a6c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
+                      <path d="M0,6 L35,6 L43,21" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
+                    </svg>
+                    <img src="/spidey-bday/assets/pin-spider.png" alt="" className="relative z-10 mr-2 h-7 w-7 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
                   </button>
                   <button 
-                    onClick={() => {
-                      // Toggle letter pin visibility (red tab)
-                      setActivePanel({ type: "none" });
-                    }} 
-                    className="group relative flex h-10 w-12 cursor-pointer items-center justify-center border-y-2 border-r-2 border-black bg-[#ba5c5c] transition-transform hover:translate-x-1"
-                    style={{ clipPath: "polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%)" }}
+                    onClick={() => setActivePanel({ type: "none" })} 
+                    className="group relative flex h-[42px] w-[52px] cursor-pointer items-center justify-center transition-transform hover:translate-x-1"
                   >
-                    <div className="absolute left-0 top-0 h-[2px] w-[80%] bg-white/40"></div>
-                    <img src="/spidey-bday/assets/spider-black.png" alt="" className="mr-2 h-6 w-6 object-contain pixelated opacity-90" />
+                    <svg viewBox="0 0 52 42" className="absolute inset-0 h-full w-full drop-shadow-[2px_2px_0_rgba(0,0,0,0.5)]" preserveAspectRatio="none">
+                      <path d="M-5,2 L40,2 L50,21 L40,40 L-5,40" fill="#b85c5c" stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
+                      <path d="M0,6 L35,6 L43,21" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.4" />
+                    </svg>
+                    <img src="/spidey-bday/assets/pin-spider.png" alt="" className="relative z-10 mr-2 h-7 w-7 object-contain pixelated opacity-90" style={{ mixBlendMode: 'multiply' }} />
                   </button>
                 </div>
               )}
