@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import { MemoryModal } from "@/components/memory-modal";
 import { LetterModal } from "@/components/letter-modal";
+import { BootSequence } from "@/components/boot-sequence";
 import { sound } from "@/lib/sound";
 import {
   getSoundPreference,
@@ -113,7 +114,7 @@ export default function Home() {
               <div className="screen-depth" aria-hidden />
 
               {stage === "checking" && (
-                <div className="absolute inset-0 z-40 bg-[#0a0a0a]" />
+                <BootSequence onComplete={() => finishBoot(true)} />
               )}
               
               {stage === "initmap" && (

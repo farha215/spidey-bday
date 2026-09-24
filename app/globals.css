@@ -348,6 +348,35 @@
 	animation: ticker-scroll 22s linear infinite;
 }
 
+/* --- Boot Sequence Animations --- */
+@keyframes spidey-hang {
+	0% { transform: scale(1, 1) rotate(0deg); }
+	5% { transform: scale(-1, 1) rotate(2deg); } /* Turn head */
+	20% { transform: scale(-1, 1) rotate(2deg); }
+	22% { transform: scale(-1, 0.9) rotate(2deg); } /* Blink / Squish */
+	24% { transform: scale(-1, 1) rotate(2deg); }
+	35% { transform: scale(1, 1) rotate(-2deg); } /* Turn back */
+	50% { transform: scale(1, 1) rotate(-2deg); }
+	52% { transform: scale(1, 0.9) rotate(-2deg); } /* Blink */
+	54% { transform: scale(1, 1) rotate(-2deg); }
+	70% { transform: scale(1, 1) rotate(0deg); }
+	100% { transform: scale(1, 1) rotate(0deg); }
+}
+
+.animate-spidey-hang {
+	animation: spidey-hang 6s infinite;
+	transform-origin: top center;
+}
+
+@keyframes fade-in-fast {
+	0% { opacity: 0; }
+	100% { opacity: 0.7; }
+}
+
+.animate-fade-in-fast {
+	animation: fade-in-fast 0.1s ease-out forwards;
+}
+
 /* --- pins --- */
 @keyframes pin-glow-pulse {
 	0%,
