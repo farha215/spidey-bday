@@ -91,6 +91,7 @@ export function TrackerMap({
 				defaultZoom={2.5}
 				disableDefaultUI={true}
 				gestureHandling="greedy"
+				colorScheme={"DARK" as any}
 				className="h-full w-full"
 			>
 				{visiblePins.map((pin) => (
