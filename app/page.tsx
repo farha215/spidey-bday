@@ -22,6 +22,8 @@ const TrackerMap = dynamic(
 type Stage = "checking" | "welcome" | "tutorial" | "initmap" | "live";
 type PanelState = { type: "none" } | { type: "memory"; index: number } | { type: "letter" } | { type: "guide" };
 
+const MAP_LIBRARIES: any[] = ["marker"];
+
 export default function Home() {
   const [stage, setStage] = useState<Stage>("checking");
   const booted = stage === "live";
@@ -66,7 +68,7 @@ export default function Home() {
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-black">
-      <APIProvider apiKey="AIzaSyDhFTe_7TYC4vcCSntJmbIVQcXTjjZuXcM">
+      <APIProvider apiKey="AIzaSyDhFTe_7TYC4vcCSntJmbIVQcXTjjZuXcM" libraries={MAP_LIBRARIES}>
         <main className="relative flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-[#0a0a0a] shadow-[0_0_50px_rgba(90,200,236,0.15)]">
         <div className="absolute left-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b-4 border-[#5a9cba] bg-[#96e0f7] px-2 shadow-[0_0_15px_rgba(150,224,247,0.5)]">
           <div className="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-[#ffc619] bg-white shadow-[0_0_10px_rgba(255,198,25,0.6)]">
