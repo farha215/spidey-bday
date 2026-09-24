@@ -1,476 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>SPIDEY TRACKER — Happy Birthday Twin!</title>
-  <meta name="description" content="A special birthday Spidey Tracker for Twin." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <meta name="description" content="A special Spidey Tracker birthday surprise for Twin."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-    body {
-      background: #050510;
-      display: flex; justify-content: center; align-items: center;
-      min-height: 100vh; min-height: 100dvh;
-      font-family: 'Press Start 2P', monospace;
-      overflow: hidden;
-    }
+  body{
+    background:#111;
+    display:flex;justify-content:center;align-items:center;
+    min-height:100dvh;
+    font-family:'Press Start 2P',monospace;
+    overflow:hidden;
+  }
 
-    #app {
-      position: relative;
-      width: 100vw; max-width: 430px;
-      height: 100vh; height: 100dvh;
-      background: #111827;
-      overflow: hidden;
-      display: flex; flex-direction: column;
-    }
+  /* ═══ APP SHELL ═══ */
+  #app{
+    position:relative;
+    width:100vw;max-width:430px;
+    height:100dvh;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+    /* Bright cyan pixel frame — matches reference exactly */
+    border:14px solid #4ecde8;
+    box-shadow:
+      inset 0 0 0 3px #1a8aaa,
+      inset 0 0 0 6px #2eb5d4,
+      0 0 0 2px #1a8aaa,
+      0 0 30px rgba(78,205,232,0.4);
+    background:#0d1f35;
+  }
 
-    /* ── Pixel border frame ── */
-    #pixel-frame {
-      position: absolute; inset: 0;
-      border: 10px solid #2d8ec9;
-      box-shadow:
-        inset 0 0 0 3px #0b3d5e,
-        inset 0 0 0 6px #1a6fa0,
-        0 0 40px rgba(45,142,201,0.5);
-      pointer-events: none; z-index: 999;
-    }
-    #pixel-frame::before {
-      content: ''; position: absolute; inset: 4px;
-      border: 2px solid rgba(45,142,201,0.3);
-      pointer-events: none;
-    }
+  /* Scanlines */
+  #app::after{
+    content:'';position:absolute;inset:0;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.08) 0,rgba(0,0,0,.08) 1px,transparent 1px,transparent 4px);
+    pointer-events:none;z-index:9999;
+  }
 
-    /* ── Scanlines ── */
-    #scanlines {
-      position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        0deg, rgba(0,0,0,.10) 0px, rgba(0,0,0,.10) 1px,
-        transparent 1px, transparent 4px
-      );
-      pointer-events: none; z-index: 998;
-    }
+  /* ═══════════════════════════════════
+     LOADING SCREEN
+  ═══════════════════════════════════ */
+  #loading-screen{
+    position:absolute;inset:0;
+    background:#0d1f35;
+    display:flex;flex-direction:column;align-items:center;
+    z-index:90;transition:opacity .6s ease;
+  }
+  #loading-screen.hide{opacity:0;pointer-events:none}
 
-    /* ════════════════════════════════
-       LOADING SCREEN
-    ════════════════════════════════ */
-    #loading-screen {
-      position: absolute; inset: 0;
-      background: #0d1117;
-      display: flex; flex-direction: column; align-items: center;
-      z-index: 90; transition: opacity .6s ease;
-    }
-    #loading-screen.hide { opacity: 0; pointer-events: none; }
+  .ld-top{
+    padding:18px 0 0;
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+  }
+  /* Header badge — like reference top bar */
+  .spidey-logo{
+    display:flex;align-items:center;gap:6px;
+    font-size:10px;color:#4ecde8;letter-spacing:2px;
+    border:2px solid #4ecde8;padding:7px 12px;
+    box-shadow:0 0 14px rgba(78,205,232,0.35);
+    text-shadow:0 0 10px rgba(78,205,232,0.8);
+  }
+  .eyes-icon{
+    display:flex;align-items:center;justify-content:center;
+    background:#cc1a1a;border-radius:50%;border:2px solid #ff4444;
+    width:28px;height:28px;gap:3px;padding:4px;
+    box-shadow:0 0 8px rgba(200,30,30,.6);
+  }
+  .s-eye{
+    width:9px;height:7px;background:#fff;
+    clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);
+    flex-shrink:0;
+  }
 
-    .ld-header {
-      padding: 20px 0 0;
-      display: flex; flex-direction: column; align-items: center;
-    }
+  /* Web + spider drop */
+  .web-stage{
+    position:relative;width:100%;height:210px;
+    flex-shrink:0;display:flex;justify-content:center;
+  }
+  #web-line{
+    position:absolute;top:0;left:50%;width:3px;height:0;
+    background:linear-gradient(to bottom,rgba(255,255,255,.95),rgba(255,255,255,.3));
+    transform:translateX(-50%);
+    animation:growWeb 1s ease forwards;
+  }
+  @keyframes growWeb{to{height:185px}}
+  #spider-drop{
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
+    animation:dropSpider 1.1s ease .7s both;z-index:5;
+  }
+  @keyframes dropSpider{from{top:0}to{top:173px}}
+  #spider-img{
+    height:96px;width:auto;object-fit:contain;
+    image-rendering:pixelated;
+    filter:drop-shadow(0 0 10px rgba(200,30,30,.7));
+    animation:spiderSway 3s ease-in-out infinite 1.8s;
+  }
+  @keyframes spiderSway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
 
-    .spidey-logo {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 11px; color: #2d8ec9; letter-spacing: 2px;
-      text-shadow: 0 0 12px rgba(45,142,201,0.9);
-      border: 2px solid #2d8ec9; padding: 8px 12px;
-      box-shadow: 0 0 16px rgba(45,142,201,0.25);
-    }
-    .eyes-wrap { display: flex; gap: 3px; }
-    .s-eye {
-      width: 13px; height: 9px; background: white;
-      clip-path: polygon(20% 0%,80% 0%,100% 50%,80% 100%,20% 100%,0% 50%);
-    }
+  /* CSS fallback */
+  .css-spider{width:56px;height:66px;position:relative;display:none}
+  .sp-body{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:36px;height:42px;background:#cc1a1a;border-radius:40% 40% 50% 50%}
+  .sp-head{position:absolute;top:0;left:50%;transform:translateX(-50%);width:34px;height:28px;background:#cc1a1a;border-radius:50% 50% 40% 40%}
+  .sp-el,.sp-er{position:absolute;top:8px;width:10px;height:7px;background:#fff;clip-path:polygon(20% 0%,80% 0%,100% 50%,80% 100%,20% 100%,0% 50%)}
+  .sp-el{left:4px}.sp-er{right:4px}
+  .sp-al,.sp-ar{position:absolute;top:32px;width:13px;height:4px;background:#cc1a1a;border-radius:2px}
+  .sp-al{left:0;transform:rotate(-25deg)}.sp-ar{right:0;transform:rotate(25deg)}
 
-    /* ── Web + Spider drop ── */
-    .web-stage {
-      position: relative; width: 100%;
-      height: 220px; flex-shrink: 0;
-      display: flex; justify-content: center;
-    }
-    #web-line {
-      position: absolute; top: 0; left: 50%;
-      width: 3px; height: 0;
-      background: linear-gradient(to bottom, rgba(255,255,255,.95), rgba(255,255,255,.4));
-      transform: translateX(-50%);
-      animation: growWeb 1s ease forwards;
-    }
-    @keyframes growWeb { to { height: 190px; } }
+  /* Loading body */
+  .ld-body{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:0 28px;width:100%;
+  }
+  .ld-welcome{font-size:7px;color:#7adce8;line-height:2.2;text-align:center;margin-bottom:14px}
+  .dot-row{display:flex;gap:6px;justify-content:center;margin-bottom:14px}
+  .dot{width:6px;height:6px;background:#4ecde8;animation:blk 1.1s infinite}
+  .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
+  .dot:nth-child(4){animation-delay:.45s}.dot:nth-child(5){animation-delay:.6s}
+  @keyframes blk{0%,100%{opacity:.15}50%{opacity:1}}
 
-    #spider-drop {
-      position: absolute; top: 0; left: 50%;
-      transform: translateX(-50%);
-      animation: dropSpider 1.1s ease .7s both;
-      z-index: 5;
-    }
-    @keyframes dropSpider { from { top: 0; } to { top: 178px; } }
+  .ld-choice{font-size:5.5px;color:#7adce8;margin-bottom:10px;text-align:center;line-height:2}
+  .sound-row{display:flex;gap:10px;margin-bottom:18px}
+  .px-btn{
+    font-family:'Press Start 2P',monospace;font-size:7px;
+    padding:9px 13px;border:2px solid #4ecde8;
+    background:transparent;color:#4ecde8;cursor:pointer;
+    letter-spacing:1px;transition:background .12s,color .12s;
+  }
+  .px-btn.on{background:#4ecde8;color:#0d1f35}
+  .px-btn:hover{background:rgba(78,205,232,.18)}
+  .start-btn{
+    font-family:'Press Start 2P',monospace;font-size:9px;
+    padding:13px 22px;background:#c0392b;color:#fff;
+    border:none;cursor:pointer;letter-spacing:1px;
+    box-shadow:0 5px 0 #7f1d1d,0 0 24px rgba(192,57,43,.45);
+    transition:transform .08s,box-shadow .08s;
+  }
+  .start-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #7f1d1d}
 
-    /* Spider image */
-    #spider-img {
-      height: 96px; width: auto;
-      object-fit: contain;
-      image-rendering: pixelated;
-      filter: drop-shadow(0 0 8px rgba(200,30,30,.6));
-    }
+  .ld-footer{
+    height:48px;background:#060f1a;border-top:3px solid #4ecde8;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    flex-shrink:0;width:100%;
+  }
+  .ld-footer-lbl{font-size:7px;color:#7adce8;letter-spacing:4px}
 
-    /* CSS fallback spider art (shown if no image) */
-    .css-spider { width: 60px; height: 70px; position: relative; display: none; }
-    .sp-body {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 38px; height: 44px; background: #cc1a1a;
-      border-radius: 40% 40% 50% 50%;
-    }
-    .sp-head {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 36px; height: 30px; background: #cc1a1a;
-      border-radius: 50% 50% 40% 40%;
-    }
-    .sp-eye-l, .sp-eye-r {
-      position: absolute; top: 8px; width: 11px; height: 8px; background: white;
-      clip-path: polygon(20% 0%,80% 0%,100% 50%,80% 100%,20% 100%,0% 50%);
-    }
-    .sp-eye-l { left: 4px; } .sp-eye-r { right: 4px; }
-    .sp-arm-l,.sp-arm-r {
-      position: absolute; top: 34px; width: 14px; height: 5px;
-      background: #cc1a1a; border-radius: 2px;
-    }
-    .sp-arm-l { left: 0; transform: rotate(-25deg); }
-    .sp-arm-r { right: 0; transform: rotate(25deg); }
+  /* ═══════════════════════════════════
+     TRACKER SCREEN
+  ═══════════════════════════════════ */
+  #tracker-screen{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    opacity:0;pointer-events:none;
+    transition:opacity .5s ease .2s;
+  }
+  #tracker-screen.show{opacity:1;pointer-events:all}
 
-    /* ── Loading body ── */
-    .ld-body {
-      padding: 0 28px;
-      display: flex; flex-direction: column; align-items: center;
-      width: 100%; flex: 1;
-      justify-content: center;
-    }
-    .ld-welcome {
-      font-size: 7px; color: #5aabdb; line-height: 2.2;
-      text-align: center; margin-bottom: 16px;
-    }
-    .dot-row { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; }
-    .dot { width: 6px; height: 6px; background: #2d8ec9; animation: blk 1.1s infinite; }
-    .dot:nth-child(2){ animation-delay: .15s }
-    .dot:nth-child(3){ animation-delay: .3s }
-    .dot:nth-child(4){ animation-delay: .45s }
-    .dot:nth-child(5){ animation-delay: .6s }
-    @keyframes blk { 0%,100%{ opacity:.15 } 50%{ opacity:1 } }
+  /* ── Header ── */
+  .trk-header{
+    height:48px;background:#060f1a;
+    border-bottom:3px solid #4ecde8;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 8px;flex-shrink:0;z-index:30;position:relative;
+  }
+  /* Spider face circle button */
+  .hdr-face{
+    width:36px;height:36px;border-radius:50%;
+    background:#cc1a1a;border:2px solid #ff6666;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex-shrink:0;gap:3px;padding:5px;
+    box-shadow:0 0 10px rgba(200,30,30,.5);
+  }
+  .hdr-face:active{opacity:.7}
+  /* Square spider icon button */
+  .hdr-sq{
+    width:36px;height:36px;border:2px solid #4ecde8;
+    background:#0d1f35;display:flex;align-items:center;
+    justify-content:center;cursor:pointer;font-size:15px;
+    color:#4ecde8;flex-shrink:0;
+  }
+  .hdr-sq:active{background:rgba(78,205,232,.2)}
+  /* Center counter display */
+  .hdr-center{
+    display:flex;align-items:center;gap:6px;
+    border:2px solid #4ecde8;padding:5px 10px;
+    box-shadow:0 0 12px rgba(78,205,232,.25);
+  }
+  .hdr-title-txt{
+    font-size:9px;color:#4ecde8;letter-spacing:1px;
+    text-shadow:0 0 10px rgba(78,205,232,.9);
+  }
 
-    .ld-choice-label { font-size: 5.5px; color: #5aabdb; margin-bottom: 10px; text-align: center; line-height: 2; }
-    .sound-row { display: flex; gap: 10px; margin-bottom: 20px; }
-    .px-btn {
-      font-family: 'Press Start 2P', monospace; font-size: 7px;
-      padding: 9px 13px; border: 2px solid #2d8ec9;
-      background: transparent; color: #2d8ec9; cursor: pointer;
-      letter-spacing: 1px; transition: background .12s, color .12s;
-    }
-    .px-btn.on { background: #2d8ec9; color: #0d1117; }
-    .px-btn:hover { background: rgba(45,142,201,.18); }
+  /* ── Map area ── */
+  .map-wrap{flex:1;position:relative;overflow:hidden;min-height:0}
+  #leaflet-map{position:absolute;inset:0;background:#0a1628;z-index:1}
+  #leaflet-map .leaflet-tile-pane{
+    filter:brightness(0.75) contrast(1.15) saturate(0.7) hue-rotate(190deg);
+  }
+  #leaflet-map .leaflet-control-attribution{
+    background:rgba(6,15,26,.8)!important;color:#7adce8!important;
+    font-family:'Press Start 2P',monospace;font-size:4px!important;
+    border:1px solid #2a6a90;padding:2px 4px!important;
+  }
+  #leaflet-map .leaflet-control-attribution a{color:#4ecde8!important}
+  #leaflet-map .leaflet-control-zoom{display:none}
 
-    .start-btn {
-      font-family: 'Press Start 2P', monospace; font-size: 9px;
-      padding: 13px 22px; background: #b91c1c; color: white;
-      border: none; cursor: pointer; letter-spacing: 1px;
-      box-shadow: 0 5px 0 #7f1d1d, 0 0 24px rgba(185,28,28,.45);
-      transition: transform .08s, box-shadow .08s;
-    }
-    .start-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #7f1d1d; }
+  /* Ruler strips */
+  .ruler{
+    position:absolute;top:0;bottom:0;width:16px;z-index:10;
+    overflow:hidden;display:flex;flex-direction:column;
+  }
+  .ruler.left{left:0;border-right:1px solid #2a6080;background:rgba(6,15,26,.8)}
+  .ruler.right{right:0;border-left:1px solid #2a6080;background:rgba(6,15,26,.8)}
+  .r-tick{flex:1;border-bottom:1px solid #2a6080}
 
-    .ld-footer {
-      height: 48px; background: #060b10; border-top: 3px solid #2d8ec9;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      flex-shrink: 0; width: 100%;
-    }
-    .ld-footer-lbl { font-size: 7px; color: #5aabdb; letter-spacing: 4px; }
+  /* ── LEFT SIDEBAR — circular letter buttons ── */
+  .sidebar{
+    position:absolute;left:0;top:50%;transform:translateY(-60%);
+    display:flex;flex-direction:column;gap:8px;z-index:20;padding-left:0;
+  }
+  .sdb-btn{
+    width:38px;height:38px;border-radius:50%;
+    background:#c0392b;border:3px solid #ff6655;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:9px;color:#fff;
+    box-shadow:0 0 10px rgba(192,57,43,.5);
+    transition:transform .15s,box-shadow .15s;
+    user-select:none;position:relative;
+  }
+  .sdb-btn:active{transform:scale(.9)}
+  .sdb-btn.active{
+    background:#27ae60;border-color:#4ade80;
+    box-shadow:0 0 14px rgba(39,174,96,.6);
+  }
+  /* small status dot */
+  .sdb-dot{
+    position:absolute;top:2px;right:2px;
+    width:7px;height:7px;border-radius:50%;
+    background:#4ade80;border:1px solid #0d1f35;
+  }
+  /* Spider face circle in sidebar */
+  .sdb-face{
+    width:38px;height:38px;border-radius:50%;
+    background:#cc1a1a;border:3px solid #ff6655;
+    display:flex;align-items:center;justify-content:center;
+    gap:3px;padding:6px;margin-top:4px;
+    box-shadow:0 0 10px rgba(200,30,30,.5);
+    cursor:pointer;
+  }
+  .sdb-s-eye{
+    width:10px;height:7px;background:#fff;
+    clip-path:polygon(20% 0%,80% 0%,100% 50%,80% 100%,20% 100%,0% 50%);
+  }
 
-    /* ════════════════════════════════
-       TRACKER SCREEN
-    ════════════════════════════════ */
-    #tracker-screen {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column;
-      opacity: 0; pointer-events: none;
-      transition: opacity .5s ease .2s;
-    }
-    #tracker-screen.show { opacity: 1; pointer-events: all; }
+  /* ── Leaflet pin icons ── */
+  .leaflet-div-icon,.leaflet-marker-icon{background:transparent!important;border:none!important}
+  .lf-pin{
+    width:38px;height:38px;border-radius:50%;border:3px solid;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:17px;user-select:none;position:relative;
+  }
+  .lf-pin.pin-mem{
+    background:rgba(22,163,74,.92);border-color:#4ade80;
+    animation:pMem 2.5s ease-in-out infinite;
+  }
+  @keyframes pMem{0%,100%{box-shadow:0 0 6px rgba(22,163,74,.5)}50%{box-shadow:0 0 22px rgba(22,163,74,1),0 0 40px rgba(22,163,74,.3)}}
+  .lf-pin.pin-letter{
+    background:rgba(192,57,43,.92);border-color:#f87171;
+    animation:pLet 2.5s ease-in-out infinite;
+  }
+  @keyframes pLet{0%,100%{box-shadow:0 0 6px rgba(192,57,43,.5)}50%{box-shadow:0 0 22px rgba(192,57,43,1),0 0 40px rgba(192,57,43,.3)}}
 
-    /* ── Header ── */
-    .trk-header {
-      height: 50px; background: #060b10;
-      border-bottom: 3px solid #2d8ec9;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 10px; flex-shrink: 0; z-index: 30; position: relative;
-    }
-    .hdr-btn {
-      width: 36px; height: 36px; border: 2px solid #2d8ec9; background: #0d1117;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 15px; color: #2d8ec9; user-select: none;
-    }
-    .hdr-btn:active { background: rgba(45,142,201,.2); }
-    .hdr-title {
-      font-size: 9px; color: #2d8ec9; letter-spacing: 1px;
-      border: 2px solid #2d8ec9; padding: 6px 10px;
-      display: flex; align-items: center; gap: 5px;
-      text-shadow: 0 0 10px rgba(45,142,201,.9);
-    }
+  /* ── Sighting popup (like reference "NEW SIGHTING LOCATION") ── */
+  #sighting-popup{
+    position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    background:#f5a623;border:2px solid #e8941a;
+    padding:8px 12px;z-index:50;text-align:center;
+    opacity:0;pointer-events:none;
+    transition:opacity .2s;
+    white-space:nowrap;
+  }
+  #sighting-popup.show{opacity:1}
+  #sighting-popup p{font-size:6px;color:#0d1f35;line-height:1.9}
 
-    /* ── Map ── */
-    .map-wrap { flex: 1; position: relative; overflow: hidden; min-height: 0; }
-    #leaflet-map { position: absolute; inset: 0; background: #0a1628; z-index: 1; }
+  /* Walk figure bottom-left */
+  .walk-figure{
+    position:absolute;bottom:8px;left:8px;
+    z-index:20;pointer-events:none;
+    animation:spiderBob 2.2s ease-in-out infinite;
+  }
+  @keyframes spiderBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  .walk-img{
+    height:44px;width:auto;object-fit:contain;
+    image-rendering:pixelated;
+    filter:drop-shadow(0 0 6px rgba(200,30,30,.6));
+  }
 
-    /* Dark pixel-tinted basemap */
-    #leaflet-map .leaflet-tile-pane {
-      filter: brightness(0.9) contrast(1.08) saturate(0.85);
-    }
-    #leaflet-map .leaflet-control-attribution {
-      background: rgba(6,11,16,.75) !important; color: #5aabdb !important;
-      font-family: 'Press Start 2P', monospace; font-size: 4.5px !important;
-      border: 1px solid #2a6a90; padding: 3px 5px !important;
-    }
-    #leaflet-map .leaflet-control-attribution a { color: #2d8ec9 !important; }
-    #leaflet-map .leaflet-control-zoom { display: none; }
+  /* ── BOTTOM BUTTON PANEL (replaces ticker) ── */
+  .btn-panel{
+    background:#060f1a;border-top:3px solid #4ecde8;
+    flex-shrink:0;padding:8px 6px 6px;
+    display:flex;flex-direction:column;gap:5px;
+  }
+  .btn-row{display:flex;gap:5px;align-items:center}
+  .row-label{
+    font-size:6px;color:#4ecde8;width:22px;flex-shrink:0;text-align:center;
+    line-height:1.6;
+  }
+  .panel-btn{
+    font-family:'Press Start 2P',monospace;font-size:5.5px;
+    flex:1;padding:7px 2px;
+    border:none;cursor:pointer;letter-spacing:.5px;
+    transition:filter .1s,transform .08s;
+    color:#fff;
+    border-radius:3px;
+  }
+  .panel-btn.orange{background:#e8714a;box-shadow:0 3px 0 #9e3d22}
+  .panel-btn.teal  {background:#1aaa8a;box-shadow:0 3px 0 #0e6b58}
+  .panel-btn.blue  {background:#2d7eb8;box-shadow:0 3px 0 #1a4f78}
+  .panel-btn.grey  {background:#3a4a5a;box-shadow:0 3px 0 #212d38}
+  .panel-btn:active{transform:translateY(2px);box-shadow:none!important}
+  .panel-btn:hover{filter:brightness(1.15)}
 
-    /* Leaflet pin markers (reuses pin visuals, positioned by Leaflet) */
-    .leaflet-div-icon,
-    .leaflet-marker-icon { background: transparent !important; border: none !important; }
-    .lf-pin {
-      width: 40px; height: 40px; border-radius: 50%; border: 3px solid;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 18px; user-select: none; position: relative;
-    }
-    .lf-pin.pin-mem {
-      background: rgba(22,163,74,.9); border-color: #4ade80;
-      animation: pulseMem 2.5s ease-in-out infinite;
-    }
-    .lf-pin.pin-letter {
-      background: rgba(185,28,28,.9); border-color: #f87171;
-      animation: pulseLetter 2.5s ease-in-out infinite;
-    }
-    .lf-pin .pin-lbl {
-      position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
-      background: #060b10; border: 1px solid #2d8ec9;
-      font-size: 5px; color: #5aabdb; padding: 3px 6px;
-      white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .2s;
-    }
-    .lf-pin:hover .pin-lbl { opacity: 1; }
+  /* ═══════════════════════════════════
+     GUIDE OVERLAY
+  ═══════════════════════════════════ */
+  #guide-overlay{
+    position:absolute;inset:0;background:rgba(5,10,20,.94);z-index:500;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:28px 22px;text-align:center;
+    opacity:0;pointer-events:none;transition:opacity .28s;
+  }
+  #guide-overlay.open{opacity:1;pointer-events:all}
+  .guide-title{font-size:8px;color:#f59e0b;line-height:2.2;margin-bottom:24px}
+  .guide-items{display:flex;flex-direction:column;gap:16px;margin-bottom:24px;width:100%}
+  .g-item{display:flex;align-items:center;gap:14px}
+  .g-icon{
+    width:38px;height:38px;border-radius:50%;border:3px solid;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;flex-shrink:0;
+  }
+  .g-icon.green{background:rgba(22,163,74,.9);border-color:#4ade80}
+  .g-icon.red  {background:rgba(192,57,43,.9);border-color:#f87171}
+  .g-label{text-align:left}
+  .g-name{font-size:6px;color:#fff;line-height:2}
+  .g-sub {font-size:5px;color:#7adce8;line-height:2}
+  .guide-close{
+    font-family:'Press Start 2P',monospace;font-size:6px;
+    padding:10px 14px;border:2px solid #4ecde8;
+    background:transparent;color:#4ecde8;cursor:pointer;
+    animation:blinkBorder 1.5s linear infinite;
+  }
+  @keyframes blinkBorder{0%,100%{border-color:#4ecde8}50%{border-color:transparent}}
 
-    /* Map control cluster (bottom-right, like the globe/center icons) */
-    .map-controls {
-      position: absolute; right: 10px; bottom: 62px; z-index: 20;
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .map-ctrl-btn {
-      width: 34px; height: 34px; border-radius: 50%;
-      border: 2px solid #2d8ec9; background: rgba(6,11,16,.85);
-      color: #2d8ec9; display: flex; align-items: center; justify-content: center;
-      font-size: 14px; cursor: pointer; box-shadow: 0 0 10px rgba(45,142,201,.3);
-    }
-    .map-ctrl-btn:active { background: rgba(45,142,201,.25); }
+  /* ═══════════════════════════════════
+     MODALS
+  ═══════════════════════════════════ */
+  .modal-overlay{
+    position:absolute;inset:0;background:rgba(0,0,0,.82);z-index:800;
+    display:flex;flex-direction:column;justify-content:flex-end;
+    opacity:0;pointer-events:none;transition:opacity .28s;
+  }
+  .modal-overlay.open{opacity:1;pointer-events:all}
+  .modal-card{
+    background:#0d1f35;border:3px solid #4ecde8;border-bottom:none;
+    padding:20px 18px 28px;max-height:78vh;overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform .32s cubic-bezier(.22,.68,0,1.2);
+    position:relative;scrollbar-width:thin;scrollbar-color:#4ecde8 #0d1f35;
+  }
+  .modal-overlay.open .modal-card{transform:translateY(0)}
+  .modal-close{
+    position:sticky;top:-20px;float:right;
+    width:30px;height:30px;border:2px solid #c0392b;background:#c0392b;
+    color:#fff;font-family:'Press Start 2P',monospace;font-size:8px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    z-index:5;margin-bottom:8px;
+  }
+  .modal-close:active{background:#7f1d1d}
+  .modal-tag{font-size:6px;letter-spacing:2px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+  .modal-tag::before{content:'';display:inline-block;width:7px;height:7px;background:currentColor}
 
-    /* Rulers */
-    .ruler {
-      position: absolute; top: 0; bottom: 0; width: 18px; z-index: 10;
-      overflow: hidden; display: flex; flex-direction: column;
-    }
-    .ruler.left  { left: 0;  border-right: 1px solid #2a6a90; background: rgba(6,11,16,.75); }
-    .ruler.right { right: 0; border-left:  1px solid #2a6a90; background: rgba(6,11,16,.75); }
-    .r-tick { flex: 1; border-bottom: 1px solid #2a6a90; }
+  /* Memory */
+  .mem-photo{
+    width:100%;aspect-ratio:4/3;background:#111827;
+    border:2px solid #4ecde8;margin-bottom:14px;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .mem-photo img{width:100%;height:100%;object-fit:cover}
+  .photo-ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:#4ecde8;text-align:center}
+  .photo-ph span:first-child{font-size:32px}
+  .photo-ph span:last-child{font-size:5px;opacity:.6;line-height:2}
+  .mem-title  {font-size:8px;color:#fff;margin-bottom:10px;line-height:2}
+  .mem-caption{font-size:5.5px;color:#7adce8;line-height:2.4}
 
-    /* Sidebar filter buttons */
-    .sidebar {
-      position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-      display: flex; flex-direction: column; gap: 8px; z-index: 20;
-    }
-    .flt-btn {
-      width: 40px; height: 40px; border: 3px solid; background: #0d1117;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 16px; transition: background .15s;
-    }
-    .flt-btn.green { border-color: #16a34a; box-shadow: 0 0 10px rgba(22,163,74,.5); }
-    .flt-btn.red   { border-color: #b91c1c; box-shadow: 0 0 10px rgba(185,28,28,.5); }
-    .flt-btn.green.active { background: rgba(22,163,74,.25); }
-    .flt-btn.red.active   { background: rgba(185,28,28,.25); }
-
-    /* ── Map Pins ── */
-    .map-pin {
-      position: absolute;
-      width: 40px; height: 40px; border-radius: 50%; border: 3px solid;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 18px;
-      transform: translate(-50%, -50%); z-index: 25;
-      transition: transform .18s ease; user-select: none;
-    }
-    .map-pin:active { transform: translate(-50%,-50%) scale(1.3); }
-
-    .pin-mem {
-      background: rgba(22,163,74,.9); border-color: #4ade80;
-      animation: pulseMem 2.5s ease-in-out infinite;
-    }
-    @keyframes pulseMem {
-      0%,100% { box-shadow: 0 0 6px rgba(22,163,74,.5); }
-      50%      { box-shadow: 0 0 22px rgba(22,163,74,1), 0 0 40px rgba(22,163,74,.3); }
-    }
-    .pin-letter {
-      background: rgba(185,28,28,.9); border-color: #f87171;
-      animation: pulseLetter 2.5s ease-in-out infinite;
-    }
-    @keyframes pulseLetter {
-      0%,100% { box-shadow: 0 0 6px rgba(185,28,28,.5); }
-      50%      { box-shadow: 0 0 22px rgba(185,28,28,1), 0 0 40px rgba(185,28,28,.3); }
-    }
-
-    .pin-lbl {
-      position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
-      background: #060b10; border: 1px solid #2d8ec9;
-      font-size: 5px; color: #5aabdb; padding: 3px 6px;
-      white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .2s;
-    }
-    .map-pin:hover .pin-lbl { opacity: 1; }
-
-    /* Spiderweb corner */
-    .web-corner {
-      position: absolute; bottom: 52px; right: 10px;
-      width: 72px; height: 72px; opacity: .5; z-index: 8; pointer-events: none;
-    }
-
-    /* Walk figure bottom-left */
-    .walk-figure {
-      position: absolute; bottom: 54px; left: 10px;
-      z-index: 20; pointer-events: none;
-      animation: spiderBob 2.2s ease-in-out infinite;
-    }
-    @keyframes spiderBob { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-5px) } }
-    .walk-img {
-      height: 46px; width: auto; object-fit: contain;
-      image-rendering: pixelated;
-      filter: drop-shadow(0 0 4px rgba(200,30,30,.5));
-    }
-
-    /* ── Ticker bar ── */
-    .ticker-bar {
-      height: 48px; background: #060b10; border-top: 3px solid #2d8ec9;
-      display: flex; align-items: center; gap: 6px;
-      padding: 0 6px; flex-shrink: 0; overflow: hidden;
-    }
-    .ticker-wrap {
-      flex: 1; height: 32px; background: #0d1117; border: 1px solid #2d8ec9;
-      overflow: hidden; position: relative;
-    }
-    .ticker-txt {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      white-space: nowrap; font-size: 6.5px; color: #2d8ec9; letter-spacing: 1px;
-      animation: tickerScroll 30s linear infinite;
-    }
-    @keyframes tickerScroll { from{ left: 100%; } to{ left: -220%; } }
-    .snd-btn {
-      width: 36px; height: 36px; border: 2px solid #2d8ec9; background: #0d1117;
-      color: #2d8ec9; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 14px; flex-shrink: 0;
-    }
-    .snd-btn:active { background: rgba(45,142,201,.2); }
-
-    /* ════════════════════════════════
-       GUIDE OVERLAY
-    ════════════════════════════════ */
-    #guide-overlay {
-      position: absolute; inset: 0; background: rgba(5,5,16,.93); z-index: 500;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 30px 24px; text-align: center;
-      opacity: 0; pointer-events: none; transition: opacity .28s;
-    }
-    #guide-overlay.open { opacity: 1; pointer-events: all; }
-
-    .guide-title { font-size: 8px; color: #f59e0b; line-height: 2.2; margin-bottom: 28px; }
-    .guide-items { display: flex; flex-direction: column; gap: 18px; margin-bottom: 28px; width: 100%; }
-    .g-item { display: flex; align-items: center; gap: 14px; }
-    .g-icon {
-      width: 40px; height: 40px; border-radius: 50%; border: 3px solid;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    .g-icon.green { background: rgba(22,163,74,.9); border-color: #4ade80; }
-    .g-icon.red   { background: rgba(185,28,28,.9); border-color: #f87171; }
-    .g-label { text-align: left; }
-    .g-name { font-size: 6px; color: #fff; line-height: 2; }
-    .g-sub  { font-size: 5px; color: #5aabdb; line-height: 2; }
-    .guide-close {
-      font-family: 'Press Start 2P', monospace; font-size: 6px;
-      padding: 10px 14px; border: 2px solid #2d8ec9;
-      background: transparent; color: #2d8ec9; cursor: pointer;
-      letter-spacing: 1px; animation: blinkBorder 1.5s linear infinite;
-    }
-    @keyframes blinkBorder { 0%,100%{ border-color: #2d8ec9; } 50%{ border-color: transparent; } }
-
-    /* ════════════════════════════════
-       MODALS
-    ════════════════════════════════ */
-    .modal-overlay {
-      position: absolute; inset: 0; background: rgba(0,0,0,.82); z-index: 800;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      opacity: 0; pointer-events: none; transition: opacity .28s;
-    }
-    .modal-overlay.open { opacity: 1; pointer-events: all; }
-
-    .modal-card {
-      background: #0d1117; border: 3px solid #2d8ec9; border-bottom: none;
-      padding: 20px 18px 28px; max-height: 78vh; overflow-y: auto;
-      transform: translateY(100%);
-      transition: transform .32s cubic-bezier(.22,.68,0,1.2);
-      position: relative;
-      scrollbar-width: thin; scrollbar-color: #2d8ec9 #0d1117;
-    }
-    .modal-overlay.open .modal-card { transform: translateY(0); }
-
-    .modal-close {
-      position: sticky; top: -20px; float: right;
-      width: 30px; height: 30px; border: 2px solid #b91c1c; background: #b91c1c;
-      color: white; font-family: 'Press Start 2P', monospace; font-size: 8px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      z-index: 5; margin-bottom: 8px;
-    }
-    .modal-close:active { background: #7f1d1d; }
-
-    .modal-tag {
-      font-size: 6px; letter-spacing: 2px; margin-bottom: 14px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .modal-tag::before { content: ''; display: inline-block; width: 7px; height: 7px; background: currentColor; }
-
-    /* Memory */
-    .mem-photo {
-      width: 100%; aspect-ratio: 4/3; background: #111827;
-      border: 2px solid #2d8ec9; margin-bottom: 14px;
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-    }
-    .mem-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .photo-ph { display: flex; flex-direction: column; align-items: center; gap: 8px; color: #2d8ec9; text-align: center; }
-    .photo-ph span:first-child { font-size: 34px; }
-    .photo-ph span:last-child  { font-size: 5px; opacity: .6; line-height: 2; }
-    .mem-title   { font-size: 8px; color: #fff; margin-bottom: 10px; line-height: 2; }
-    .mem-caption { font-size: 5.5px; color: #5aabdb; line-height: 2.4; }
-
-    /* Letter */
-    .bday-banner { background: linear-gradient(135deg,#7f1d1d,#1d3461); border: 2px solid #f87171; padding: 12px; text-align: center; margin-bottom: 18px; }
-    .bday-banner p { font-size: 7px; color: #fca5a5; line-height: 2.2; }
-    .bday-banner p span { color: #fde68a; }
-    .letter-greeting { font-size: 11px; color: #f87171; margin-bottom: 18px; text-shadow: 0 0 14px rgba(248,113,113,.6); line-height: 1.8; }
-    .letter-body { font-size: 6px; color: #93c5fd; line-height: 2.8; }
-    .letter-sign { margin-top: 22px; font-size: 7px; color: #fff; line-height: 2; }
-    .letter-deco { margin-top: 14px; font-size: 20px; text-align: center; animation: spiderBob 2s ease-in-out infinite; }
+  /* Letter */
+  .bday-banner{background:linear-gradient(135deg,#7f1d1d,#1d3461);border:2px solid #f87171;padding:12px;text-align:center;margin-bottom:18px}
+  .bday-banner p{font-size:7px;color:#fca5a5;line-height:2.2}
+  .bday-banner p span{color:#fde68a}
+  .letter-greeting{font-size:11px;color:#f87171;margin-bottom:18px;text-shadow:0 0 14px rgba(248,113,113,.6);line-height:1.8}
+  .letter-body{font-size:6px;color:#93c5fd;line-height:2.8}
+  .letter-sign{margin-top:22px;font-size:7px;color:#fff;line-height:2}
+  .letter-deco{margin-top:14px;font-size:20px;text-align:center;animation:spiderBob 2s ease-in-out infinite}
   </style>
 </head>
 <body>
 <div id="app">
-  <div id="pixel-frame"></div>
-  <div id="scanlines"></div>
 
   <!-- ════ LOADING SCREEN ════ -->
   <div id="loading-screen">
-    <div class="ld-header">
+    <div class="ld-top">
       <div class="spidey-logo">
         SPIDEY
-        <div class="eyes-wrap"><div class="s-eye"></div><div class="s-eye"></div></div>
+        <div class="eyes-icon"><div class="s-eye"></div><div class="s-eye"></div></div>
         TRACKER
       </div>
     </div>
@@ -478,83 +425,107 @@
     <div class="web-stage">
       <div id="web-line"></div>
       <div id="spider-drop">
-        <!-- assets/spider-drop.png, falls back to CSS art if missing -->
         <img id="spider-img" src="assets/spider-drop.png" alt="Spider-Man"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
         <div class="css-spider">
-          <div class="sp-head"><div class="sp-eye-l"></div><div class="sp-eye-r"></div></div>
-          <div class="sp-arm-l"></div><div class="sp-arm-r"></div>
+          <div class="sp-head"><div class="sp-el"></div><div class="sp-er"></div></div>
+          <div class="sp-al"></div><div class="sp-ar"></div>
           <div class="sp-body"></div>
         </div>
       </div>
     </div>
 
     <div class="ld-body">
-      <p class="ld-welcome">
-        WELCOME TO THE<br>SPIDEY TRACKER.<br>
-        INTERACT WITH THE<br>MAP TO VIEW<br>MEMORIES &amp; MESSAGES.
-      </p>
-      <div class="dot-row">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        <div class="dot"></div><div class="dot"></div>
-      </div>
-      <p class="ld-choice-label">CHOOSE YOUR SETTINGS AND START TRACKING</p>
+      <p class="ld-welcome">WELCOME TO THE<br>SPIDEY TRACKER.<br>INTERACT WITH THE<br>MAP TO VIEW<br>MEMORIES &amp; MESSAGES.</p>
+      <div class="dot-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <p class="ld-choice">CHOOSE YOUR SETTINGS AND START TRACKING</p>
       <div class="sound-row">
-        <button class="px-btn on"  id="snd-on"  onclick="setSound(true)">SOUND ON</button>
-        <button class="px-btn"     id="snd-off" onclick="setSound(false)">SOUND OFF</button>
+        <button class="px-btn on" id="snd-on"  onclick="setSound(true)">SOUND ON</button>
+        <button class="px-btn"    id="snd-off" onclick="setSound(false)">SOUND OFF</button>
       </div>
       <button class="start-btn" onclick="launchTracker()">START TRACKING ▶</button>
     </div>
 
     <div class="ld-footer">
       <span class="ld-footer-lbl">LOADING</span>
-      <div class="dot-row" style="margin:0">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      </div>
+      <div class="dot-row" style="margin:0"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
   </div>
 
   <!-- ════ TRACKER SCREEN ════ -->
   <div id="tracker-screen">
+
+    <!-- Header -->
     <div class="trk-header">
-      <div class="hdr-btn" onclick="toggleGuide()">☰</div>
-      <div class="hdr-title">
-        SPIDEY <div class="eyes-wrap"><div class="s-eye"></div><div class="s-eye"></div></div> TRACKER
+      <div class="hdr-face" onclick="toggleGuide()">
+        <div class="s-eye"></div><div class="s-eye"></div>
       </div>
-      <div class="hdr-btn" onclick="openLetter()">🕷</div>
+      <div class="hdr-center">
+        <span class="hdr-title-txt">SPIDEY</span>
+        <div class="eyes-icon" style="width:22px;height:22px;padding:3px">
+          <div class="s-eye" style="width:7px;height:5px"></div>
+          <div class="s-eye" style="width:7px;height:5px"></div>
+        </div>
+        <span class="hdr-title-txt">TRACKER</span>
+      </div>
+      <div class="hdr-sq" onclick="openLetter()">🕷</div>
     </div>
 
+    <!-- Map -->
     <div class="map-wrap" id="map-wrap">
       <div id="leaflet-map"></div>
 
       <div class="ruler left"  id="ruler-l"></div>
       <div class="ruler right" id="ruler-r"></div>
 
+      <!-- Left sidebar: circular letter buttons -->
       <div class="sidebar">
-        <div class="flt-btn green active" id="flt-mem" onclick="toggleFilter(this)">🕷</div>
-        <div class="flt-btn red   active" id="flt-let" onclick="toggleFilter(this)">🕷</div>
+        <!-- M = Memories filter -->
+        <div class="sdb-btn active" id="sdb-m" onclick="toggleSidebar(this,'mem')" title="Memories">
+          M<div class="sdb-dot"></div>
+        </div>
+        <!-- L = Letter filter -->
+        <div class="sdb-btn active" id="sdb-l" onclick="toggleSidebar(this,'letter')" title="Letter">L</div>
+        <!-- G = Guide -->
+        <div class="sdb-btn" id="sdb-g" onclick="toggleGuide()" title="Guide">G</div>
+        <!-- Spider face -->
+        <div class="sdb-face" onclick="recenterMap()">
+          <div class="sdb-s-eye"></div><div class="sdb-s-eye"></div>
+        </div>
       </div>
 
-      <div class="map-controls">
-        <div class="map-ctrl-btn" onclick="mapZoom(1)">＋</div>
-        <div class="map-ctrl-btn" onclick="mapZoom(-1)">－</div>
-        <div class="map-ctrl-btn" onclick="recenterMap()">◎</div>
+      <!-- Sighting popup (shows on pin click) -->
+      <div id="sighting-popup">
+        <p id="sighting-txt">NEW SIGHTING<br>LOCATION: ????</p>
       </div>
 
       <!-- Walk figure -->
       <div class="walk-figure">
         <img class="walk-img" src="assets/spiderman-walk.png" alt=""
-             onerror="this.style.display='none'" />
+             onerror="this.style.display='none'"/>
       </div>
     </div>
 
-    <div class="ticker-bar">
-      <div class="ticker-wrap">
-        <div class="ticker-txt">
-          HAPPY BIRTHDAY TWIN! 🕷 TAP THE PINS ACROSS CALICUT TO UNLOCK MEMORIES &amp; A SECRET MESSAGE 🕸 YOUR FRIENDLY NEIGHBORHOOD BIRTHDAY SURPRISE IS HERE 🕷 HAPPY BIRTHDAY TWIN! 🕸
-        </div>
+    <!-- Bottom button panel — like the reference image -->
+    <div class="btn-panel">
+      <div class="btn-row">
+        <span class="row-label">M.1</span>
+        <button class="panel-btn orange" onclick="openMemory(0)">MEMORY 1</button>
+        <button class="panel-btn orange" onclick="openMemory(1)">MEMORY 2</button>
+        <button class="panel-btn teal"   onclick="openLetter()">LETTER</button>
       </div>
-      <div class="snd-btn" id="snd-toggle" onclick="toggleSound()">🔊</div>
+      <div class="btn-row">
+        <span class="row-label">M.2</span>
+        <button class="panel-btn orange" onclick="openMemory(2)">MEMORY 3</button>
+        <button class="panel-btn orange" onclick="openMemory(3)">MEMORY 4</button>
+        <button class="panel-btn blue"   onclick="toggleGuide()">GUIDE</button>
+      </div>
+      <div class="btn-row">
+        <span class="row-label"></span>
+        <button class="panel-btn grey"   onclick="recenterMap()">CENTER MAP</button>
+        <button class="panel-btn grey"   onclick="mapZoom(1)">ZOOM +</button>
+        <button class="panel-btn grey"   onclick="mapZoom(-1)">ZOOM −</button>
+      </div>
     </div>
   </div>
 
@@ -565,7 +536,7 @@
       <div class="g-item">
         <div class="g-icon green">🕷</div>
         <div class="g-label">
-          <div class="g-name">CONFIRMED MEMORY</div>
+          <div class="g-name">MEMORY PIN</div>
           <div class="g-sub">TAP TO VIEW A MEMORY</div>
         </div>
       </div>
@@ -584,7 +555,7 @@
   <div class="modal-overlay" id="mem-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeModal('mem-modal')">✕</button>
-      <div class="modal-tag" style="color:#4ade80;">CONFIRMED SIGHTING</div>
+      <div class="modal-tag" style="color:#4ade80">CONFIRMED SIGHTING</div>
       <div class="mem-photo" id="mem-photo-wrap"></div>
       <div class="mem-title"   id="mem-title"></div>
       <div class="mem-caption" id="mem-caption"></div>
@@ -595,7 +566,7 @@
   <div class="modal-overlay" id="letter-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeModal('letter-modal')">✕</button>
-      <div class="modal-tag" style="color:#f87171;">SECRET MESSAGE</div>
+      <div class="modal-tag" style="color:#f87171">SECRET MESSAGE</div>
       <div class="bday-banner"><p>🕸 HAPPY BIRTHDAY <span>TWIN</span> 🕸</p></div>
       <div class="letter-greeting">HEY TWIN,</div>
       <div class="letter-body">
@@ -610,10 +581,7 @@
         i hope this year is everything you want it to be. you deserve it for real. no cap.<br><br>
         happy birthday twin. you're one of a kind and i'm glad we found each other. 🕷
       </div>
-      <div class="letter-sign">
-        — your twin 🖤<br>
-        <span style="font-size:5px;color:#5aabdb;">[ your friendly neighborhood bestie ]</span>
-      </div>
+      <div class="letter-sign">— your twin 🖤<br><span style="font-size:5px;color:#7adce8">[ your friendly neighborhood bestie ]</span></div>
       <div class="letter-deco">🕷 🕸 🕷</div>
     </div>
   </div>
@@ -624,216 +592,172 @@
 <script>
 /* ══════════════════════════════════════════════
    ✏️  CUSTOMIZE YOUR MEMORIES HERE
-   - Set title, caption for each memory
-   - Set photo: "filename.jpg" to show a photo
-     (put the image file in the same folder)
 ══════════════════════════════════════════════ */
 const MEMORIES = [
   {
     title:   "MEMORY #1 — ADD YOUR TITLE",
-    caption: "Write your memory caption here. Describe this moment and why it matters to you.",
-    photo:   ""   // e.g. "photos/memory1.jpg"
+    caption: "Write your memory caption here.",
+    photo:   ""   // e.g. "photos/photo1.jpg"
   },
   {
     title:   "MEMORY #2 — ADD YOUR TITLE",
-    caption: "Write your memory caption here. Describe this moment and why it matters to you.",
+    caption: "Write your memory caption here.",
     photo:   ""
   },
   {
     title:   "MEMORY #3 — ADD YOUR TITLE",
-    caption: "Write your memory caption here. Describe this moment and why it matters to you.",
+    caption: "Write your memory caption here.",
     photo:   ""
   },
   {
     title:   "MEMORY #4 — ADD YOUR TITLE",
-    caption: "Write your memory caption here. Describe this moment and why it matters to you.",
+    caption: "Write your memory caption here.",
     photo:   ""
   }
 ];
 
-/* ── Pin locations across Calicut (Kozhikode) ──
-   Edit these lat/lng values to move a pin anywhere on the map. */
-const CALICUT_CENTER = [11.2588, 75.7804];
-const CALICUT_ZOOM   = 14;
-const MEM_PINS = [
-  [11.2626, 75.7746],
-  [11.2540, 75.7862],
-  [11.2685, 75.7830],
-  [11.2497, 75.7760]
+/* ── Pin locations (Calicut/Kozhikode) ── */
+const CENTER     = [11.2588, 75.7804];
+const ZOOM       = 14;
+const MEM_LOCS   = [
+  { pos:[11.2626,75.7746], name:"SIGHTING A" },
+  { pos:[11.2540,75.7862], name:"SIGHTING B" },
+  { pos:[11.2685,75.7830], name:"SIGHTING C" },
+  { pos:[11.2497,75.7760], name:"SIGHTING D" }
 ];
-const LETTER_PIN = [11.2588, 75.7810];
+const LETTER_LOC = { pos:[11.2588,75.7810], name:"SECRET LOCATION" };
 
 /* ── State ── */
-let soundEnabled = true;
-let guideOpen    = false;
-let audioCtx     = null;
-let leafletMap   = null;
-let memLayer     = null;
-let letterLayer  = null;
+let soundOn = true, guideOpen = false, audioCtx = null, map = null;
 
 /* ── Sound ── */
-function getAudio() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return audioCtx;
+function ga(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx}
+function playBeep(f=600,d=.08,t='square'){
+  if(!soundOn)return;
+  try{const c=ga(),o=c.createOscillator(),g=c.createGain();o.type=t;o.connect(g);g.connect(c.destination);
+  o.frequency.setValueAtTime(f,c.currentTime);o.frequency.exponentialRampToValueAtTime(f*.55,c.currentTime+d);
+  g.gain.setValueAtTime(.18,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);
+  o.start(c.currentTime);o.stop(c.currentTime+d);}catch(e){}
 }
-function playBeep(freq = 600, dur = 0.08, type = 'square') {
-  if (!soundEnabled) return;
-  try {
-    const ctx  = getAudio();
-    const osc  = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = type;
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(freq * .55, ctx.currentTime + dur);
-    gain.gain.setValueAtTime(0.18, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
-    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
-  } catch(e) {}
-}
-function setSound(on) {
-  soundEnabled = on;
-  document.getElementById('snd-on').classList.toggle('on', on);
-  document.getElementById('snd-off').classList.toggle('on', !on);
-}
-function toggleSound() {
-  setSound(!soundEnabled);
-  document.getElementById('snd-toggle').textContent = soundEnabled ? '🔊' : '🔇';
-  playBeep(soundEnabled ? 700 : 300, 0.1);
+function setSound(on){soundOn=on;document.getElementById('snd-on').classList.toggle('on',on);document.getElementById('snd-off').classList.toggle('on',!on)}
+function toggleSound(){setSound(!soundOn);playBeep(soundOn?700:300,.1)}
+
+/* ── Launch ── */
+function launchTracker(){
+  playBeep(800,.12);
+  document.getElementById('loading-screen').classList.add('hide');
+  document.getElementById('tracker-screen').classList.add('show');
+  setTimeout(()=>{
+    document.getElementById('loading-screen').style.display='none';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      initMap(); buildRulers(); showGuideOnce();
+    }));
+  },700);
 }
 
-/* ── Launch tracker ── */
-function launchTracker() {
-  playBeep(800, 0.12);
-  const ld  = document.getElementById('loading-screen');
-  const trk = document.getElementById('tracker-screen');
-  ld.classList.add('hide');
-  trk.classList.add('show');
-  // Wait for transition, then build map
-  setTimeout(() => {
-    ld.style.display = 'none';
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        initLeafletMap();
-        buildRulers();
-        showGuideOnce();
-      });
-    });
-  }, 700);
-}
+/* ── Map ── */
+function initMap(){
+  if(map){map.invalidateSize();return}
+  map=L.map('leaflet-map',{center:CENTER,zoom:ZOOM,zoomControl:false,attributionControl:true});
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',{
+    attribution:'Esri &copy; OpenStreetMap contributors',maxZoom:17
+  }).addTo(map);
 
-/* ── Leaflet map of Calicut ── */
-function initLeafletMap() {
-  if (leafletMap) { leafletMap.invalidateSize(); return; }
-
-  leafletMap = L.map('leaflet-map', {
-    center: CALICUT_CENTER,
-    zoom: CALICUT_ZOOM,
-    zoomControl: false,
-    attributionControl: true
+  const mkMem=(i)=>L.divIcon({
+    className:'',
+    html:`<div class="lf-pin pin-mem">🕷</div>`,
+    iconSize:[38,38],iconAnchor:[19,19]
+  });
+  const mkLet=()=>L.divIcon({
+    className:'',
+    html:`<div class="lf-pin pin-letter">✉</div>`,
+    iconSize:[38,38],iconAnchor:[19,19]
   });
 
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
-    maxZoom: 16
-  }).addTo(leafletMap);
-
-  const memIcon = (n) => L.divIcon({
-    className: '', html: `<div class="lf-pin pin-mem">🕷<div class="pin-lbl">MEMORY #${n}</div></div>`,
-    iconSize: [40,40], iconAnchor: [20,20]
+  MEM_LOCS.forEach((loc,i)=>{
+    L.marker(loc.pos,{icon:mkMem(i)})
+     .on('click',()=>{ showSighting(loc.name); setTimeout(()=>openMemory(i),600); })
+     .addTo(map);
   });
-  const letterIcon = L.divIcon({
-    className: '', html: `<div class="lf-pin pin-letter">✉<div class="pin-lbl">READ LETTER</div></div>`,
-    iconSize: [40,40], iconAnchor: [20,20]
-  });
-
-  memLayer = L.layerGroup(
-    MEM_PINS.map((pos, i) =>
-      L.marker(pos, { icon: memIcon(i+1) }).on('click', () => openMemory(i))
-    )
-  ).addTo(leafletMap);
-
-  letterLayer = L.layerGroup([
-    L.marker(LETTER_PIN, { icon: letterIcon }).on('click', () => openLetter())
-  ]).addTo(leafletMap);
+  L.marker(LETTER_LOC.pos,{icon:mkLet()})
+   .on('click',()=>{ showSighting(LETTER_LOC.name); setTimeout(()=>openLetter(),600); })
+   .addTo(map);
 }
 
-function mapZoom(dir) {
-  playBeep(550, .06);
-  if (leafletMap) leafletMap.setZoom(leafletMap.getZoom() + dir);
+/* ── Sighting popup ── */
+let sightTimer=null;
+function showSighting(name){
+  playBeep(700,.12);
+  const p=document.getElementById('sighting-popup');
+  const t=document.getElementById('sighting-txt');
+  t.innerHTML=`NEW SIGHTING<br>LOCATION: ${name}`;
+  p.classList.add('show');
+  clearTimeout(sightTimer);
+  sightTimer=setTimeout(()=>p.classList.remove('show'),2000);
 }
-function recenterMap() {
-  playBeep(600, .08);
-  if (leafletMap) leafletMap.setView(CALICUT_CENTER, CALICUT_ZOOM);
-}
+
+function mapZoom(d){playBeep(550,.06);if(map)map.setZoom(map.getZoom()+d)}
+function recenterMap(){playBeep(600,.08);if(map)map.setView(CENTER,ZOOM)}
 
 /* ── Rulers ── */
-function buildRulers() {
-  ['ruler-l', 'ruler-r'].forEach(id => {
-    document.getElementById(id).innerHTML =
-      Array(24).fill('<div class="r-tick"></div>').join('');
+function buildRulers(){
+  ['ruler-l','ruler-r'].forEach(id=>{
+    document.getElementById(id).innerHTML=Array(22).fill('<div class="r-tick"></div>').join('');
   });
 }
 
 /* ── Guide ── */
-function showGuideOnce() {
-  if (!localStorage.getItem('spidey-guide-seen')) {
-    setTimeout(() => { guideOpen = true; document.getElementById('guide-overlay').classList.add('open'); }, 500);
-    localStorage.setItem('spidey-guide-seen', '1');
+function showGuideOnce(){
+  if(!localStorage.getItem('spidey-g')){
+    setTimeout(()=>{guideOpen=true;document.getElementById('guide-overlay').classList.add('open')},500);
+    localStorage.setItem('spidey-g','1');
   }
 }
-function toggleGuide() {
-  playBeep(600, .08);
-  guideOpen = !guideOpen;
-  document.getElementById('guide-overlay').classList.toggle('open', guideOpen);
+function toggleGuide(){
+  playBeep(600,.08);
+  guideOpen=!guideOpen;
+  document.getElementById('guide-overlay').classList.toggle('open',guideOpen);
+}
+
+/* ── Sidebar filter ── */
+function toggleSidebar(btn,type){
+  playBeep(550,.07);
+  btn.classList.toggle('active');
+  const show=btn.classList.contains('active');
+  // toggle dot
+  const dot=btn.querySelector('.sdb-dot');
+  if(dot)dot.style.display=show?'block':'none';
+  // leaflet markers visibility handled via CSS filter
+  document.getElementById('leaflet-map').querySelectorAll(
+    type==='mem'?'.pin-mem':'.pin-letter'
+  ).forEach(el=>el.parentElement.style.display=show?'':'none');
 }
 
 /* ── Modals ── */
-function openMemory(idx) {
-  playBeep(700, .1);
-  const m    = MEMORIES[idx];
-  const wrap = document.getElementById('mem-photo-wrap');
-  wrap.innerHTML = m.photo
-    ? `<img src="${m.photo}" alt="Memory ${idx+1}" />`
-    : `<div class="photo-ph">
-         <span>📷</span>
-         <span>DROP YOUR PHOTO IN THE FOLDER<br>& SET photo:"filename.jpg"</span>
-       </div>`;
-  document.getElementById('mem-title').textContent   = m.title;
-  document.getElementById('mem-caption').textContent = m.caption;
+function openMemory(idx){
+  playBeep(700,.1);
+  const m=MEMORIES[idx];
+  const w=document.getElementById('mem-photo-wrap');
+  w.innerHTML=m.photo
+    ?`<img src="${m.photo}" alt="Memory ${idx+1}"/>`
+    :`<div class="photo-ph"><span>📷</span><span>ADD YOUR PHOTO HERE<br>set photo:"filename.jpg"</span></div>`;
+  document.getElementById('mem-title').textContent=m.title;
+  document.getElementById('mem-caption').textContent=m.caption;
   document.getElementById('mem-modal').classList.add('open');
 }
-function openLetter() {
-  playBeep(500, .15, 'sine');
+function openLetter(){
+  playBeep(500,.15,'sine');
   document.getElementById('letter-modal').classList.add('open');
 }
-function closeModal(id) {
-  playBeep(400, .07);
+function closeModal(id){
+  playBeep(400,.07);
   document.getElementById(id).classList.remove('open');
 }
-
-/* Tap outside to close */
-document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === o) closeModal(o.id); });
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)closeModal(o.id)});
 });
 
-/* ── Filter toggle ── */
-function toggleFilter(btn) {
-  playBeep(550, .07);
-  btn.classList.toggle('active');
-  const on     = btn.classList.contains('active');
-  const isMem  = btn.id === 'flt-mem';
-  const layer  = isMem ? memLayer : letterLayer;
-  if (!leafletMap || !layer) return;
-  if (on) leafletMap.addLayer(layer); else leafletMap.removeLayer(layer);
-}
-
-/* ── Resize ── */
-window.addEventListener('resize', () => {
-  if (document.getElementById('tracker-screen').classList.contains('show') && leafletMap) {
-    leafletMap.invalidateSize();
-  }
-});
+window.addEventListener('resize',()=>{if(map)map.invalidateSize()});
 </script>
 </body>
 </html>
