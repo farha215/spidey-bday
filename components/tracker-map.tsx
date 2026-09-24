@@ -24,6 +24,14 @@ export function TrackerMap({
 	const map = useMap();
 	const [selected, setSelected] = useState<Pin | null>(null);
 	const deepLinkedRef = useRef<string | null>(null);
+	const [toastMsg, setToastMsg] = useState<string | null>(null);
+	const toastTimeout = useRef<NodeJS.Timeout | null>(null);
+
+	const handleToast = useCallback((msg: string) => {
+		setToastMsg(msg);
+		if (toastTimeout.current) clearTimeout(toastTimeout.current);
+		toastTimeout.current = setTimeout(() => setToastMsg(null), 2500);
+	}, []);
 
 	const allPins = [...PINS, ...extraPins].filter(
 		(p) => p.lat != null && p.lng != null,
@@ -109,7 +117,15 @@ export function TrackerMap({
 
 			<div className="graticule absolute inset-0 z-[5]" aria-hidden />
 
-			<Radar map={map} pins={visiblePins} />
+			<Radar map={map} pins={visiblePins} onToast={handleToast} />
+
+			{toastMsg && (
+				<div className="pointer-events-none absolute bottom-4 left-1/2 z-50 -translate-x-1/2">
+					<div className="border-[2px] border-[#96e0f7] bg-[#0a0a0a]/80 px-4 py-2 font-pixel-body text-[10px] tracking-wider text-[#96e0f7] backdrop-blur-sm">
+						{toastMsg}
+					</div>
+				</div>
+			)}
 
 			{selected && (
 				<div className="card-pop absolute left-1/2 top-4 z-20 -translate-x-1/2">

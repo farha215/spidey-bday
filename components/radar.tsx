@@ -47,10 +47,12 @@ export function Radar({
 	map,
 	pins,
 	decorative = false,
+	onToast,
 }: {
 	map: google.maps.Map | null;
 	pins: Pin[];
 	decorative?: boolean;
+	onToast?: (msg: string) => void;
 }) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -187,7 +189,8 @@ export function Radar({
 						onClick={() => {
 							if (map) {
 								map.panTo({ lat: -14, lng: -67 });
-								map.setZoom(3);
+								map.setZoom(2);
+								onToast?.("centering to global view");
 							}
 						}}
 						className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-[#5a9cba] bg-[#0a0a0a]/60 text-[#96e0f7] backdrop-blur-sm transition-all hover:bg-[#5a9cba]/30 hover:opacity-100"
@@ -199,8 +202,9 @@ export function Radar({
 						aria-label="Centrar"
 						onClick={() => {
 							if (map) {
-								map.panTo({ lat: -12.0464, lng: -77.0428 });
-								map.setZoom(10.5);
+								map.panTo({ lat: 20.5937, lng: 78.9629 }); // India
+								map.setZoom(5);
+								onToast?.("centering to your neighborhood");
 							}
 						}}
 						className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-[#5a9cba] bg-[#0a0a0a]/60 text-[#96e0f7] backdrop-blur-sm transition-all hover:bg-[#5a9cba]/30 hover:opacity-100"

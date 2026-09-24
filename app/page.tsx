@@ -67,7 +67,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-black">
+    <div className="flex min-h-dvh items-center justify-center bg-[#1c4c7c]">
       <APIProvider apiKey="AIzaSyDhFTe_7TYC4vcCSntJmbIVQcXTjjZuXcM" libraries={MAP_LIBRARIES} onError={(err) => console.error("Google Maps Error:", err)}>
         <main className="relative flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-[#2c6c8c] border-x-4 border-black shadow-[0_0_50px_rgba(90,200,236,0.15)]">
           {/* SIDEBAR TABS */}
@@ -167,7 +167,7 @@ export default function Home() {
         </div>
 
         {/* BOTTOM TICKER PANEL */}
-        <div className="relative z-50 flex h-14 w-full shrink-0 items-center gap-2 border-t-4 border-[#5a9cba] bg-[#96e0f7] py-2 pr-2 pl-12 pb-safe-3">
+        <div className="relative z-50 flex h-14 w-full shrink-0 items-center gap-2 border-t-4 border-black bg-transparent py-2 pr-2 pl-14">
           {/* OVERLAPPING SPIDEY AVATAR */}
           <div className="absolute -left-2 bottom-0 z-50 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-[4px] border-[#0a0a0a] bg-[#5a9cba] shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
             <img src="/spidey-bday/assets/spiderman-walk.png" alt="" className="h-12 w-auto pixelated drop-shadow-[0_2px_0_rgba(0,0,0,1)] animate-spidey-idle" />
@@ -196,10 +196,18 @@ export default function Home() {
               setMuted(!on);
               setSoundPreference(on);
             }}
-            className="btn-3d flex h-full aspect-square cursor-pointer items-center justify-center pt-1 font-pixel-body text-[12px] text-black"
-            style={{ "--btn-color": "#d4d4d4", "--bevel-light": "rgba(255,255,255,0.8)", "--bevel-dark": "rgba(0,0,0,0.4)" } as any}
+            className="btn-3d flex h-full w-14 cursor-pointer items-center justify-center pt-1"
+            style={{ 
+              "--btn-color": muted ? "#d4d4d4" : "#6a9a6c", 
+              "--bevel-light": muted ? "rgba(255,255,255,0.8)" : "#90c292", 
+              "--bevel-dark": muted ? "rgba(0,0,0,0.4)" : "#3b5f3c" 
+            } as any}
           >
-            {muted ? "×" : "♪"}
+            {muted ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 -mt-1"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 -mt-1"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            )}
           </button>
         </div>
       </main>
