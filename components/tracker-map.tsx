@@ -92,11 +92,12 @@ export function TrackerMap({
 				disableDefaultUI={true}
 				gestureHandling="greedy"
 				colorScheme={"DARK" as any}
+				backgroundColor="#030405"
 				className="h-full w-full"
-				minZoom={2.5}
+				minZoom={2}
 				restriction={{
 					latLngBounds: { north: 85, south: -85, west: -180, east: 180 },
-					strictBounds: true,
+					strictBounds: false,
 				}}
 			>
 				{visiblePins.map((pin) => (
