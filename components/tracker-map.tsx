@@ -93,6 +93,11 @@ export function TrackerMap({
 				gestureHandling="greedy"
 				colorScheme={"DARK" as any}
 				className="h-full w-full"
+				minZoom={2.5}
+				restriction={{
+					latLngBounds: { north: 85, south: -85, west: -180, east: 180 },
+					strictBounds: true,
+				}}
 			>
 				{visiblePins.map((pin) => (
 					<AdvancedMarker
