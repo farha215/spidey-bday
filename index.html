@@ -66,26 +66,29 @@
     box-shadow:0 0 14px rgba(78,205,232,0.35);
     text-shadow:0 0 10px rgba(78,205,232,0.8);
   }
+  /* Spider face icon — clips white bg to circle */
   .eyes-icon{
-    display:flex;align-items:center;justify-content:center;
-    background:#cc1a1a;border-radius:50%;border:2px solid #ff4444;
-    width:28px;height:28px;gap:3px;padding:4px;
+    width:32px;height:32px;border-radius:50%;overflow:hidden;
+    border:2px solid #ff4444;
     box-shadow:0 0 8px rgba(200,30,30,.6);
-  }
-  .s-eye{
-    width:9px;height:7px;background:#fff;
-    clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);
     flex-shrink:0;
+  }
+  .eyes-icon img{
+    width:100%;height:100%;object-fit:cover;
+    image-rendering:pixelated;
+    mix-blend-mode:multiply;
   }
 
   /* Web + spider drop */
   .web-stage{
     position:relative;width:100%;height:210px;
     flex-shrink:0;display:flex;justify-content:center;
+    /* Light bg so white-background spider image blends cleanly */
+    background:linear-gradient(to bottom,#e8eaf0 0%,#c8ccd8 100%);
   }
   #web-line{
     position:absolute;top:0;left:50%;width:3px;height:0;
-    background:linear-gradient(to bottom,rgba(255,255,255,.95),rgba(255,255,255,.3));
+    background:linear-gradient(to bottom,rgba(80,80,120,.9),rgba(80,80,120,.3));
     transform:translateX(-50%);
     animation:growWeb 1s ease forwards;
   }
@@ -96,9 +99,10 @@
   }
   @keyframes dropSpider{from{top:0}to{top:173px}}
   #spider-img{
-    height:96px;width:auto;object-fit:contain;
+    height:110px;width:auto;object-fit:contain;
     image-rendering:pixelated;
-    filter:drop-shadow(0 0 10px rgba(200,30,30,.7));
+    /* multiply removes white bg on the light-colored web-stage */
+    mix-blend-mode:multiply;
     animation:spiderSway 3s ease-in-out infinite 1.8s;
   }
   @keyframes spiderSway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
@@ -168,23 +172,24 @@
     display:flex;align-items:center;justify-content:space-between;
     padding:0 8px;flex-shrink:0;z-index:30;position:relative;
   }
-  /* Spider face circle button */
+  /* Spider face circle button — uses spidey-face.png */
   .hdr-face{
-    width:36px;height:36px;border-radius:50%;
-    background:#cc1a1a;border:2px solid #ff6666;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;flex-shrink:0;gap:3px;padding:5px;
+    width:36px;height:36px;border-radius:50%;overflow:hidden;
+    border:2px solid #ff6666;
+    cursor:pointer;flex-shrink:0;
     box-shadow:0 0 10px rgba(200,30,30,.5);
+    background:white;
   }
+  .hdr-face img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated;mix-blend-mode:multiply}
   .hdr-face:active{opacity:.7}
-  /* Square spider icon button */
+  /* Square spider icon — uses pin-spider.png */
   .hdr-sq{
     width:36px;height:36px;border:2px solid #4ecde8;
-    background:#0d1f35;display:flex;align-items:center;
-    justify-content:center;cursor:pointer;font-size:15px;
-    color:#4ecde8;flex-shrink:0;
+    background:white;overflow:hidden;border-radius:4px;
+    cursor:pointer;flex-shrink:0;
   }
-  .hdr-sq:active{background:rgba(78,205,232,.2)}
+  .hdr-sq img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated;mix-blend-mode:multiply}
+  .hdr-sq:active{opacity:.7}
   /* Center counter display */
   .hdr-center{
     display:flex;align-items:center;gap:6px;
@@ -238,43 +243,39 @@
     background:#27ae60;border-color:#4ade80;
     box-shadow:0 0 14px rgba(39,174,96,.6);
   }
-  /* small status dot */
   .sdb-dot{
     position:absolute;top:2px;right:2px;
     width:7px;height:7px;border-radius:50%;
     background:#4ade80;border:1px solid #0d1f35;
   }
-  /* Spider face circle in sidebar */
+  /* Spider face circle in sidebar — uses spidey-face.png */
   .sdb-face{
-    width:38px;height:38px;border-radius:50%;
-    background:#cc1a1a;border:3px solid #ff6655;
-    display:flex;align-items:center;justify-content:center;
-    gap:3px;padding:6px;margin-top:4px;
+    width:38px;height:38px;border-radius:50%;overflow:hidden;
+    border:3px solid #ff6655;margin-top:4px;
     box-shadow:0 0 10px rgba(200,30,30,.5);
-    cursor:pointer;
+    cursor:pointer;background:white;
   }
-  .sdb-s-eye{
-    width:10px;height:7px;background:#fff;
-    clip-path:polygon(20% 0%,80% 0%,100% 50%,80% 100%,20% 100%,0% 50%);
-  }
+  .sdb-face img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated;mix-blend-mode:multiply}
 
-  /* ── Leaflet pin icons ── */
+  /* ── Leaflet pin icons — uses actual PNGs ── */
   .leaflet-div-icon,.leaflet-marker-icon{background:transparent!important;border:none!important}
   .lf-pin{
-    width:38px;height:38px;border-radius:50%;border:3px solid;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;font-size:17px;user-select:none;position:relative;
+    width:44px;height:44px;border-radius:50%;overflow:hidden;
+    cursor:pointer;user-select:none;position:relative;
+    background:white;
+    image-rendering:pixelated;
   }
-  .lf-pin.pin-mem{
-    background:rgba(22,163,74,.92);border-color:#4ade80;
-    animation:pMem 2.5s ease-in-out infinite;
+  .lf-pin img{
+    width:100%;height:100%;object-fit:cover;
+    image-rendering:pixelated;
+    mix-blend-mode:multiply;
+    transition:transform .2s;
   }
-  @keyframes pMem{0%,100%{box-shadow:0 0 6px rgba(22,163,74,.5)}50%{box-shadow:0 0 22px rgba(22,163,74,1),0 0 40px rgba(22,163,74,.3)}}
-  .lf-pin.pin-letter{
-    background:rgba(192,57,43,.92);border-color:#f87171;
-    animation:pLet 2.5s ease-in-out infinite;
-  }
-  @keyframes pLet{0%,100%{box-shadow:0 0 6px rgba(192,57,43,.5)}50%{box-shadow:0 0 22px rgba(192,57,43,1),0 0 40px rgba(192,57,43,.3)}}
+  .lf-pin:hover img,.lf-pin:active img{transform:scale(1.15)}
+  .lf-pin.pin-mem{animation:pMem 2.5s ease-in-out infinite;}
+  @keyframes pMem{0%,100%{box-shadow:0 0 6px rgba(22,163,74,.5),0 0 0 3px #4ade80}50%{box-shadow:0 0 22px rgba(22,163,74,1),0 0 0 3px #4ade80,0 0 40px rgba(22,163,74,.3)}}
+  .lf-pin.pin-letter{animation:pLet 2.5s ease-in-out infinite;}
+  @keyframes pLet{0%,100%{box-shadow:0 0 6px rgba(192,57,43,.5),0 0 0 3px #f87171}50%{box-shadow:0 0 22px rgba(192,57,43,1),0 0 0 3px #f87171,0 0 40px rgba(192,57,43,.3)}}
 
   /* ── Sighting popup (like reference "NEW SIGHTING LOCATION") ── */
   #sighting-popup{
@@ -288,17 +289,20 @@
   #sighting-popup.show{opacity:1}
   #sighting-popup p{font-size:6px;color:#0d1f35;line-height:1.9}
 
-  /* Walk figure bottom-left */
+  /* Walk figure bottom-left — white bg handled with light container */
   .walk-figure{
     position:absolute;bottom:8px;left:8px;
     z-index:20;pointer-events:none;
     animation:spiderBob 2.2s ease-in-out infinite;
+    background:rgba(255,255,255,0.9);
+    border-radius:4px;
+    padding:2px;
   }
   @keyframes spiderBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
   .walk-img{
-    height:44px;width:auto;object-fit:contain;
+    height:48px;width:auto;object-fit:contain;
     image-rendering:pixelated;
-    filter:drop-shadow(0 0 6px rgba(200,30,30,.6));
+    display:block;
   }
 
   /* ── BOTTOM BUTTON PANEL (replaces ticker) ── */
@@ -417,7 +421,7 @@
     <div class="ld-top">
       <div class="spidey-logo">
         SPIDEY
-        <div class="eyes-icon"><div class="s-eye"></div><div class="s-eye"></div></div>
+        <div class="eyes-icon"><img src="assets/spidey-face.png" alt="Spidey"/></div>
         TRACKER
       </div>
     </div>
@@ -458,17 +462,16 @@
     <!-- Header -->
     <div class="trk-header">
       <div class="hdr-face" onclick="toggleGuide()">
-        <div class="s-eye"></div><div class="s-eye"></div>
+        <img src="assets/spidey-face.png" alt="Spidey"/>
       </div>
       <div class="hdr-center">
         <span class="hdr-title-txt">SPIDEY</span>
-        <div class="eyes-icon" style="width:22px;height:22px;padding:3px">
-          <div class="s-eye" style="width:7px;height:5px"></div>
-          <div class="s-eye" style="width:7px;height:5px"></div>
-        </div>
+        <div class="eyes-icon" style="width:22px;height:22px"><img src="assets/spidey-face.png" alt=""/></div>
         <span class="hdr-title-txt">TRACKER</span>
       </div>
-      <div class="hdr-sq" onclick="openLetter()">🕷</div>
+      <div class="hdr-sq" onclick="openLetter()">
+        <img src="assets/pin-spider.png" alt="Spider"/>
+      </div>
     </div>
 
     <!-- Map -->
@@ -490,7 +493,7 @@
         <div class="sdb-btn" id="sdb-g" onclick="toggleGuide()" title="Guide">G</div>
         <!-- Spider face -->
         <div class="sdb-face" onclick="recenterMap()">
-          <div class="sdb-s-eye"></div><div class="sdb-s-eye"></div>
+          <img src="assets/spidey-face.png" alt="Spidey"/>
         </div>
       </div>
 
@@ -665,13 +668,13 @@ function initMap(){
 
   const mkMem=(i)=>L.divIcon({
     className:'',
-    html:`<div class="lf-pin pin-mem">🕷</div>`,
-    iconSize:[38,38],iconAnchor:[19,19]
+    html:`<div class="lf-pin pin-mem"><img src="assets/pin-spider.png" alt="pin"/></div>`,
+    iconSize:[44,44],iconAnchor:[22,22]
   });
   const mkLet=()=>L.divIcon({
     className:'',
-    html:`<div class="lf-pin pin-letter">✉</div>`,
-    iconSize:[38,38],iconAnchor:[19,19]
+    html:`<div class="lf-pin pin-letter"><img src="assets/spider-black.png" alt="letter"/></div>`,
+    iconSize:[44,44],iconAnchor:[22,22]
   });
 
   MEM_LOCS.forEach((loc,i)=>{
