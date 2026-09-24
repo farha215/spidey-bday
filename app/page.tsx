@@ -138,14 +138,14 @@ export default function Home() {
               {/* SIDEBAR TABS */}
               {booted && (
                 <div className="absolute left-0 top-1/2 z-30 flex -translate-y-1/2 flex-col gap-2">
-                  <button onClick={() => openMemory(0)} className="flex h-10 w-10 cursor-pointer items-center justify-center bg-[#ff4040] text-white shadow-[0_0_12px_rgba(255,64,64,0.6)]" style={{ clipPath: "polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%)" }}>
-                    <span className="font-pixel-body text-[8px]">M1</span>
+                  <button onClick={() => openMemory(0)} className="bit-border flex h-10 w-10 cursor-pointer items-center justify-center font-pixel-body text-[8px] text-white hover:opacity-85 shadow-[0_0_12px_rgba(255,64,64,0.6)]" style={{ "--bb-step": "3px", "--bb-frame": "#ff4040", "--bb-fill": "#ff4040" } as any}>
+                    M1
                   </button>
-                  <button onClick={() => openMemory(1)} className="flex h-10 w-10 cursor-pointer items-center justify-center bg-[#ff4040] text-white shadow-[0_0_12px_rgba(255,64,64,0.6)]" style={{ clipPath: "polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%)" }}>
-                    <span className="font-pixel-body text-[8px]">M2</span>
+                  <button onClick={() => openMemory(1)} className="bit-border flex h-10 w-10 cursor-pointer items-center justify-center font-pixel-body text-[8px] text-white hover:opacity-85 shadow-[0_0_12px_rgba(255,64,64,0.6)]" style={{ "--bb-step": "3px", "--bb-frame": "#ff4040", "--bb-fill": "#ff4040" } as any}>
+                    M2
                   </button>
-                  <button onClick={openLetter} className="flex h-10 w-10 cursor-pointer items-center justify-center bg-[#2aaa90] text-white shadow-[0_0_12px_rgba(42,170,144,0.6)]" style={{ clipPath: "polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%)" }}>
-                    <span className="font-pixel-body text-[8px]">LTR</span>
+                  <button onClick={openLetter} className="bit-border flex h-10 w-10 cursor-pointer items-center justify-center font-pixel-body text-[8px] text-white hover:opacity-85 shadow-[0_0_12px_rgba(42,170,144,0.6)]" style={{ "--bb-step": "3px", "--bb-frame": "#2aaa90", "--bb-fill": "#2aaa90" } as any}>
+                    LTR
                   </button>
                   <div className="mt-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white shadow-[0_0_10px_rgba(255,64,64,0.6)]">
                     <img src="/assets/spidey-face.png" alt="" className="h-full w-full object-cover pixelated" style={{ mixBlendMode: 'multiply' }} />
@@ -181,17 +181,17 @@ export default function Home() {
 
         {/* BOTTOM CONTROL PANEL */}
         <div className="z-50 flex flex-col gap-1.5 border-t-4 border-[#2a9ac0] bg-[#5ac8ec] p-2 pb-safe-4">
-          <div className="flex items-center gap-1.5">
-            <span className="flex-shrink-0 rounded-full border-2 border-[#2a9ac0] bg-white/30 px-1.5 py-1 text-center font-pixel-body text-[6px] text-[#0a0a0a] min-w-[28px]">M.1</span>
-            <button onClick={() => openMemory(0)} className="flex-1 cursor-pointer rounded-full bg-[#d45a30] py-2 font-pixel-body text-[6px] text-white hover:brightness-110" style={{ boxShadow: "0 3px 0 #8a2a10" }}>MEMORY 1</button>
-            <button onClick={() => openMemory(1)} className="flex-1 cursor-pointer rounded-full bg-[#d45a30] py-2 font-pixel-body text-[6px] text-white hover:brightness-110" style={{ boxShadow: "0 3px 0 #8a2a10" }}>MEMORY 2</button>
-            <button onClick={openLetter} className="flex-1 cursor-pointer rounded-full bg-[#c89a10] py-2 font-pixel-body text-[6px] text-white hover:brightness-110" style={{ boxShadow: "0 3px 0 #7a5a00" }}>LETTER</button>
+          <div className="flex items-center gap-2">
+            <span className="bit-border flex-shrink-0 px-2 py-1.5 text-center font-pixel-body text-[6px] text-white min-w-[32px]" style={{ "--bb-step": "2px", "--bb-frame": "#2a9ac0", "--bb-fill": "rgba(255,255,255,0.15)" } as any}>M.1</span>
+            <button onClick={() => openMemory(0)} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#8a2a10", "--bb-fill": "#d45a30" } as any}>MEMORY 1</button>
+            <button onClick={() => openMemory(1)} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#8a2a10", "--bb-fill": "#d45a30" } as any}>MEMORY 2</button>
+            <button onClick={openLetter} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#7a5a00", "--bb-fill": "#c89a10" } as any}>LETTER</button>
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="flex-shrink-0 rounded-full border-2 border-[#2a9ac0] bg-white/30 px-1.5 py-1 text-center font-pixel-body text-[6px] text-[#0a0a0a] min-w-[28px]">M.2</span>
-            <button onClick={() => openMemory(2)} className="flex-1 cursor-pointer rounded-full bg-[#d45a30] py-2 font-pixel-body text-[6px] text-white hover:brightness-110" style={{ boxShadow: "0 3px 0 #8a2a10" }}>MEMORY 3</button>
-            <button onClick={() => openMemory(3)} className="flex-1 cursor-pointer rounded-full bg-[#d45a30] py-2 font-pixel-body text-[6px] text-white hover:brightness-110" style={{ boxShadow: "0 3px 0 #8a2a10" }}>MEMORY 4</button>
-            <button onClick={() => setActivePanel({ type: "guide" })} className="flex-1 cursor-pointer rounded-full bg-[#2aaa90] py-2 font-pixel-body text-[6px] text-white hover:brightness-110" style={{ boxShadow: "0 3px 0 #0e6b58" }}>GUIDE</button>
+          <div className="flex items-center gap-2">
+            <span className="bit-border flex-shrink-0 px-2 py-1.5 text-center font-pixel-body text-[6px] text-white min-w-[32px]" style={{ "--bb-step": "2px", "--bb-frame": "#2a9ac0", "--bb-fill": "rgba(255,255,255,0.15)" } as any}>M.2</span>
+            <button onClick={() => openMemory(2)} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#8a2a10", "--bb-fill": "#d45a30" } as any}>MEMORY 3</button>
+            <button onClick={() => openMemory(3)} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#8a2a10", "--bb-fill": "#d45a30" } as any}>MEMORY 4</button>
+            <button onClick={() => setActivePanel({ type: "guide" })} className="bit-border flex-1 cursor-pointer py-2.5 font-pixel-body text-[7px] text-white hover:opacity-85" style={{ "--bb-step": "2px", "--bb-frame": "#0e6b58", "--bb-fill": "#2aaa90" } as any}>GUIDE</button>
           </div>
         </div>
       </main>
