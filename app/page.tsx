@@ -137,17 +137,23 @@ export default function Home() {
 
               {/* SIDEBAR TABS */}
               {booted && (
-                <div className="absolute left-0 top-1/2 z-30 flex -translate-y-1/2 flex-col gap-2">
-                  <button onClick={() => openMemory(0)} className="btn-3d flex h-10 w-10 items-center justify-center font-pixel-body text-[8px]" style={{ "--btn-color": "#ff4040" } as any}>
+                <div className="absolute left-0 top-1/2 z-30 flex -translate-y-1/2 flex-col gap-1">
+                  <button onClick={() => openMemory(0)} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>
                     M1
                   </button>
-                  <button onClick={() => openMemory(1)} className="btn-3d flex h-10 w-10 items-center justify-center font-pixel-body text-[8px]" style={{ "--btn-color": "#ff4040" } as any}>
+                  <button onClick={() => openMemory(1)} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>
                     M2
                   </button>
-                  <button onClick={openLetter} className="btn-3d flex h-10 w-10 items-center justify-center font-pixel-body text-[8px]" style={{ "--btn-color": "#2aaa90" } as any}>
+                  <button onClick={() => openMemory(2)} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>
+                    M3
+                  </button>
+                  <button onClick={() => openMemory(3)} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>
+                    M4
+                  </button>
+                  <button onClick={openLetter} className="btn-3d flex h-8 w-8 items-center justify-center font-pixel-body text-[6px]" style={{ "--btn-color": "#c89a10" } as any}>
                     LTR
                   </button>
-                  <div className="mt-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white shadow-[0_0_10px_rgba(255,64,64,0.6)]">
+                  <div className="mt-1 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-[#ff4040] bg-white shadow-[0_0_10px_rgba(255,64,64,0.6)]">
                     <img src="/assets/spidey-face.png" alt="" className="h-full w-full object-cover pixelated" style={{ mixBlendMode: 'multiply' }} />
                   </div>
                 </div>
@@ -159,40 +165,34 @@ export default function Home() {
                   <img src="/assets/spiderman-walk.png" alt="" className="h-12 w-auto pixelated" />
                 </div>
               )}
-              
-              {/* SOUND TOGGLE */}
-              {booted && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    const on = sound.toggle();
-                    setMuted(!on);
-                    setSoundPreference(on);
-                  }}
-                  className="bit-border absolute right-2 top-2 z-50 flex h-8 w-8 cursor-pointer items-center justify-center font-pixel-body text-[8px] text-[#5ac8ec] hover:opacity-80"
-                  style={{ "--bb-step": "2px", "--bb-frame": "#5ac8ec", "--bb-fill": "#0a0a0a" } as any}
-                >
-                  {muted ? "×" : "♪"}
-                </button>
-              )}
             </div>
           </div>
         </div>
 
-        {/* BOTTOM CONTROL PANEL */}
-        <div className="z-50 flex flex-col gap-1.5 border-t-4 border-[#2a9ac0] bg-[#5ac8ec] p-2 pb-safe-4">
-          <div className="flex items-center gap-1">
-            <span className="btn-3d flex-shrink-0 px-1 py-1.5 text-center font-pixel-body text-[6px] min-w-[28px] cursor-default" style={{ "--btn-color": "#4a4a4a", "--bevel-light": "rgba(255,255,255,0.2)", "--bevel-dark": "rgba(0,0,0,0.4)" } as any}>M.1</span>
-            <button onClick={() => openMemory(0)} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>MEMORY 1</button>
-            <button onClick={() => openMemory(1)} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>MEMORY 2</button>
-            <button onClick={openLetter} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#c89a10" } as any}>LETTER</button>
+        {/* BOTTOM TICKER PANEL */}
+        <div className="z-50 flex h-10 w-full shrink-0 items-center gap-2 border-t-4 border-[#2a9ac0] bg-[#5ac8ec] px-2 py-1 pb-safe-2">
+          {/* SCROLLING TICKER */}
+          <div className="relative flex h-full flex-1 items-center overflow-hidden rounded bg-[#04040e] border-2 border-[#04040e] shadow-[inset_0_0_10px_rgba(0,0,0,0.8)]">
+            <div className="ticker-track flex w-max items-center font-pixel-body text-[8px] text-[#5ac8ec] tracking-widest pt-1">
+              <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
+              <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
+              <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
+              <span className="whitespace-nowrap px-4">🕷️ SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈 •</span>
+            </div>
           </div>
-          <div className="flex items-center gap-1">
-            <span className="btn-3d flex-shrink-0 px-1 py-1.5 text-center font-pixel-body text-[6px] min-w-[28px] cursor-default" style={{ "--btn-color": "#4a4a4a", "--bevel-light": "rgba(255,255,255,0.2)", "--bevel-dark": "rgba(0,0,0,0.4)" } as any}>M.2</span>
-            <button onClick={() => openMemory(2)} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>MEMORY 3</button>
-            <button onClick={() => openMemory(3)} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#d45a30" } as any}>MEMORY 4</button>
-            <button onClick={() => setActivePanel({ type: "guide" })} className="btn-3d flex-1 py-2 font-pixel-body text-[6px]" style={{ "--btn-color": "#2aaa90" } as any}>GUIDE</button>
-          </div>
+
+          {/* SOUND TOGGLE */}
+          <button
+            type="button"
+            onClick={() => {
+              const on = sound.toggle();
+              setMuted(!on);
+              setSoundPreference(on);
+            }}
+            className="flex h-full aspect-square cursor-pointer items-center justify-center rounded bg-[#0a0a0a] font-pixel-body text-[10px] text-[#5ac8ec] hover:brightness-110"
+          >
+            {muted ? "×" : "♪"}
+          </button>
         </div>
       </main>
     </div>
