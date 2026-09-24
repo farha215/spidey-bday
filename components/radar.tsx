@@ -71,8 +71,20 @@ export function Radar({
 		let sweep = 0;
 		let raf = 0;
 
+		const drawPolygonPath = (r: number) => {
+			const spokes = 10;
+			ctx.beginPath();
+			for (let i = 0; i <= spokes; i++) {
+				const a = (i / spokes) * Math.PI * 2;
+				const x = cx + r * Math.cos(a);
+				const y = cy + r * Math.sin(a);
+				if (i === 0) ctx.moveTo(x, y);
+				else ctx.lineTo(x, y);
+			}
+		};
+
 		const drawWeb = () => {
-			ctx.strokeStyle = "rgba(245, 183, 0, 0.35)";
+			ctx.strokeStyle = "rgba(150, 224, 247, 0.4)";
 			ctx.lineWidth = 1;
 			const spokes = 10;
 			for (let i = 0; i < spokes; i++) {
@@ -83,15 +95,7 @@ export function Radar({
 				ctx.stroke();
 			}
 			for (let ring = 1; ring <= 4; ring++) {
-				const r = (ring / 4) * R;
-				ctx.beginPath();
-				for (let i = 0; i <= spokes; i++) {
-					const a = (i / spokes) * Math.PI * 2;
-					const x = cx + r * Math.cos(a);
-					const y = cy + r * Math.sin(a);
-					if (i === 0) ctx.moveTo(x, y);
-					else ctx.lineTo(x, y);
-				}
+				drawPolygonPath((ring / 4) * R);
 				ctx.stroke();
 			}
 		};
@@ -100,11 +104,10 @@ export function Radar({
 			ctx.clearRect(0, 0, SIZE, SIZE);
 
 			ctx.save();
-			ctx.beginPath();
-			ctx.arc(cx, cy, R, 0, Math.PI * 2);
+			drawPolygonPath(R);
 			ctx.clip();
 
-			ctx.fillStyle = "rgba(10, 10, 10, 0.72)";
+			ctx.fillStyle = "#0a0a0a";
 			ctx.fillRect(0, 0, SIZE, SIZE);
 			drawWeb();
 
@@ -115,8 +118,8 @@ export function Radar({
 			ctx.arc(cx, cy, R, sweep - tail, sweep);
 			ctx.closePath();
 			const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
-			grad.addColorStop(0, "rgba(245, 183, 0, 0)");
-			grad.addColorStop(1, "rgba(245, 183, 0, 0.20)");
+			grad.addColorStop(0, "rgba(150, 224, 247, 0)");
+			grad.addColorStop(1, "rgba(150, 224, 247, 0.35)");
 			ctx.fillStyle = grad;
 			ctx.fill();
 			ctx.beginPath();
@@ -156,8 +159,7 @@ export function Radar({
 			ctx.restore();
 
 			// rim
-			ctx.beginPath();
-			ctx.arc(cx, cy, R, 0, Math.PI * 2);
+			drawPolygonPath(R);
 			ctx.strokeStyle = "#96e0f7";
 			ctx.lineWidth = 2;
 			ctx.stroke();
@@ -178,46 +180,32 @@ export function Radar({
 				aria-label="Radar de actividad"
 			/>
 			{!decorative && (
-				<div className="absolute -right-3 top-0 flex flex-col gap-2">
+				<div className="absolute -right-4 top-1/2 flex -translate-y-1/2 flex-col gap-4">
 					<button
 						type="button"
 						aria-label="Vista global"
 						onClick={() => {
 							if (map) {
 								map.panTo({ lat: -14, lng: -67 });
-								map.setZoom(2.5);
+								map.setZoom(3);
 							}
 						}}
-						className="bit-border flex h-8 w-8 cursor-pointer items-center justify-center font-pixel-body text-[13px] text-black hover:opacity-85"
-						style={
-							{
-								"--bb-step": "2px",
-								"--bb-frame": "#0a0a0a",
-								"--bb-fill": "#96e0f7",
-							} as React.CSSProperties
-						}
+						className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-[#5a9cba] bg-[#0a0a0a]/60 text-[#96e0f7] backdrop-blur-sm transition-all hover:bg-[#5a9cba]/30 hover:opacity-100"
 					>
-						⊕
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
 					</button>
 					<button
 						type="button"
-						aria-label="Centrar en Lima"
+						aria-label="Centrar"
 						onClick={() => {
 							if (map) {
 								map.panTo({ lat: -12.0464, lng: -77.0428 });
 								map.setZoom(10.5);
 							}
 						}}
-						className="bit-border flex h-8 w-8 cursor-pointer items-center justify-center font-pixel-body text-[13px] text-black hover:opacity-85"
-						style={
-							{
-								"--bb-step": "2px",
-								"--bb-frame": "#0a0a0a",
-								"--bb-fill": "#96e0f7",
-							} as React.CSSProperties
-						}
+						className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-[#5a9cba] bg-[#0a0a0a]/60 text-[#96e0f7] backdrop-blur-sm transition-all hover:bg-[#5a9cba]/30 hover:opacity-100"
 					>
-						◎
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="20" y2="12"/></svg>
 					</button>
 				</div>
 			)}
