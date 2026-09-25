@@ -63,16 +63,22 @@ export default function Home() {
       console.error("Failed to load custom memories from localStorage", err);
     }
 
-    fetchSharedMemories()
-      .then((remoteMems) => {
-        if (Array.isArray(remoteMems)) {
-          setCustomMemories(remoteMems);
-          try {
-            localStorage.setItem("spidey_custom_memories", JSON.stringify(remoteMems));
-          } catch (e) {}
-        }
-      })
-      .catch((err) => console.error("Failed fetching Supabase memories:", err));
+    const loadMemories = () => {
+      fetchSharedMemories()
+        .then((remoteMems) => {
+          if (Array.isArray(remoteMems)) {
+            setCustomMemories(remoteMems);
+            try {
+              localStorage.setItem("spidey_custom_memories", JSON.stringify(remoteMems));
+            } catch (e) {}
+          }
+        })
+        .catch((err) => console.error("Failed fetching Supabase memories:", err));
+    };
+
+    loadMemories();
+    const interval = setInterval(loadMemories, 4000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSaveMemory = async (newMem: Memory) => {
