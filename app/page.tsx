@@ -20,6 +20,9 @@ const TrackerMap = dynamic(
   { ssr: false },
 );
 
+import { PasscodeGate } from "@/components/passcode-gate";
+import { fetchSharedMemories, saveSharedMemory, deleteSharedMemory } from "@/lib/supabase";
+
 type Stage = "checking" | "welcome" | "tutorial" | "initmap" | "live";
 type PanelState = 
   | { type: "none" } 
@@ -33,7 +36,16 @@ export default function Home() {
   const [stage, setStage] = useState<Stage>("checking");
   const booted = stage === "live";
   const [muted, setMuted] = useState(true);
+  const [unlocked, setUnlocked] = useState(false);
   const [activePanel, setActivePanel] = useState<PanelState>({ type: "none" });
+
+  useEffect(() => {
+    try {
+      localStorage.removeItem("spidey_unlocked");
+      const isUnl = sessionStorage.getItem("spidey_unlocked") === "true";
+      setUnlocked(isUnl);
+    } catch (e) {}
+  }, []);
 
   const [starActive, setStarActive] = useState(true);
   const [bunnyActive, setBunnyActive] = useState(true);
@@ -48,19 +60,46 @@ export default function Home() {
         setCustomMemories(JSON.parse(saved));
       }
     } catch (err) {
-      console.error("Failed to load custom memories", err);
+      console.error("Failed to load custom memories from localStorage", err);
     }
+
+    fetchSharedMemories()
+      .then((remoteMems) => {
+        if (Array.isArray(remoteMems)) {
+          setCustomMemories(remoteMems);
+          try {
+            localStorage.setItem("spidey_custom_memories", JSON.stringify(remoteMems));
+          } catch (e) {}
+        }
+      })
+      .catch((err) => console.error("Failed fetching Supabase memories:", err));
   }, []);
 
-  const handleSaveMemory = (newMem: Memory) => {
-    const updated = [...customMemories, newMem];
+  const handleSaveMemory = async (newMem: Memory) => {
+    const updated = [newMem, ...customMemories];
     setCustomMemories(updated);
     try {
       localStorage.setItem("spidey_custom_memories", JSON.stringify(updated));
     } catch (err) {
-      console.error("Failed to save custom memory", err);
+      console.error("Failed to save custom memory to localStorage", err);
     }
     sound.play("panel-open", 0.45);
+
+    await saveSharedMemory(newMem);
+  };
+
+  const handleDeleteMemory = async (id: string) => {
+    sound.play("panel-open", 0.45);
+    const updated = customMemories.filter((m) => m.id !== id);
+    setCustomMemories(updated);
+    try {
+      localStorage.setItem("spidey_custom_memories", JSON.stringify(updated));
+    } catch (err) {
+      console.error("Failed to update localStorage after delete", err);
+    }
+    setActivePanel({ type: "none" });
+
+    await deleteSharedMemory(id);
   };
 
   const finishBoot = useCallback((playIntro: boolean) => {
@@ -94,20 +133,15 @@ export default function Home() {
     setActivePanel({ type: "none" });
   };
 
-  const allMapPins = [
-    ...customMemories.map((m) => ({
-      id: m.id,
-      lat: m.lat,
-      lng: m.lng,
-      pinType: "memory" as const,
-      nodeType: m.nodeType || (m.id.includes("star") ? "star" : m.id.includes("bunny") ? "bunny" : "spidey"),
-      title: m.title,
-      createdAt: new Date().toISOString()
-    })),
-    { id: "mem0", lat: 11.2626, lng: 75.7746, pinType: "memory" as const, nodeType: "star" as const, title: "STAR MEMORY 🌟", createdAt: new Date().toISOString() },
-    { id: "mem1", lat: 11.2540, lng: 75.7862, pinType: "memory" as const, nodeType: "bunny" as const, title: "BUNNY MEMORY 🐰", createdAt: new Date().toISOString() },
-    { id: "mem2", lat: 11.2685, lng: 75.7830, pinType: "memory" as const, nodeType: "spidey" as const, title: "SPIDEY MEMORY 🕷️", createdAt: new Date().toISOString() },
-  ].filter((p) => {
+  const allMapPins = customMemories.map((m) => ({
+    id: m.id,
+    lat: m.lat,
+    lng: m.lng,
+    pinType: "memory" as const,
+    nodeType: m.nodeType || (m.id.includes("star") ? "star" : m.id.includes("bunny") ? "bunny" : "spidey"),
+    title: m.title,
+    createdAt: new Date().toISOString()
+  })).filter((p) => {
     if (p.nodeType === "star" && !starActive) return false;
     if (p.nodeType === "bunny" && !bunnyActive) return false;
     if (p.nodeType === "spidey" && !spideyActive) return false;
@@ -120,18 +154,19 @@ export default function Home() {
         <main className="frame-3d-outer relative flex h-[calc(100dvh-16px)] sm:h-[calc(100dvh-32px)] max-h-[880px] w-full max-w-[430px] flex-col overflow-hidden bg-[#2c6c8c]">
           {/* FLOATING TOP OVERLAY BUTTONS OVERLAYING CONSOLE BORDER */}
           <div className="absolute inset-x-0 top-0 z-50 flex items-start justify-between p-1.5 pointer-events-none">
-            {/* TOP LEFT LETTER BUTTON WITH 8-BIT STEPPED PIXEL CORNERS */}
+            {/* TOP LEFT LETTER BUTTON - 8-BIT PIXEL CIRCULAR BADGE */}
             <button 
               onClick={openLetter} 
-              className="btn-3d pointer-events-auto flex h-10 w-10 cursor-pointer items-center justify-center"
-              style={{ 
-                "--btn-color": "#e6ad28", 
-                "--bevel-light": "#ffe066", 
-                "--bevel-dark": "#a37512" 
-              } as any}
+              className="group pointer-events-auto relative flex h-16 w-16 cursor-pointer items-center justify-center transition-transform hover:scale-105 active:scale-95"
               aria-label="Open Birthday Letter"
             >
-              <img src="/spidey-bday/assets/letter-transparent.png" alt="Letter" className="h-6 w-6 object-contain pixelated" />
+              <svg viewBox="0 0 24 24" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
+                {/* Outer Black Pixel Circle Border */}
+                <path d="M7 3 h10 v2 h2 v2 h2 v10 h-2 v2 h-2 v2 h-10 v-2 h-2 v-2 h-2 v-10 h2 v-2 h2 Z" fill="#0a0a0a" />
+                {/* Inner Yellow Pixel Circle Fill */}
+                <path d="M8 5 h8 v2 h2 v2 h2 v8 h-2 v2 h-2 v2 h-8 v-2 h-2 v-2 h-2 v-8 h2 v-2 h2 Z" fill="#e6ad28" />
+              </svg>
+              <img src="/spidey-bday/assets/letter-transparent.png" alt="Letter" className="relative z-10 h-8 w-8 object-contain pixelated" />
             </button>
 
             {/* TOP CENTER PLAQUE */}
@@ -169,7 +204,7 @@ export default function Home() {
                   setStarActive(!starActive);
                 }} 
                 aria-label="Toggle Manav's Nodes"
-                title="Toggle Manav's Nodes (Star)"
+                title="Toggle Manav's Nodes (Orca)"
                 className="group relative flex h-[38px] w-[48px] cursor-pointer items-center justify-center transition-opacity active:scale-95"
               >
                 <svg viewBox="0 0 58 46" className="absolute inset-0 h-full w-full drop-shadow-[2px_2px_0_rgba(0,0,0,0.6)]" preserveAspectRatio="none">
@@ -336,12 +371,17 @@ export default function Home() {
         </div>
 
         {/* TOPMOST OVERLAY MODALS (LETTER, MEMORY CARD, ADD MEMORY NODE) */}
+        {!unlocked && (
+          <PasscodeGate onUnlock={() => setUnlocked(true)} />
+        )}
+
         {activePanel.type === "memory" && (
           <MemoryModal 
             index={activePanel.index} 
             memoryId={activePanel.id}
             customMemories={customMemories}
             onClose={closePanel} 
+            onDelete={handleDeleteMemory}
           />
         )}
         {activePanel.type === "letter" && (

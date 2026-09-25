@@ -1,10 +1,17 @@
 "use client";
 
 /**
- * Mini sound manager, Sony's pattern: HTMLAudio pool, global toggle,
- * voice lines organized by category with a 1-in-3 click throttle and
- * no-repeat tracking (a line only plays once per session).
+ * Sound manager: HTMLAudio pool, global toggle, background music loop,
+ * voice lines organized by category with click throttle and no-repeat tracking.
  */
+
+const BASE_PATH = "/spidey-bday";
+
+function getSrc(path: string): string {
+	if (typeof window === "undefined") return path;
+	if (path.startsWith(BASE_PATH)) return path;
+	return `${BASE_PATH}${path.startsWith("/") ? "" : "/"}${path}`;
+}
 
 const VOICE_BY_CATEGORY: Record<string, string[]> = {
 	welcome: ["welcome"],
@@ -22,13 +29,15 @@ let clickCount = 0;
 const tracks = new Map<string, HTMLAudioElement>();
 const played = new Set<string>();
 let currentVoice: HTMLAudioElement | null = null;
+let bgMusic: HTMLAudioElement | null = null;
 
 function track(src: string): HTMLAudioElement {
-	let a = tracks.get(src);
+	const fullSrc = getSrc(src);
+	let a = tracks.get(fullSrc);
 	if (!a) {
-		a = new Audio(src);
+		a = new Audio(fullSrc);
 		a.preload = "auto";
-		tracks.set(src, a);
+		tracks.set(fullSrc, a);
 	}
 	return a;
 }
@@ -36,9 +45,11 @@ function track(src: string): HTMLAudioElement {
 export const sound = {
 	enable() {
 		enabled = true;
+		sound.startBgm();
 	},
 	disable() {
 		enabled = false;
+		sound.stopBgm();
 		for (const a of tracks.values()) {
 			a.pause();
 			a.currentTime = 0;
@@ -52,6 +63,23 @@ export const sound = {
 		else sound.enable();
 		return enabled;
 	},
+	startBgm() {
+		if (!enabled) return;
+		try {
+			if (!bgMusic) {
+				bgMusic = new Audio(getSrc("/sounds/oh-yeah.mp3"));
+				bgMusic.loop = true;
+				bgMusic.volume = 0.5;
+			}
+			bgMusic.play().catch(() => {});
+		} catch (err) {}
+	},
+	stopBgm() {
+		if (bgMusic) {
+			bgMusic.pause();
+			bgMusic.currentTime = 0;
+		}
+	},
 
 	/** UI sfx from /sounds/<name>.mp3 */
 	play(name: string, volume = 0.6) {
@@ -62,40 +90,17 @@ export const sound = {
 		a.play().catch(() => {});
 	},
 
-	/** Voice line by category; throttled 1-in-3 except welcome/villain. */
-	say(category: keyof typeof VOICE_BY_CATEGORY) {
-		if (!enabled) return;
-		const free = category === "welcome" || category === "villain";
-		if (!free) {
-			clickCount += 1;
-			if (clickCount % THROTTLE_EVERY !== 0) return;
-		}
-		const pool = (VOICE_BY_CATEGORY[category] ?? []).filter(
-			(n) => !played.has(n),
-		);
-		const name = pool[Math.floor(Math.random() * pool.length)];
-		if (!name) return;
-		played.add(name);
-		const a = track(`/sounds/voice/${name}.mp3`);
-		currentVoice?.pause();
-		currentVoice = a;
-		a.volume = 0.9;
-		a.currentTime = 0;
-		a.play().catch(() => {});
+	/** Voice line by category - disabled so no template voice clips overlap your music */
+	say(_category: keyof typeof VOICE_BY_CATEGORY) {
+		// Disabled: prevents template Spanish voice line overlaps
 	},
 
-	/** Per-villain line for the Bitácora: always replays, cuts the previous voice. */
-	sayVillainById(id: string) {
-		if (!enabled) return;
-		const a = track(`/sounds/voice/villain-${id}.mp3`);
-		currentVoice?.pause();
-		currentVoice = a;
-		a.volume = 0.9;
-		a.currentTime = 0;
-		a.play().catch(() => {});
+	/** Per-villain line - disabled */
+	sayVillainById(_id: string) {
+		// Disabled: prevents template Spanish voice line overlaps
 	},
 
-	/** Stop the active voice line (e.g. when closing the Bitácora). */
+	/** Stop the active voice line. */
 	stopVoice() {
 		if (!currentVoice) return;
 		currentVoice.pause();

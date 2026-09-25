@@ -40,35 +40,16 @@ export function TrackerMap({
 
 	const flyToPin = useCallback(
 		(pin: Pin, opts?: { silent?: boolean }) => {
-			if (!map || pin.lat == null || pin.lng == null) {
-				setSelected(pin);
-				onPinFocus?.(pin.id);
-				deepLinkedRef.current = pin.id;
-				return;
+			if (map && pin.lat != null && pin.lng != null) {
+				map.panTo({ lat: pin.lat, lng: pin.lng });
+				map.setZoom(10.8);
 			}
-			
-			map.panTo({ lat: pin.lat, lng: pin.lng });
-			map.setZoom(10.8);
-			
-			if (pin.pinType === "letter" || pin.id === "letter") {
-				setSelected(null);
-			} else {
-				setSelected(pin);
-			}
+			setSelected(null);
 			onPinFocus?.(pin.id);
 			deepLinkedRef.current = pin.id;
 			
 			if (!opts?.silent) {
 				sound.play("pin-click", 0.5);
-				const cat =
-					pin.pinType === "shipped"
-						? "shipped"
-						: pin.pinType === "cooking"
-							? "cooking"
-							: pin.pinType === "event" || pin.pinType === "hack0"
-								? "event"
-								: "general";
-				sound.say(cat);
 			}
 		},
 		[map, onPinFocus],

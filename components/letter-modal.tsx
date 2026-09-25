@@ -47,13 +47,14 @@ export function LetterModal({ onClose }: { onClose: () => void }) {
           </div>
 
           {/* TITLE */}
-          <h2 className="font-pixel-body text-[13px] font-bold tracking-wider text-black mb-3 border-b-2 border-black/10 pb-1">
-            LETTER
+          <h2 className="font-pixel-body text-[12px] font-bold tracking-wider text-[#b83a3a] flex items-center justify-center gap-1.5 mb-3 border-b-2 border-black/10 pb-1">
+            <span>🕸️</span>
+            <span>HAPPY BIRTHDAY</span>
+            <span>🕸️</span>
           </h2>
 
           {/* LETTER CONTENT */}
           <div className="space-y-3 font-pixel-body text-[9px] leading-relaxed text-[#2a241e] max-h-[280px] overflow-y-auto pr-1">
-            <p className="font-bold text-[#b83232]">🕸 HAPPY BIRTHDAY TWIN 🕸</p>
             <p>hey twin,</p>
             <p>
               idk how to start this without being cringe lol but here goes nothing.

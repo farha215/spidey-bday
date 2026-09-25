@@ -54,14 +54,17 @@ export function MemoryModal({
   index, 
   memoryId,
   customMemories = [],
-  onClose 
+  onClose,
+  onDelete
 }: { 
   index?: number; 
   memoryId?: string;
   customMemories?: Memory[];
   onClose: () => void; 
+  onDelete?: (id: string) => void;
 }) {
-  const allMems = [...customMemories, ...MEMORIES];
+  const [confirmDelete, setConfirmDelete] = React.useState(false);
+  const allMems = customMemories.length > 0 ? customMemories : MEMORIES;
   const m = allMems.find(x => x.id === memoryId) || allMems[index ?? 0] || MEMORIES[0];
 
   return (
@@ -135,6 +138,55 @@ export function MemoryModal({
               {m.caption}
             </p>
           ) : null}
+
+          {/* 2-STEP DELETE VERIFICATION */}
+          {onDelete && m.id && (
+            <div className="mt-3 pt-2 border-t border-black/10">
+              {!confirmDelete ? (
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setConfirmDelete(true);
+                    }}
+                    className="bg-[#d83a3a] text-white hover:bg-[#b52a2a] active:scale-95 px-2.5 py-1 font-pixel-body text-[8px] font-bold tracking-wider shadow-[2px_2px_0px_rgba(0,0,0,0.8)] border border-black cursor-pointer flex items-center gap-1.5"
+                  >
+                    <span>🗑️</span>
+                    <span>DELETE NODE</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="bg-[#b83a3a]/10 border border-[#b83a3a] p-2 flex flex-col gap-2">
+                  <p className="font-pixel-body text-[8px] text-[#b83a3a] font-bold text-center">
+                    ⚠️ CONFIRM DELETE? THIS CANNOT BE UNDONE!
+                  </p>
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmDelete(false);
+                      }}
+                      className="bg-[#4a525d] text-white hover:bg-[#383e46] active:scale-95 px-2 py-0.5 font-pixel-body text-[8px] font-bold border border-black cursor-pointer"
+                    >
+                      CANCEL
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(m.id);
+                      }}
+                      className="bg-[#d83a3a] text-white hover:bg-[#a92222] active:scale-95 px-2 py-0.5 font-pixel-body text-[8px] font-bold border border-black cursor-pointer shadow-[1px_1px_0px_rgba(0,0,0,0.8)]"
+                    >
+                      YES, DELETE
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -141,41 +141,59 @@ export function AddMemoryModal({
             {/* NODE TYPE SELECTOR */}
             <div>
               <label className="block font-bold text-black mb-1">NODE SYMBOL & COLOR</label>
-              <div className="flex gap-1.5">
+              <div className="flex gap-2 p-1">
                 <button
                   type="button"
                   onClick={() => setNodeType("star")}
-                  className={`flex flex-1 items-center justify-center gap-1 py-1 px-1.5 border-2 border-black text-white font-bold cursor-pointer transition-transform ${
-                    nodeType === "star" ? "ring-2 ring-black scale-105" : "opacity-65"
+                  className={`btn-3d flex flex-1 items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-white cursor-pointer transition-all ${
+                    nodeType === "star" 
+                      ? "scale-105" 
+                      : "opacity-60 grayscale-[40%] hover:opacity-100"
                   }`}
-                  style={{ backgroundColor: "#8F2867" }}
+                  style={{ 
+                    "--btn-color": "#8F2867", 
+                    "--bevel-light": "#d64da0", 
+                    "--bevel-dark": "#4a1235" 
+                  } as any}
                 >
-                  <img src="/spidey-bday/assets/symbol-star.png" alt="" className="h-3.5 w-3.5 object-contain pixelated" />
-                  <span className="text-[7.5px]">MANAV</span>
+                  <img src="/spidey-bday/assets/symbol-star.png" alt="" className="h-4 w-4 object-contain pixelated drop-shadow-[0_1px_0_rgba(0,0,0,0.8)]" />
+                  <span className="text-[8px] tracking-wider drop-shadow-[1px_1px_0_rgba(0,0,0,0.8)]">MANAV</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setNodeType("bunny")}
-                  className={`flex flex-1 items-center justify-center gap-1 py-1 px-1.5 border-2 border-black text-black font-bold cursor-pointer transition-transform ${
-                    nodeType === "bunny" ? "ring-2 ring-black scale-105" : "opacity-65"
+                  className={`btn-3d flex flex-1 items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-black cursor-pointer transition-all ${
+                    nodeType === "bunny" 
+                      ? "scale-105" 
+                      : "opacity-60 grayscale-[40%] hover:opacity-100"
                   }`}
-                  style={{ backgroundColor: "#FFB5E6" }}
+                  style={{ 
+                    "--btn-color": "#FFB5E6", 
+                    "--bevel-light": "#ffffff", 
+                    "--bevel-dark": "#b870a2" 
+                  } as any}
                 >
-                  <img src="/spidey-bday/assets/symbol-bunny.png" alt="" className="h-3.5 w-3.5 object-contain pixelated" />
-                  <span className="text-[7.5px]">FARHA</span>
+                  <img src="/spidey-bday/assets/symbol-bunny.png" alt="" className="h-4 w-4 object-contain pixelated drop-shadow-[0_1px_0_rgba(0,0,0,0.5)]" />
+                  <span className="text-[8px] tracking-wider drop-shadow-[1px_1px_0_rgba(0,0,0,0.8)]">FARHA</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setNodeType("spidey")}
-                  className={`flex flex-1 items-center justify-center gap-1 py-1 px-1.5 border-2 border-black text-white font-bold cursor-pointer transition-transform ${
-                    nodeType === "spidey" ? "ring-2 ring-black scale-105" : "opacity-65"
+                  className={`btn-3d flex flex-1 items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-white cursor-pointer transition-all ${
+                    nodeType === "spidey" 
+                      ? "scale-105" 
+                      : "opacity-60 grayscale-[40%] hover:opacity-100"
                   }`}
-                  style={{ backgroundColor: "#b85c5c" }}
+                  style={{ 
+                    "--btn-color": "#b85c5c", 
+                    "--bevel-light": "#e08585", 
+                    "--bevel-dark": "#632727" 
+                  } as any}
                 >
-                  <img src="/spidey-bday/assets/pin-spider-transparent.png" alt="" className="h-3.5 w-3.5 object-contain pixelated" />
-                  <span className="text-[7.5px]">TWIN</span>
+                  <img src="/spidey-bday/assets/pin-spider-transparent.png" alt="" className="h-4 w-4 object-contain pixelated drop-shadow-[0_1px_0_rgba(0,0,0,0.8)]" />
+                  <span className="text-[8px] tracking-wider drop-shadow-[1px_1px_0_rgba(0,0,0,0.8)]">TWIN</span>
                 </button>
               </div>
             </div>

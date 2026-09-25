@@ -92,10 +92,10 @@ export function BootSequence({
       {/* BOTTOM SECTION: WELCOME TEXT & SOUND BUTTONS */}
       <div className={`relative z-20 flex flex-col items-center text-center gap-4 w-full transition-all duration-700 delay-300 ${dropProgress ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
         <div className="font-pixel-body text-[12px] sm:text-[13px] leading-relaxed text-[#96e0f7] tracking-widest max-w-[340px] font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-          <p>WELCOME TO THE SPIDEY TRACKER.</p>
+          <p>HAPPY BIRTHDAY TWIN!!</p>
+          <p>WELCOME TO THE SPIDEY MEMORY TRACKER.</p>
           <p>INTERACT WITH THE MAP TO VIEW</p>
-          <p>TWIN SIGHTINGS</p>
-          <p>ALL OVER THE WORLD.</p>
+          <p>MEMORIES ALL OVER THE WORLD.</p>
         </div>
 
         <p className="font-pixel-body text-[9px] tracking-widest text-[#7a9cb0]">

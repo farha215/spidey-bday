@@ -15,17 +15,19 @@ export function PinMarker({ pin }: { pin: Pin }) {
   if (pin.pinType === "letter" || pin.id === "letter") {
     return (
       <div
-        className="relative cursor-pointer transition-transform hover:scale-115 active:scale-95"
-        style={{ width: 40, height: 40 }}
+        className="relative flex items-center justify-center cursor-pointer transition-transform hover:scale-115 active:scale-95"
+        style={{ width: 56, height: 56 }}
         title={pin.title}
       >
-        <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-black bg-[#e6ad28] shadow-[0_4px_10px_rgba(0,0,0,0.7)]">
-          <img
-            src="/spidey-bday/assets/letter-transparent.png"
-            alt=""
-            className="h-6 w-6 object-contain pixelated drop-shadow-[0_1px_0_rgba(0,0,0,0.5)]"
-          />
-        </div>
+        <svg viewBox="0 0 24 24" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
+          <path d="M7 3 h10 v2 h2 v2 h2 v10 h-2 v2 h-2 v2 h-10 v-2 h-2 v-2 h-2 v-10 h2 v-2 h2 Z" fill="#0a0a0a" />
+          <path d="M8 5 h8 v2 h2 v2 h2 v8 h-2 v2 h-2 v2 h-8 v-2 h-2 v-2 h-2 v-8 h2 v-2 h2 Z" fill="#e6ad28" />
+        </svg>
+        <img
+          src="/spidey-bday/assets/letter-transparent.png"
+          alt=""
+          className="relative z-10 h-8 w-8 object-contain pixelated"
+        />
       </div>
     );
   }
