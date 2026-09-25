@@ -256,7 +256,7 @@ export function AddMemoryModal({
                   } as any}
                 >
                   <img src="/spidey-bday/assets/seal.png" alt="" className="h-4 w-4 object-contain pixelated drop-shadow-[0_1px_0_rgba(0,0,0,0.5)]" />
-                  <span className="text-[8px] tracking-wider drop-shadow-[1px_1px_0_rgba(0,0,0,0.5)]">MONA</span>
+                  <span className="text-[8px] tracking-wider drop-shadow-[1px_1px_0_rgba(0,0,0,0.8)]">MONA</span>
                 </button>
               </div>
             </div>
