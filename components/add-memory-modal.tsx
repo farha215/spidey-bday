@@ -18,7 +18,7 @@ export function AddMemoryModal({
 }) {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [caption, setCaption] = useState("");
   const [photo, setPhoto] = useState<string>("");
   const [lat, setLat] = useState("11.2588");
@@ -128,11 +128,22 @@ export function AddMemoryModal({
           ? "/spidey-bday/assets/seal.png"
           : "/spidey-bday/assets/spidey-face-transparent.png";
 
+    let formattedDate = date;
+    if (date) {
+      try {
+        const [y, m, d] = date.split("-");
+        if (y && m && d) {
+          const dObj = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+          formattedDate = dObj.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" }).toUpperCase();
+        }
+      } catch (e) {}
+    }
+
     const newMem: Memory = {
       id: `custom_${nodeType}_${Date.now()}`,
       title: title.trim(),
       location: location.trim() || "Secret Spot",
-      date: date.trim() || new Date().toLocaleDateString(),
+      date: formattedDate || new Date().toLocaleDateString(),
       caption: caption.trim(),
       photo: photo || defaultPhoto,
       lat: parseFloat(lat) || 11.2588,
@@ -295,13 +306,12 @@ export function AddMemoryModal({
                 )}
               </div>
               <div>
-                <label className="block font-bold text-black mb-0.5">DATE</label>
+                <label className="block font-bold text-black mb-0.5">DATE (CALENDAR)</label>
                 <input 
-                  type="text" 
-                  placeholder="e.g. OCT 12, 2024" 
+                  type="date" 
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full border-2 border-black bg-white px-2 py-1 font-pixel-body text-[8px] text-black focus:outline-none"
+                  className="w-full border-2 border-black bg-white px-2 py-1 font-pixel-body text-[8px] text-black focus:outline-none cursor-pointer"
                 />
               </div>
             </div>

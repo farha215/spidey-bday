@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { MemoryModal, type Memory } from "@/components/memory-modal";
 import { LetterModal } from "@/components/letter-modal";
 import { AddMemoryModal } from "@/components/add-memory-modal";
+import { GuideModal } from "@/components/guide-modal";
 import { BootSequence } from "@/components/boot-sequence";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { sound } from "@/lib/sound";
@@ -28,7 +29,8 @@ type PanelState =
   | { type: "none" } 
   | { type: "memory"; index?: number; id?: string } 
   | { type: "letter" } 
-  | { type: "add" };
+  | { type: "add" }
+  | { type: "guide" };
 
 const MAP_LIBRARIES: any[] = ["marker"];
 
@@ -354,16 +356,25 @@ export default function Home() {
         {/* BOTTOM TICKER PANEL */}
         <div className="relative z-50 flex h-14 w-full shrink-0 items-center gap-2 border-t-4 border-black bg-transparent py-2 pr-2 pl-14">
           {/* OVERLAPPING SPIDEY AVATAR */}
-          <div className="absolute -left-1 -bottom-1 z-50 flex h-16 w-14 items-center justify-center pointer-events-none">
+          <button
+            type="button"
+            onClick={() => {
+              sound.play("panel-open", 0.45);
+              setActivePanel({ type: "guide" });
+            }}
+            className="absolute -left-1 -bottom-1 z-50 flex h-16 w-14 items-center justify-center pointer-events-auto cursor-pointer transition-transform hover:scale-110 active:scale-95 group"
+            aria-label="Open User Guide"
+            title="Click Spider-Man for Spidey Tracker Guide!"
+          >
             {/* SMALL BACKGROUND CIRCLE BADGE BEHIND SPIDEY */}
-            <div className="absolute bottom-1 h-10 w-10 rounded-full border-[3px] border-[#0a0a0a] bg-[#5a9cba] shadow-[0_3px_8px_rgba(0,0,0,0.5)]" />
+            <div className="absolute bottom-1 h-10 w-10 rounded-full border-[3px] border-[#0a0a0a] bg-[#5a9cba] shadow-[0_3px_8px_rgba(0,0,0,0.5)] group-hover:border-[#96e0f7] group-hover:bg-[#4a8cae]" />
             {/* SPIDER-MAN CHARACTER PNG ON TOP (UNCOMPRESSED) */}
             <img 
               src="/spidey-bday/assets/spiderman-walk.png" 
-              alt="" 
+              alt="Spidey Guide" 
               className="relative z-10 h-16 w-auto object-contain pixelated drop-shadow-[0_2px_0_rgba(0,0,0,1)] animate-spidey-idle" 
             />
-          </div>
+          </button>
 
           {/* SCROLLING TICKER PILL WITH 8-BIT STEPPED PIXEL CORNERS */}
           <div className="btn-3d flex h-full flex-1 items-center overflow-hidden font-pixel-body text-[8px] tracking-widest text-white" style={{ "--btn-color": "#1a1a1a", "--bevel-light": "rgba(255,255,255,0.15)", "--bevel-dark": "rgba(0,0,0,0.6)" } as any}>
@@ -403,7 +414,7 @@ export default function Home() {
           </button>
         </div>
 
-        {/* TOPMOST OVERLAY MODALS (LETTER, MEMORY CARD, ADD MEMORY NODE) */}
+        {/* TOPMOST OVERLAY MODALS (LETTER, MEMORY CARD, ADD MEMORY NODE, GUIDE) */}
         {!unlocked && (
           <PasscodeGate onUnlock={() => {
             setUnlocked(true);
@@ -428,6 +439,9 @@ export default function Home() {
             onClose={closePanel} 
             onSave={handleSaveMemory} 
           />
+        )}
+        {activePanel.type === "guide" && (
+          <GuideModal onClose={closePanel} />
         )}
       </main>
       </APIProvider>
