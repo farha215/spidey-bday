@@ -1,12 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Memory } from "@/components/memory-modal";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  "https://natqyjlcienlysgnczad.supabase.co";
 
-export const supabase = (supabaseUrl && supabaseAnonKey)
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5hdHF5amxjaWVubHlzZ25jemFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNjk3NTMsImV4cCI6MjEwNTg0NTc1M30.EavIbXzfnGTs0tiEUiwgv5fcOx4bUm5uNW_fz2lLkNo";
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function fetchSharedMemories(): Promise<Memory[]> {
   if (!supabase) return [];
