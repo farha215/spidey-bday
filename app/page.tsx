@@ -23,7 +23,7 @@ const TrackerMap = dynamic(
 import { PasscodeGate } from "@/components/passcode-gate";
 import { fetchSharedMemories, saveSharedMemory, deleteSharedMemory } from "@/lib/supabase";
 
-type Stage = "locked" | "checking" | "welcome" | "tutorial" | "initmap" | "live";
+type Stage = "checking" | "welcome" | "tutorial" | "initmap" | "live";
 type PanelState = 
   | { type: "none" } 
   | { type: "memory"; index?: number; id?: string } 
@@ -33,10 +33,10 @@ type PanelState =
 const MAP_LIBRARIES: any[] = ["marker"];
 
 export default function Home() {
-  const [unlocked, setUnlocked] = useState(false);
-  const [stage, setStage] = useState<Stage>("locked");
+  const [stage, setStage] = useState<Stage>("checking");
   const booted = stage === "live";
   const [muted, setMuted] = useState(true);
+  const [unlocked, setUnlocked] = useState(false);
   const [activePanel, setActivePanel] = useState<PanelState>({ type: "none" });
 
   useEffect(() => {
@@ -44,23 +44,8 @@ export default function Home() {
       localStorage.removeItem("spidey_unlocked");
       const isUnl = sessionStorage.getItem("spidey_unlocked") === "true";
       setUnlocked(isUnl);
-      if (isUnl) {
-        setStage("live");
-      } else {
-        setStage("locked");
-      }
-    } catch (e) {
-      setStage("locked");
-    }
-  }, []);
-
-  const handlePasscodeUnlock = () => {
-    try {
-      sessionStorage.setItem("spidey_unlocked", "true");
     } catch (e) {}
-    setUnlocked(true);
-    setStage("checking");
-  };
+  }, []);
 
   const [starActive, setStarActive] = useState(true);
   const [bunnyActive, setBunnyActive] = useState(true);
@@ -393,7 +378,7 @@ export default function Home() {
 
         {/* TOPMOST OVERLAY MODALS (LETTER, MEMORY CARD, ADD MEMORY NODE) */}
         {!unlocked && (
-          <PasscodeGate onUnlock={handlePasscodeUnlock} />
+          <PasscodeGate onUnlock={() => setUnlocked(true)} />
         )}
 
         {activePanel.type === "memory" && (

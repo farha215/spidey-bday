@@ -14,8 +14,9 @@ const pixelBody = Bitcount_Prop_Single({
 });
 
 export const metadata: Metadata = {
-	title: "Spidey Tracker 🕷️",
-	description: "Spidey Memory Tracker - Interactive Birthday Map & Memories",
+	title: "Crafter Tracker",
+	description:
+		"Rastrea los ships, cooking sessions y eventos de la comunidad Crafter Station en LATAM y más allá.",
 };
 
 export default function RootLayout({
@@ -25,7 +26,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html
-			lang="en"
+			lang="es"
 			className={`dark ${pixelTitle.variable} ${pixelBody.variable} h-full antialiased`}
 		>
 			<body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#f5e9c8]">
