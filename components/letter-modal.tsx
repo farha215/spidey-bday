@@ -55,25 +55,24 @@ export function LetterModal({ onClose }: { onClose: () => void }) {
 
           {/* LETTER CONTENT */}
           <div className="space-y-3 font-pixel-body text-[9px] leading-relaxed text-[#2a241e] max-h-[280px] overflow-y-auto pr-1">
-            <p>hey twin,</p>
+            <p className="font-bold">HII twin!! Happy Birthday! 🎈</p>
             <p>
-              idk how to start this without being cringe lol but here goes nothing.
+              You can't call me old anymore, I can't believe we’re both 20 now, isn't that insane?
             </p>
             <p>
-              you mean a lot to me and i wanted to do something actually special for your birthday this year — so i built this whole spidey tracker just for you, because we both know you would've loved this if it was real 😭
+              This year has been insane, so much has happened, good and bad, but at the end of it all, I'm going to come out of this year having so many amazing memories of us. I would’ve never in a million years believed that I'd have a best friend who I genuinely feel is going to be in my life forever. Friendships for me have always been temporary with moving around a lot and just never feeling like I'm truly myself around people, but you've challenged that belief and proved me wrong.
             </p>
             <p>
-              i put some of our best memories on the map so you can tap through them. each one means something to me even if we never talk about it.
+              I know we appreciate each other often, but words can't portray how important you are to me. I owe my sanity to having you to fall back on and talk to. Life is hectic and busy and I'm still figuring out how to navigate it, but you help me out with it so, so much.
             </p>
             <p>
-              i hope this year is everything you want it to be. you deserve it for real. no cap.
+              This past year has been a rollercoaster for you too. I know you've had to deal with a lot, but I'm so, so proud of you for getting through it all and throughout it managing to show up for the people around you who need you. Life is throwing a lot of things at you that might make you doubt yourself, but I want you to never, ever forget how capable you are. You are meant for SO SO much more than you realize, and the people in your life who love you can see and recognize that, and I hope you do too. It is okay to not have everything figured out, trust that things will fall into place, but never, ever give up okay? Whatever happens, you have people to help you back up, and most importantly, yourself.
             </p>
             <p>
-              happy birthday twin. you're one of a kind and i'm glad we found each other. 🕷
+              I hope you have an amazing year ahead of you! This is just the start of your adulthood, so many experiences and memories are waiting for you and I can't wait to be there through it all. I hope you like the website and that we’re able to fill it with SO many memory nodes together! I CAN'T WAIT! 🕷️
             </p>
             <div className="pt-2 border-t border-black/10 text-[9px] text-[#4a4238]">
-              — your twin 🖤<br/>
-              <span className="text-[7px] text-[#7a7060]">[ your friendly neighborhood bestie ]</span>
+              with love, your awesome cool super funny pretty twin 🖤
             </div>
           </div>
         </div>
