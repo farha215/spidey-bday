@@ -38,6 +38,30 @@ export function TrackerMap({
 	);
 	const visiblePins = allPins.filter((p) => !hiddenTypes.includes(p.pinType));
 
+	const [clusterModalPins, setClusterModalPins] = useState<Pin[] | null>(null);
+
+	// Group overlapping pins within 0.0005 lat/lng threshold
+	const clusters: { key: string; lat: number; lng: number; pins: Pin[] }[] = [];
+	const THRESHOLD = 0.0005;
+
+	visiblePins.forEach((pin) => {
+		const existing = clusters.find(
+			(c) =>
+				Math.abs(c.lat - (pin.lat as number)) < THRESHOLD &&
+				Math.abs(c.lng - (pin.lng as number)) < THRESHOLD,
+		);
+		if (existing) {
+			existing.pins.push(pin);
+		} else {
+			clusters.push({
+				key: pin.id,
+				lat: pin.lat as number,
+				lng: pin.lng as number,
+				pins: [pin],
+			});
+		}
+	});
+
 	const flyToPin = useCallback(
 		(pin: Pin, opts?: { silent?: boolean }) => {
 			if (map && pin.lat != null && pin.lng != null) {
@@ -45,6 +69,7 @@ export function TrackerMap({
 				map.setZoom(10.8);
 			}
 			setSelected(null);
+			setClusterModalPins(null);
 			onPinFocus?.(pin.id);
 			deepLinkedRef.current = pin.id;
 			
@@ -98,15 +123,38 @@ export function TrackerMap({
 					strictBounds: true,
 				}}
 			>
-				{visiblePins.map((pin) => (
-					<AdvancedMarker
-						key={pin.id}
-						position={{ lat: pin.lat as number, lng: pin.lng as number }}
-						onClick={() => flyToPin(pin)}
-					>
-						<PinMarker pin={pin} />
-					</AdvancedMarker>
-				))}
+				{clusters.map((cluster) => {
+					if (cluster.pins.length === 1) {
+						const pin = cluster.pins[0];
+						return (
+							<AdvancedMarker
+								key={pin.id}
+								position={{ lat: cluster.lat, lng: cluster.lng }}
+								onClick={() => flyToPin(pin)}
+							>
+								<PinMarker pin={pin} />
+							</AdvancedMarker>
+						);
+					}
+
+					return (
+						<AdvancedMarker
+							key={cluster.key}
+							position={{ lat: cluster.lat, lng: cluster.lng }}
+							onClick={() => {
+								sound.play("pin-click", 0.5);
+								setClusterModalPins(cluster.pins);
+							}}
+						>
+							<div className="relative flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95">
+								<div className="flex items-center gap-1 border-2 border-black bg-[#e6ad28] px-2 py-1 shadow-[0_4px_10px_rgba(0,0,0,0.8)] font-pixel-body text-[9px] font-bold text-black">
+									<span>📍</span>
+									<span>{cluster.pins.length} NODES</span>
+								</div>
+							</div>
+						</AdvancedMarker>
+					);
+				})}
 			</Map>
 
 			<div className="graticule absolute inset-0 z-[5]" aria-hidden />
@@ -117,6 +165,67 @@ export function TrackerMap({
 				<div className="pointer-events-none absolute bottom-4 left-1/2 z-50 -translate-x-1/2">
 					<div className="border-[2px] border-[#96e0f7] bg-[#0a0a0a]/80 px-4 py-2 font-pixel-body text-[10px] tracking-wider text-[#96e0f7] backdrop-blur-sm whitespace-nowrap">
 						{toastMsg}
+					</div>
+				</div>
+			)}
+
+			{/* MULTI-NODE CLUSTER SELECTION MODAL */}
+			{clusterModalPins && (
+				<div className="absolute inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-[2px] font-pixel-body select-none">
+					<div 
+						className="bit-border relative z-10 w-full max-w-xs p-4 shadow-[6px_6px_0px_rgba(0,0,0,0.9)] flex flex-col gap-3"
+						style={{ 
+							"--bb-step": "4px", 
+							"--bb-frame": "#000000", 
+							"--bb-fill": "#ded6be" 
+						} as any}
+					>
+						<div className="flex items-center justify-between border-b-2 border-black/10 pb-1">
+							<div className="bg-[#e6ad28] px-2 py-0.5 text-black font-pixel-body text-[9px] font-bold tracking-wider">
+								📍 {clusterModalPins.length} NODES AT LOCATION
+							</div>
+							<button
+								type="button"
+								onClick={() => setClusterModalPins(null)}
+								className="flex h-5 w-5 items-center justify-center font-bold text-black hover:bg-black/10 rounded"
+							>
+								✕
+							</button>
+						</div>
+
+						<p className="text-[8px] text-[#2a241e] font-bold">
+							SELECT A MEMORY TO VIEW:
+						</p>
+
+						<div className="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1">
+							{clusterModalPins.map((pin) => {
+								const nType = (pin as any).nodeType || "spidey";
+								const icon = nType === "star" ? "⭐" : nType === "bunny" ? "🐰" : nType === "mona" ? "🦭" : "🕷️";
+								return (
+									<button
+										key={pin.id}
+										type="button"
+										onClick={() => flyToPin(pin)}
+										className="border-2 border-black bg-white p-2 text-left hover:bg-[#96e0f7]/20 active:translate-y-0.5 transition-all flex items-center justify-between cursor-pointer"
+									>
+										<div className="flex flex-col gap-0.5 overflow-hidden pr-2">
+											<div className="text-[9px] font-bold text-black truncate flex items-center gap-1">
+												<span>{icon}</span>
+												<span>{pin.title}</span>
+											</div>
+											{pin.displayLocation && (
+												<div className="text-[7.5px] text-[#555] truncate">
+													📍 {pin.displayLocation}
+												</div>
+											)}
+										</div>
+										<span className="bg-[#2d7d54] text-white px-2 py-0.5 text-[8px] font-bold shrink-0">
+											SELECT
+										</span>
+									</button>
+								);
+							})}
+						</div>
 					</div>
 				</div>
 			)}

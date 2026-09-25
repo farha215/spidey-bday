@@ -23,7 +23,7 @@ export function AddMemoryModal({
   const [photo, setPhoto] = useState<string>("");
   const [lat, setLat] = useState("11.2588");
   const [lng, setLng] = useState("75.7810");
-  const [nodeType, setNodeType] = useState<"star" | "bunny" | "spidey">("star");
+  const [nodeType, setNodeType] = useState<"star" | "bunny" | "spidey" | "mona">("star");
 
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -124,7 +124,9 @@ export function AddMemoryModal({
       ? "/spidey-bday/assets/symbol-star.png" 
       : nodeType === "bunny" 
         ? "/spidey-bday/assets/symbol-bunny.png" 
-        : "/spidey-bday/assets/spidey-face-transparent.png";
+        : nodeType === "mona"
+          ? "/spidey-bday/assets/seal.png"
+          : "/spidey-bday/assets/spidey-face-transparent.png";
 
     const newMem: Memory = {
       id: `custom_${nodeType}_${Date.now()}`,
@@ -173,11 +175,11 @@ export function AddMemoryModal({
             {/* NODE TYPE SELECTOR */}
             <div>
               <label className="block font-bold text-black mb-1">NODE SYMBOL & COLOR</label>
-              <div className="flex gap-2 p-1">
+              <div className="grid grid-cols-2 gap-1.5 p-1">
                 <button
                   type="button"
                   onClick={() => setNodeType("star")}
-                  className={`btn-3d flex flex-1 items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-white cursor-pointer transition-all ${
+                  className={`btn-3d flex items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-white cursor-pointer transition-all ${
                     nodeType === "star" 
                       ? "scale-105" 
                       : "opacity-60 grayscale-[40%] hover:opacity-100"
@@ -195,7 +197,7 @@ export function AddMemoryModal({
                 <button
                   type="button"
                   onClick={() => setNodeType("bunny")}
-                  className={`btn-3d flex flex-1 items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-black cursor-pointer transition-all ${
+                  className={`btn-3d flex items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-black cursor-pointer transition-all ${
                     nodeType === "bunny" 
                       ? "scale-105" 
                       : "opacity-60 grayscale-[40%] hover:opacity-100"
@@ -213,7 +215,7 @@ export function AddMemoryModal({
                 <button
                   type="button"
                   onClick={() => setNodeType("spidey")}
-                  className={`btn-3d flex flex-1 items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-white cursor-pointer transition-all ${
+                  className={`btn-3d flex items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-white cursor-pointer transition-all ${
                     nodeType === "spidey" 
                       ? "scale-105" 
                       : "opacity-60 grayscale-[40%] hover:opacity-100"
@@ -226,6 +228,24 @@ export function AddMemoryModal({
                 >
                   <img src="/spidey-bday/assets/pin-spider-transparent.png" alt="" className="h-4 w-4 object-contain pixelated drop-shadow-[0_1px_0_rgba(0,0,0,0.8)]" />
                   <span className="text-[8px] tracking-wider drop-shadow-[1px_1px_0_rgba(0,0,0,0.8)]">TWIN</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setNodeType("mona")}
+                  className={`btn-3d flex items-center justify-center gap-1.5 py-1.5 px-2 font-pixel-body font-bold text-black cursor-pointer transition-all ${
+                    nodeType === "mona" 
+                      ? "scale-105" 
+                      : "opacity-60 grayscale-[40%] hover:opacity-100"
+                  }`}
+                  style={{ 
+                    "--btn-color": "#E5FAFF", 
+                    "--bevel-light": "#ffffff", 
+                    "--bevel-dark": "#9ec5d0" 
+                  } as any}
+                >
+                  <img src="/spidey-bday/assets/seal.png" alt="" className="h-4 w-4 object-contain pixelated drop-shadow-[0_1px_0_rgba(0,0,0,0.5)]" />
+                  <span className="text-[8px] tracking-wider drop-shadow-[1px_1px_0_rgba(0,0,0,0.5)]">MONA</span>
                 </button>
               </div>
             </div>

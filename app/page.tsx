@@ -23,7 +23,7 @@ const TrackerMap = dynamic(
 import { PasscodeGate } from "@/components/passcode-gate";
 import { fetchSharedMemories, saveSharedMemory, deleteSharedMemory } from "@/lib/supabase";
 
-type Stage = "checking" | "welcome" | "tutorial" | "initmap" | "live";
+type Stage = "locked" | "checking" | "welcome" | "tutorial" | "initmap" | "live";
 type PanelState = 
   | { type: "none" } 
   | { type: "memory"; index?: number; id?: string } 
@@ -33,7 +33,7 @@ type PanelState =
 const MAP_LIBRARIES: any[] = ["marker"];
 
 export default function Home() {
-  const [stage, setStage] = useState<Stage>("checking");
+  const [stage, setStage] = useState<Stage>("locked");
   const booted = stage === "live";
   const [muted, setMuted] = useState(true);
   const [unlocked, setUnlocked] = useState(false);
@@ -44,12 +44,18 @@ export default function Home() {
       localStorage.removeItem("spidey_unlocked");
       const isUnl = sessionStorage.getItem("spidey_unlocked") === "true";
       setUnlocked(isUnl);
+      if (isUnl) {
+        setStage("checking");
+      } else {
+        setStage("locked");
+      }
     } catch (e) {}
   }, []);
 
   const [starActive, setStarActive] = useState(true);
   const [bunnyActive, setBunnyActive] = useState(true);
   const [spideyActive, setSpideyActive] = useState(true);
+  const [monaActive, setMonaActive] = useState(true);
 
   const [customMemories, setCustomMemories] = useState<Memory[]>([]);
 
@@ -144,13 +150,14 @@ export default function Home() {
     lat: m.lat,
     lng: m.lng,
     pinType: "memory" as const,
-    nodeType: m.nodeType || (m.id.includes("star") ? "star" : m.id.includes("bunny") ? "bunny" : "spidey"),
+    nodeType: m.nodeType || (m.id.includes("star") ? "star" : m.id.includes("bunny") ? "bunny" : m.id.includes("mona") ? "mona" : "spidey"),
     title: m.title,
     createdAt: new Date().toISOString()
   })).filter((p) => {
     if (p.nodeType === "star" && !starActive) return false;
     if (p.nodeType === "bunny" && !bunnyActive) return false;
     if (p.nodeType === "spidey" && !spideyActive) return false;
+    if (p.nodeType === "mona" && !monaActive) return false;
     return true;
   });
 
@@ -199,10 +206,9 @@ export default function Home() {
             </button>
           </div>
 
-          {/* SIDEBAR TABS (STAR: #8F2867, BUNNY: #FFB5E6, SPIDEY: #b85c5c) */}
+          {/* SIDEBAR TABS (STAR: #8F2867, BUNNY: #FFB5E6, SPIDEY: #b85c5c, MONA: #E5FAFF) */}
           {booted && (
             <div className="absolute left-0 top-1/3 z-50 flex -translate-y-1/2 flex-col gap-1.5">
-              {/* STAR TAB */}
               {/* MANAV TAB (STAR: #8F2867) */}
               <button 
                 onClick={() => {
@@ -263,6 +269,27 @@ export default function Home() {
                   src="/spidey-bday/assets/side-button-transparent.png" 
                   alt="" 
                   className={`relative z-10 mr-1.5 h-6 w-6 object-contain pixelated transition-opacity ${spideyActive ? "opacity-100" : "opacity-40 grayscale"}`} 
+                />
+              </button>
+
+              {/* MONA TAB (SEAL: #E5FAFF) */}
+              <button 
+                onClick={() => {
+                  sound.play("panel-open", 0.3);
+                  setMonaActive(!monaActive);
+                }} 
+                aria-label="Toggle Mona's Nodes"
+                title="Toggle Mona's Nodes (Seal)"
+                className="group relative flex h-[38px] w-[48px] cursor-pointer items-center justify-center transition-opacity active:scale-95"
+              >
+                <svg viewBox="0 0 58 46" className="absolute inset-0 h-full w-full drop-shadow-[2px_2px_0_rgba(0,0,0,0.6)]" preserveAspectRatio="none">
+                  <path d="M0,2 L44,2 L56,23 L44,44 L0,44" fill={monaActive ? "#E5FAFF" : "#4a525d"} stroke="#0a0a0a" strokeWidth="4" strokeLinejoin="miter" />
+                  <path d="M0,6 L38,6 L48,23" fill="none" stroke="#ffffff" strokeWidth="2" strokeOpacity={monaActive ? "0.4" : "0.15"} />
+                </svg>
+                <img 
+                  src="/spidey-bday/assets/seal.png" 
+                  alt="" 
+                  className={`relative z-10 mr-1.5 h-5 w-5 object-contain pixelated transition-opacity ${monaActive ? "opacity-100" : "opacity-40 grayscale"}`} 
                 />
               </button>
             </div>
@@ -378,7 +405,10 @@ export default function Home() {
 
         {/* TOPMOST OVERLAY MODALS (LETTER, MEMORY CARD, ADD MEMORY NODE) */}
         {!unlocked && (
-          <PasscodeGate onUnlock={() => setUnlocked(true)} />
+          <PasscodeGate onUnlock={() => {
+            setUnlocked(true);
+            setStage("checking");
+          }} />
         )}
 
         {activePanel.type === "memory" && (

@@ -1,9 +1,9 @@
 {
-	"name": "tracker",
+	"name": "spidey-bday",
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "portless crafter-tracker next dev",
+		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
 		"dev:raw": "next dev"

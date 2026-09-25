@@ -11,7 +11,7 @@ export interface Memory {
   photo: string;
   lat: number;
   lng: number;
-  nodeType?: "star" | "bunny" | "spidey";
+  nodeType?: "star" | "bunny" | "spidey" | "mona";
 }
 
 export const MEMORIES: Memory[] = [

@@ -8,8 +8,10 @@ export function PinMarker({ pin }: { pin: Pin }) {
     pin.id === "mem0" ? "star" :
     pin.id === "mem1" ? "bunny" :
     pin.id === "mem2" ? "spidey" :
+    pin.id === "mem3" ? "mona" :
     pin.id.includes("star") ? "star" :
-    pin.id.includes("bunny") ? "bunny" : "spidey"
+    pin.id.includes("bunny") ? "bunny" :
+    pin.id.includes("mona") ? "mona" : "spidey"
   );
 
   if (pin.pinType === "letter" || pin.id === "letter") {
@@ -48,8 +50,12 @@ export function PinMarker({ pin }: { pin: Pin }) {
     );
   }
 
-  const bgColor = nodeType === "star" ? "#8F2867" : "#FFB5E6";
-  const symbolImg = nodeType === "star" ? "/spidey-bday/assets/symbol-star.png" : "/spidey-bday/assets/symbol-bunny.png";
+  const bgColor = nodeType === "star" ? "#8F2867" : nodeType === "mona" ? "#E5FAFF" : "#FFB5E6";
+  const symbolImg = nodeType === "star" 
+    ? "/spidey-bday/assets/symbol-star.png" 
+    : nodeType === "mona"
+      ? "/spidey-bday/assets/seal.png"
+      : "/spidey-bday/assets/symbol-bunny.png";
 
   return (
     <div

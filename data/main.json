@@ -2,7 +2,7 @@
 	"init": {
 		"general": {
 			"header": {
-				"title": "CRAFTER TRACKER"
+				"title": "SPIDEY TRACKER 🕷️"
 			},
 			"map2D": {
 				"startView": "worldmap",
@@ -14,45 +14,39 @@
 			}
 		},
 		"tickerMessages": {
-			"appLoading": "CARGANDO",
-			"preloaderTapToLaunch": "TOCA PARA INICIAR",
-			"preloaderSelectSoundOption": "SELECCIONA UNA OPCIÓN DE SONIDO",
-			"liveMapShare": "REPORTA TU SHIP EN X · @CRAFTERSTATION · COOKING HOY, SHIPPED MAÑANA"
+			"appLoading": "LOADING",
+			"preloaderTapToLaunch": "TAP TO LAUNCH",
+			"preloaderSelectSoundOption": "SELECT A SOUND OPTION",
+			"liveMapShare": "SPIDEY TRACKER ONLINE • HAPPY BIRTHDAY TWIN! 🎈"
 		},
 		"preloader": {
 			"lines": [
-				"INICIALIZANDO CRAFTER TRACKER v1.0.0...",
-				"INICIANDO SERVICIOS PRINCIPALES [OK]",
-				"INICIALIZANDO MOTOR DE RENDERIZADO DEL MAPA...",
-				"CARGANDO RECURSOS BASE: INTERFAZ [OK]",
-				"CARGANDO RECURSOS BASE: MÓDULO DE TICKER [OK]",
-				"INICIANDO BUS DE EVENTOS [OK]",
-				"CALIBRANDO MOTOR DE SPRITES [OK]",
-				"SIRVIENDO CODE BREW [OK]",
-				"CONECTANDO A 900+ CRAFTERS [OK]",
-				"INDEXANDO SHIPS DE LA COMUNIDAD...",
-				"DETECTANDO SCOPE CREEP [ELIMINADO]",
-				"VERIFICANDO REGISTRO DE FUENTES [OK]",
-				"SINCRONIZANDO CALENDARIO LUMA [OK]",
-				"ESCANEANDO LATAM DE PUNTA A PUNTA...",
-				"RADAR DE SHIPPING EN LÍNEA [OK]",
-				"TODOS LOS SISTEMAS OPERATIVOS."
+				"INITIALIZING SPIDEY TRACKER v1.0.0...",
+				"STARTING CORE SERVICES [OK]",
+				"INITIALIZING MAP RENDER ENGINE...",
+				"LOADING INTERFACE ASSETS [OK]",
+				"LOADING TICKER MODULE [OK]",
+				"CALIBRATING SPRITE ENGINE [OK]",
+				"CONNECTING MEMORY NODES [OK]",
+				"SCANNING GLOBAL COORDINATES...",
+				"SPIDEY RADAR ONLINE [OK]",
+				"ALL SYSTEMS OPERATIONAL."
 			]
 		},
 		"pinCards": {
-			"viewShipText": "VER SHIP",
-			"viewCookingText": "VER QUIÉN COCINA",
-			"viewEventText": "VER EVENTO",
-			"viewDropText": "VER ANUNCIO",
-			"viewCrafterText": "VER PERFIL"
+			"viewShipText": "VIEW MEMORY",
+			"viewCookingText": "VIEW NODE",
+			"viewEventText": "VIEW EVENT",
+			"viewDropText": "VIEW ANNOUNCEMENT",
+			"viewCrafterText": "VIEW PROFILE"
 		},
 		"legend": {
-			"shipped": "SHIP CONFIRMADO",
-			"cooking": "COOKING",
-			"event": "EVENTO",
-			"drop": "ANUNCIO",
-			"crafter": "CRAFTER",
-			"hack0": "EVENTO HACK0"
+			"shipped": "MANAV'S NODE",
+			"cooking": "FARHA'S NODE",
+			"event": "TWIN'S NODE",
+			"drop": "MONA'S NODE",
+			"crafter": "MEMORY NODE",
+			"hack0": "SPECIAL NODE"
 		},
 		"missionLog": {
 			"title": "BITÁCORA DE MISIÓN v1.0",
